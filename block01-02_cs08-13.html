@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>American History — Block 1–2 (CS 8–13) Game</title>
+<style>
+  :root{
+    --bg:#0b1220; --card:#111a2e; --text:#e7eefc; --muted:#a8b4cf;
+    --accent:#7aa2ff; --good:#2bd576; --bad:#ff5c7a; --warn:#ffd166;
+    --border:rgba(255,255,255,.12); --shadow:0 18px 55px rgba(0,0,0,.35);
+    --r:18px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:radial-gradient(900px 500px at 20% 20%,rgba(122,162,255,.18),transparent 60%), var(--bg);
+    color:var(--text); min-height:100vh;
+    display:flex; align-items:center; justify-content:center; padding:18px;
+  }
+  .app{width:min(980px,100%); background:rgba(17,26,46,.9); border:1px solid var(--border);
+    border-radius:var(--r); box-shadow:var(--shadow); overflow:hidden}
+  header{padding:16px 18px; display:flex; gap:12px; align-items:flex-start; justify-content:space-between;
+    border-bottom:1px solid var(--border); background:linear-gradient(180deg,rgba(255,255,255,.05),transparent)}
+  .title{display:flex; flex-direction:column; gap:4px}
+  .title h1{margin:0; font-size:16px; letter-spacing:.2px}
+  .title .sub{color:var(--muted); font-size:12px; line-height:1.3}
+  .meta{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center}
+  .pill{border:1px solid var(--border); border-radius:999px; padding:6px 10px; font-size:12px; color:var(--muted)}
+  .pill b{color:var(--text); font-weight:600}
+  main{padding:18px; display:grid; gap:14px}
+  .card{background:rgba(0,0,0,.22); border:1px solid var(--border); border-radius:var(--r); padding:16px}
+  .row{display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between}
+  label{font-size:12px; color:var(--muted)}
+  input[type="text"]{
+    width:min(420px,100%); padding:10px 12px; border-radius:12px;
+    border:1px solid var(--border); background:rgba(0,0,0,.25); color:var(--text);
+    outline:none;
+  }
+  button{
+    cursor:pointer; border:none; border-radius:14px; padding:12px 12px;
+    font-weight:700; color:var(--text); background:rgba(122,162,255,.18);
+    border:1px solid rgba(122,162,255,.35);
+    transition:transform .08s ease, filter .12s ease;
+  }
+  button:hover{filter:brightness(1.06)}
+  button:active{transform:scale(.99)}
+  button.secondary{background:rgba(255,255,255,.06); border:1px solid var(--border); color:var(--muted)}
+  button.good{background:rgba(43,213,118,.14); border:1px solid rgba(43,213,118,.35)}
+  button.bad{background:rgba(255,92,122,.14); border:1px solid rgba(255,92,122,.35)}
+  .qTop{display:flex; align-items:flex-start; justify-content:space-between; gap:10px}
+  .qTitle{margin:0; font-size:14px; line-height:1.35}
+  .kicker{color:var(--muted); font-size:12px}
+  .grid{
+    display:grid; gap:10px; margin-top:10px;
+    grid-template-columns:repeat(2, minmax(0,1fr)); /* 2x2 = low scrolling */
+  }
+  @media (max-width:640px){
+    .grid{grid-template-columns:1fr}
+  }
+  .hint{
+    margin-top:10px; padding:10px 12px; border-radius:14px;
+    background:rgba(255,209,102,.12); border:1px solid rgba(255,209,102,.35);
+    color:var(--text); display:none;
+  }
+  .hint .small{color:var(--muted); font-size:12px; margin-top:4px}
+  .status{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  .bar{height:10px; background:rgba(255,255,255,.08); border-radius:999px; overflow:hidden; border:1px solid var(--border); width:220px}
+  .bar > div{height:100%; width:0%; background:rgba(43,213,118,.75)}
+  .toast{font-size:12px; color:var(--muted)}
+  .hidden{display:none !important}
+  pre{
+    white-space:pre-wrap; word-break:break-word;
+    background:rgba(0,0,0,.25); border:1px solid var(--border); padding:12px; border-radius:14px; color:var(--text);
+    font-size:12px; line-height:1.35; margin:10px 0 0;
+  }
+</style>
+</head>
+<body>
+<div class="app" role="application" aria-label="American History Block Game">
+  <header>
+    <div class="title">
+      <h1>American History — Block 1–2 Game (CS 8–13)</h1>
+      <div class="sub">100% accuracy required • Hints only after a miss • Auto-advance on correct</div>
+    </div>
+    <div class="meta">
+      <div class="pill">Name: <b id="mName">—</b></div>
+      <div class="pill">Started: <b id="mStart">—</b></div>
+      <div class="pill">Time: <b id="mTime">00:00</b></div>
+      <div class="pill">Accuracy: <b id="mAcc">100%</b></div>
+    </div>
+  </header>
+
+  <main>
+    <!-- START -->
+    <section id="screenStart" class="card">
+      <div class="row">
+        <div>
+          <div class="kicker">Enter your name to begin</div>
+          <div style="margin-top:8px">
+            <label for="name">Student Name</label><br/>
+            <input id="name" type="text" autocomplete="name" placeholder="Type your name…" />
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center">
+          <button id="btnStart">Start</button>
+          <button id="btnDemo" class="secondary" title="Quick-fill a demo name">Demo</button>
+        </div>
+      </div>
+      <div class="toast" style="margin-top:10px">
+        Tip: No scrolling needed—choices stay on-screen.
+      </div>
+    </section>
+
+    <!-- QUESTION -->
+    <section id="screenGame" class="card hidden">
+      <div class="qTop">
+        <div>
+          <div class="kicker" id="qKicker">Question</div>
+          <p class="qTitle" id="qText">—</p>
+        </div>
+        <div class="status">
+          <div class="bar" aria-label="progress"><div id="barFill"></div></div>
+          <div class="toast"><span id="qCount">0</span>/<span id="qTotal">0</span></div>
+        </div>
+      </div>
+
+      <div class="grid" id="choices"></div>
+
+      <div class="hint" id="hintBox" role="note" aria-label="Hint">
+        <div><b>Hint (appears only after a miss):</b></div>
+        <div id="hintText" style="margin-top:6px"></div>
+        <div class="small" id="hintSmall"></div>
+      </div>
+
+      <div class="row" style="margin-top:14px">
+        <div class="toast" id="feedback">—</div>
+        <div style="display:flex; gap:10px">
+          <button id="btnReset" class="secondary">Reset</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPLETE -->
+    <section id="screenDone" class="card hidden">
+      <div class="row">
+        <div>
+          <h2 style="margin:0 0 6px; font-size:16px;">Complete ✅</h2>
+          <div class="toast">100% accuracy achieved. Copy your completion log and submit if requested.</div>
+        </div>
+        <div style="display:flex; gap:10px">
+          <button id="btnCopy" class="good">Copy Log</button>
+          <button id="btnPlayAgain" class="secondary">Play Again</button>
+        </div>
+      </div>
+      <pre id="logOut"></pre>
+    </section>
+  </main>
+</div>
+
+<script>
+/** =========
+ *  CONFIG
+ *  =========
+ * Question types kept minimal to limit scrolling:
+ * - MCQ with 3–4 choices
+ * Each question has:
+ *  { cs: "CS8", prompt, choices:[...], answer:"...", hint:{why, keyPoints[]} }
+ */
+
+// SAMPLE DATASET: Block 1–2 (CS 8–13), aligned to Ohio Model Curriculum elaborations.
+const QUESTIONS = shuffle([
+  {
+    cs:"CS8",
+    prompt:"Which change best shows how industrialization shifted the U.S. economy in the late 1800s?",
+    choices:[
+      "Most workers moved from factories back to small farms",
+      "Workers shifted from agriculture toward factory work and cities grew",
+      "The U.S. stopped using machines to produce goods",
+      "Skilled labor replaced mass production"
+    ],
+    answer:"Workers shifted from agriculture toward factory work and cities grew",
+    hint:{
+      why:"Industrialization created more factory jobs and encouraged urban living.",
+      keyPoints:["Shift from agricultural to factory workers","Rural → urban migration; crowded/unsanitary cities"]
+    }
+  },
+  {
+    cs:"CS8",
+    prompt:"Which innovation best connects to mass production and the rise of unskilled labor?",
+    choices:["Mechanized assembly line","Handcrafted tools","Barter trade","Crop rotation"],
+    answer:"Mechanized assembly line",
+    hint:{
+      why:"Assembly lines standardized tasks and supported mass production.",
+      keyPoints:["Mass production","Transition from skilled → unskilled labor"]
+    }
+  },
+  {
+    cs:"CS9",
+    prompt:"Which pairing is most accurate about labor unions during industrialization?",
+    choices:[
+      "Unions supported longer workdays to increase profits",
+      "Unions demanded reforms like safer conditions and shorter hours",
+      "Unions opposed collective bargaining and strikes",
+      "Unions formed because government banned factories"
+    ],
+    answer:"Unions demanded reforms like safer conditions and shorter hours",
+    hint:{
+      why:"Unions pushed workplace reforms in response to unregulated conditions.",
+      keyPoints:["Shorter workdays","Safer conditions","Higher pay","Child labor restrictions"]
+    }
+  },
+  {
+    cs:"CS9",
+    prompt:"Which tactic is a union strategy used to pressure employers to negotiate?",
+    choices:["Collective bargaining","Company monopoly","Laissez-faire","Trust formation"],
+    answer:"Collective bargaining",
+    hint:{
+      why:"Collective bargaining is negotiation between workers (as a group) and management.",
+      keyPoints:["Collective bargaining","Strikes","Boycotts"]
+    }
+  },
+  {
+    cs:"CS10",
+    prompt:"Which statement best explains one major effect of mass immigration around 1900?",
+    choices:[
+      "It reduced city growth because immigrants avoided urban jobs",
+      "It increased diversity and helped fill demand for workers",
+      "It ended nativist sentiment across the country",
+      "It stopped internal migration from farms to cities"
+    ],
+    answer:"It increased diversity and helped fill demand for workers",
+    hint:{
+      why:"Immigration helped meet labor demand and shaped culture, but also fueled nativism.",
+      keyPoints:["Demand for workers","Diffusion of ethnic traits","City growth","Nativist sentiment"]
+    }
+  },
+  {
+    cs:"CS10",
+    prompt:"What best describes the Great Migration’s core cause-and-effect pattern?",
+    choices:[
+      "More southern factory jobs → move to rural South",
+      "Escape discrimination + seek jobs → growth and cultural change in northern cities",
+      "End of cities → return to farms",
+      "More western gold → migration to Alaska"
+    ],
+    answer:"Escape discrimination + seek jobs → growth and cultural change in northern cities",
+    hint:{
+      why:"African Americans moved from the rural South to the urban North for safety and opportunity.",
+      keyPoints:["Escape discrimination","Better-paying jobs","Northern economic + cultural transformation"]
+    }
+  },
+  {
+    cs:"CS11",
+    prompt:"Which U.S. policy/action is most directly tied to reinforcing the reservation system?",
+    choices:["Dawes Act","Monroe Doctrine","Marshall Plan","Wagner Act"],
+    answer:"Dawes Act",
+    hint:{
+      why:"Government actions like the Dawes Act supported displacement and assimilation pressures.",
+      keyPoints:["Treaties + government actions","Reservation system","Assimilation pressures"]
+    }
+  },
+  {
+    cs:"CS12",
+    prompt:"Which combination best reflects how racism was institutionalized after Reconstruction?",
+    choices:[
+      "Jim Crow laws + Plessy v. Ferguson affirming segregation",
+      "New Deal programs + Social Security",
+      "Marshall Plan + NATO",
+      "Homestead Act + Gold Rush"
+    ],
+    answer:"Jim Crow laws + Plessy v. Ferguson affirming segregation",
+    hint:{
+      why:"Jim Crow enforced segregation and Plessy upheld it legally.",
+      keyPoints:["Segregation","Limited ballot access","Plessy v. Ferguson","Violence/KKK revival"]
+    }
+  },
+  {
+    cs:"CS13",
+    prompt:"Which reform is most clearly Progressive and aimed at consumer protection?",
+    choices:[
+      "Pure Food and Drug Act",
+      "Treaty of Versailles",
+      "Dawes Act",
+      "Lend-Lease Act"
+    ],
+    answer:"Pure Food and Drug Act",
+    hint:{
+      why:"Progressives pushed laws to protect consumers from unsafe products and practices.",
+      keyPoints:["Consumer protection","Muckrakers exposed abuses","Reform agenda"]
+    }
+  }
+]);
+
+/** =========
+ *  ENGINE
+ *  ========= */
+const $ = (s)=>document.querySelector(s);
+const screens = {
+  start: $("#screenStart"),
+  game:  $("#screenGame"),
+  done:  $("#screenDone")
+};
+
+const meta = {
+  name: $("#mName"),
+  start: $("#mStart"),
+  time: $("#mTime"),
+  acc:  $("#mAcc")
+};
+
+const qUI = {
+  kicker: $("#qKicker"),
+  text: $("#qText"),
+  choices: $("#choices"),
+  count: $("#qCount"),
+  total: $("#qTotal"),
+  bar: $("#barFill"),
+  feedback: $("#feedback"),
+  hintBox: $("#hintBox"),
+  hintText: $("#hintText"),
+  hintSmall: $("#hintSmall")
+};
+
+let state = {
+  startedAt: null,
+  timerId: null,
+  idx: 0,
+  misses: 0,
+  attempts: 0,
+  qOrder: [],
+  perQMissed: new Set()
+};
+
+$("#btnDemo").addEventListener("click", ()=>{ $("#name").value="Demo Student"; $("#name").focus(); });
+$("#btnStart").addEventListener("click", startGame);
+$("#btnReset").addEventListener("click", resetAll);
+$("#btnPlayAgain").addEventListener("click", resetAll);
+$("#btnCopy").addEventListener("click", async ()=>{
+  try{
+    await navigator.clipboard.writeText($("#logOut").innerText);
+    $("#btnCopy").textContent="Copied ✅";
+    setTimeout(()=>$("#btnCopy").textContent="Copy Log", 1100);
+  }catch(e){
+    alert("Copy failed. You can manually select and copy the log text.");
+  }
+});
+
+function startGame(){
+  const n = ($("#name").value||"").trim();
+  if(!n){ alert("Please enter your name."); return; }
+
+  state.startedAt = new Date();
+  meta.name.textContent = n;
+  meta.start.textContent = stamp(state.startedAt);
+  meta.time.textContent = "00:00";
+  meta.acc.textContent = "100%";
+
+  // shuffle question order each load
+  state.qOrder = shuffle([...QUESTIONS]);
+  state.idx = 0;
+  state.misses = 0;
+  state.attempts = 0;
+  state.perQMissed = new Set();
+
+  $("#qTotal").textContent = String(state.qOrder.length);
+
+  switchTo("game");
+  startTimer();
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = state.qOrder[state.idx];
+  if(!q){ return finish(); }
+
+  qUI.kicker.textContent = `${q.cs} • Question ${state.idx+1}`;
+  qUI.text.textContent = q.prompt;
+
+  qUI.count.textContent = String(state.idx+1);
+  qUI.total.textContent = String(state.qOrder.length);
+  qUI.bar.style.width = `${Math.round((state.idx/state.qOrder.length)*100)}%`;
+
+  qUI.feedback.textContent = "Choose the best answer.";
+  qUI.feedback.style.color = "var(--muted)";
+
+  // hide hint until missed
+  qUI.hintBox.style.display = "none";
+  qUI.hintText.textContent = "";
+  qUI.hintSmall.textContent = "";
+
+  // render choices (2x2 grid; 3 choices still looks clean)
+  qUI.choices.innerHTML = "";
+  q.choices.forEach(choice=>{
+    const btn = document.createElement("button");
+    btn.textContent = choice;
+    btn.addEventListener("click", ()=>submit(choice));
+    qUI.choices.appendChild(btn);
+  });
+}
+
+function submit(choice){
+  const q = state.qOrder[state.idx];
+  state.attempts++;
+
+  if(choice === q.answer){
+    // correct: advance immediately
+    qUI.feedback.textContent = "Correct ✅";
+    qUI.feedback.style.color = "var(--good)";
+    // quick visual flash
+    flashButtons(choice, true);
+    setTimeout(()=>{
+      state.idx++;
+      renderQuestion();
+    }, 350);
+    return;
+  }
+
+  // incorrect: mark miss + show hint (only after miss)
+  state.misses++;
+  state.perQMissed.add(state.idx);
+
+  qUI.feedback.textContent = "Not yet ❌ Try again.";
+  qUI.feedback.style.color = "var(--bad)";
+  flashButtons(choice, false);
+
+  qUI.hintBox.style.display = "block";
+  qUI.hintText.textContent = q.hint?.why || "Think back to the content elaboration details.";
+  qUI.hintSmall.textContent = q.hint?.keyPoints?.length
+    ? ("Key points: " + q.hint.keyPoints.join(" • "))
+    : "";
+
+  // accuracy is always “what you end with” (100%), but we can still display live accuracy if you want.
+  // For now, keep it strict: completion only happens at 100% (because you can’t progress until correct).
+  meta.acc.textContent = "100%";
+}
+
+function finish(){
+  stopTimer();
+  qUI.bar.style.width = "100%";
+
+  const endedAt = new Date();
+  const durationSec = Math.floor((endedAt - state.startedAt)/1000);
+
+  const log = {
+    game: "American History — Block 1–2 (CS 8–13)",
+    student: meta.name.textContent,
+    started: stamp(state.startedAt),
+    ended: stamp(endedAt),
+    duration_seconds: durationSec,
+    total_questions: state.qOrder.length,
+    total_attempts: state.attempts,
+    total_misses: state.misses,
+    missed_questions_indexes: [...state.perQMissed].map(i=>i+1)
+  };
+
+  $("#logOut").textContent = JSON.stringify(log, null, 2);
+  switchTo("done");
+}
+
+function switchTo(which){
+  Object.values(screens).forEach(el=>el.classList.add("hidden"));
+  screens[which].classList.remove("hidden");
+}
+
+function startTimer(){
+  stopTimer();
+  state.timerId = setInterval(()=>{
+    const s = Math.floor((new Date() - state.startedAt)/1000);
+    meta.time.textContent = fmtTime(s);
+  }, 250);
+}
+function stopTimer(){
+  if(state.timerId){ clearInterval(state.timerId); state.timerId=null; }
+}
+
+function resetAll(){
+  stopTimer();
+  meta.name.textContent="—";
+  meta.start.textContent="—";
+  meta.time.textContent="00:00";
+  meta.acc.textContent="100%";
+  $("#name").value="";
+  $("#btnCopy").textContent="Copy Log";
+  switchTo("start");
+}
+
+function fmtTime(sec){
+  const m = String(Math.floor(sec/60)).padStart(2,"0");
+  const s = String(sec%60).padStart(2,"0");
+  return `${m}:${s}`;
+}
+function stamp(d){
+  // local time stamp
+  return d.toLocaleString(undefined, {year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit", second:"2-digit"});
+}
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+function flashButtons(choice, correct){
+  [...qUI.choices.querySelectorAll("button")].forEach(b=>{
+    if(b.textContent === choice){
+      b.classList.add(correct ? "good" : "bad");
+      setTimeout(()=>b.classList.remove("good","bad"), 350);
+    }
+  });
+}
+</script>
+</body>
+</html>
