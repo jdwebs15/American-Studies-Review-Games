@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>American Studies Review Games</title>
+<style>
+  :root{
+    --bg:#0b1220; --card:#111a2e; --text:#e7eefc; --muted:#a8b4cf;
+    --accent:#7aa2ff; --good:#2bd576; --warn:#ffd166;
+    --border:rgba(255,255,255,.12); --shadow:0 18px 55px rgba(0,0,0,.35);
+    --r:18px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:
+      radial-gradient(1000px 650px at 18% 12%, rgba(122,162,255,.18), transparent 60%),
+      radial-gradient(900px 500px at 80% 20%, rgba(43,213,118,.10), transparent 60%),
+      var(--bg);
+    color:var(--text); min-height:100vh;
+  }
+  a{color:inherit; text-decoration:none}
+  .wrap{max-width:1100px; margin:0 auto; padding:22px 18px 30px}
+  header{
+    display:flex; flex-wrap:wrap; gap:14px; align-items:flex-end; justify-content:space-between;
+    padding:18px; border:1px solid var(--border); border-radius:var(--r);
+    background:rgba(17,26,46,.85); box-shadow:var(--shadow);
+  }
+  h1{margin:0; font-size:20px; letter-spacing:.2px}
+  .sub{margin-top:6px; color:var(--muted); font-size:13px; line-height:1.35}
+  .tagrow{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+  .pill{
+    border:1px solid var(--border); border-radius:999px;
+    padding:7px 10px; font-size:12px; color:var(--muted);
+    background:rgba(0,0,0,.18);
+  }
+  .pill b{color:var(--text); font-weight:700}
+  .grid{
+    margin-top:16px;
+    display:grid; gap:12px;
+    grid-template-columns:repeat(3, minmax(0,1fr));
+  }
+  @media (max-width:920px){ .grid{grid-template-columns:repeat(2, minmax(0,1fr));} }
+  @media (max-width:620px){ .grid{grid-template-columns:1fr;} }
+
+  .card{
+    border:1px solid var(--border);
+    border-radius:var(--r);
+    background:rgba(17,26,46,.75);
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .card .top{
+    padding:14px 14px 10px;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, rgba(255,255,255,.05), transparent);
+  }
+  .card h2{margin:0; font-size:14px}
+  .card .desc{margin-top:6px; color:var(--muted); font-size:12px; line-height:1.35}
+  .card .actions{
+    padding:12px 14px 14px;
+    display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+  }
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    padding:11px 12px; border-radius:14px;
+    font-weight:800; font-size:13px;
+    background:rgba(122,162,255,.18);
+    border:1px solid rgba(122,162,255,.35);
+    transition:transform .08s ease, filter .12s ease;
+    min-width:140px;
+  }
+  .btn:hover{filter:brightness(1.06)}
+  .btn:active{transform:scale(.99)}
+  .mini{color:var(--muted); font-size:12px}
+  .rules{
+    margin-top:14px;
+    border:1px solid rgba(255,209,102,.35);
+    background:rgba(255,209,102,.08);
+    border-radius:var(--r);
+    padding:12px 14px;
+    color:var(--text);
+  }
+  .rules b{color:var(--warn)}
+  .rules ul{margin:8px 0 0; padding-left:18px; color:var(--muted); font-size:12px; line-height:1.5}
+  footer{margin-top:16px; color:var(--muted); font-size:12px; text-align:center}
+  .smalllink{color:var(--accent); text-decoration:underline; text-underline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>American Studies Review Games</h1>
+      <div class="sub">
+        Choose your block. Each game requires <b>100% accuracy</b> to finish and gives hints only after a miss.
+      </div>
+    </div>
+    <div class="tagrow">
+      <div class="pill">Repo: <b>American-Studies-Review-Games</b></div>
+      <div class="pill">Mode: <b>Self-check</b></div>
+      <div class="pill">Shuffle: <b>On</b></div>
+    </div>
+  </header>
+
+  <div class="rules">
+    <b>How these games work</b>
+    <ul>
+      <li>Enter your name → questions are <b>shuffled each time</b>.</li>
+      <li>You advance only when correct → completion = <b>100%</b>.</li>
+      <li><b>Hints appear only after a wrong answer</b>.</li>
+      <li>At the end, copy the completion log if your teacher asks.</li>
+    </ul>
+  </div>
+
+  <section class="grid" aria-label="Game blocks">
+    <!-- Block 1–2 -->
+    <article class="card">
+      <div class="top">
+        <h2>Block 1–2 — CS 8–13</h2>
+        <div class="desc">Industrialization, labor, immigration/urbanization, Westward conflict, Jim Crow, Progressivism</div>
+      </div>
+      <div class="actions">
+        <a class="btn" href="blocks/block01-02_cs08-13.html">Play</a>
+        <div class="mini">File: block01-02_cs08-13.html</div>
+      </div>
+    </article>
+
+    <!-- Block 3–4 -->
+    <article class="card">
+      <div class="top">
+        <h2>Block 3–4 — CS 14–18</h2>
+        <div class="desc">U.S. world power, post-WWI peace/isolationism, postwar unrest, 1920s change, Harlem Renaissance/suffrage/Prohibition</div>
+      </div>
+      <div class="actions">
+        <a c
