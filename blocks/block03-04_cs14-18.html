@@ -6,7 +6,7 @@
 <title>American History — Block 3–4 (CS 14–18) Game</title>
 <style>
   :root{
-    --bg:#0b1220; --card:#111a2e; --text:#e7eefc; --muted:#a8b4cf;
+    --bg:#0b1220; --card:#111a2e; --ink:#e7eefc; --muted:#a8b4cf;
     --accent:#7aa2ff; --good:#2bd576; --bad:#ff5c7a; --warn:#ffd166;
     --border:rgba(255,255,255,.12); --shadow:0 18px 55px rgba(0,0,0,.35);
     --r:18px;
@@ -14,32 +14,33 @@
   *{box-sizing:border-box}
   body{
     margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-    background:radial-gradient(900px 500px at 20% 20%,rgba(122,162,255,.18),transparent 60%), var(--bg);
-    color:var(--text); min-height:100vh;
+    background:radial-gradient(1000px 650px at 18% 12%, rgba(122,162,255,.18), transparent 60%), var(--bg);
+    color:var(--ink); min-height:100vh;
     display:flex; align-items:center; justify-content:center; padding:18px;
   }
   .app{width:min(980px,100%); background:rgba(17,26,46,.9); border:1px solid var(--border);
     border-radius:var(--r); box-shadow:var(--shadow); overflow:hidden}
   header{padding:16px 18px; display:flex; gap:12px; align-items:flex-start; justify-content:space-between;
-    border-bottom:1px solid var(--border); background:linear-gradient(180deg,rgba(255,255,255,.05),transparent)}
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, rgba(255,255,255,.06), transparent)}
   .title{display:flex; flex-direction:column; gap:4px}
   .title h1{margin:0; font-size:16px; letter-spacing:.2px}
   .title .sub{color:var(--muted); font-size:12px; line-height:1.3}
   .meta{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center}
-  .pill{border:1px solid var(--border); border-radius:999px; padding:6px 10px; font-size:12px; color:var(--muted)}
-  .pill b{color:var(--text); font-weight:600}
+  .pill{border:1px solid var(--border); border-radius:999px; padding:6px 10px; font-size:12px; color:var(--muted); background:rgba(0,0,0,.18)}
+  .pill b{color:var(--ink); font-weight:700}
   main{padding:18px; display:grid; gap:14px}
   .card{background:rgba(0,0,0,.22); border:1px solid var(--border); border-radius:var(--r); padding:16px}
   .row{display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between}
   label{font-size:12px; color:var(--muted)}
   input[type="text"]{
     width:min(420px,100%); padding:10px 12px; border-radius:12px;
-    border:1px solid var(--border); background:rgba(0,0,0,.25); color:var(--text);
+    border:1px solid var(--border); background:rgba(0,0,0,.25); color:var(--ink);
     outline:none;
   }
   button{
     cursor:pointer; border:none; border-radius:14px; padding:12px 12px;
-    font-weight:700; color:var(--text); background:rgba(122,162,255,.18);
+    font-weight:800; color:var(--ink); background:rgba(122,162,255,.18);
     border:1px solid rgba(122,162,255,.35);
     transition:transform .08s ease, filter .12s ease;
   }
@@ -49,39 +50,37 @@
   button.good{background:rgba(43,213,118,.14); border:1px solid rgba(43,213,118,.35)}
   button.bad{background:rgba(255,92,122,.14); border:1px solid rgba(255,92,122,.35)}
   .qTop{display:flex; align-items:flex-start; justify-content:space-between; gap:10px}
-  .qTitle{margin:0; font-size:14px; line-height:1.35}
   .kicker{color:var(--muted); font-size:12px}
-  .grid{
-    display:grid; gap:10px; margin-top:10px;
-    grid-template-columns:repeat(2, minmax(0,1fr)); /* low scrolling */
-  }
-  @media (max-width:640px){
-    .grid{grid-template-columns:1fr}
-  }
-  .hint{
-    margin-top:10px; padding:10px 12px; border-radius:14px;
-    background:rgba(255,209,102,.12); border:1px solid rgba(255,209,102,.35);
-    color:var(--text); display:none;
-  }
-  .hint .small{color:var(--muted); font-size:12px; margin-top:4px}
+  .qTitle{margin:0; font-size:14px; line-height:1.35}
   .status{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
   .bar{height:10px; background:rgba(255,255,255,.08); border-radius:999px; overflow:hidden; border:1px solid var(--border); width:220px}
-  .bar > div{height:100%; width:0%; background:rgba(43,213,118,.75)}
+  .bar>div{height:100%; width:0%; background:rgba(43,213,118,.75)}
+  .grid{
+    display:grid; gap:10px; margin-top:10px;
+    grid-template-columns:repeat(2, minmax(0,1fr));
+  }
+  @media (max-width:640px){ .grid{grid-template-columns:1fr} }
+  .hint{
+    margin-top:10px; padding:10px 12px; border-radius:14px;
+    background:rgba(255,209,102,.10); border:1px solid rgba(255,209,102,.35);
+    display:none;
+  }
+  .hint .small{color:var(--muted); font-size:12px; margin-top:4px; line-height:1.35}
   .toast{font-size:12px; color:var(--muted)}
   .hidden{display:none !important}
   pre{
     white-space:pre-wrap; word-break:break-word;
-    background:rgba(0,0,0,.25); border:1px solid var(--border); padding:12px; border-radius:14px; color:var(--text);
-    font-size:12px; line-height:1.35; margin:10px 0 0;
+    background:rgba(0,0,0,.25); border:1px solid var(--border); padding:12px; border-radius:14px;
+    color:var(--ink); font-size:12px; line-height:1.35; margin:10px 0 0;
   }
 </style>
 </head>
 <body>
-<div class="app" role="application" aria-label="American History Block Game">
+<div class="app" role="application" aria-label="American History Block 3–4 Game">
   <header>
     <div class="title">
       <h1>American History — Block 3–4 Game (CS 14–18)</h1>
-      <div class="sub">100% required • Hints only after a miss • Auto-advance on correct • Shuffled each load</div>
+      <div class="sub">Perfect run required for submit ticket • Hints only after a miss • Auto-advance on correct</div>
     </div>
     <div class="meta">
       <div class="pill">Name: <b id="mName">—</b></div>
@@ -92,7 +91,6 @@
   </header>
 
   <main>
-    <!-- START -->
     <section id="screenStart" class="card">
       <div class="row">
         <div>
@@ -104,15 +102,12 @@
         </div>
         <div style="display:flex; gap:10px; align-items:center">
           <button id="btnStart">Start</button>
-          <button id="btnDemo" class="secondary" title="Quick-fill a demo name">Demo</button>
+          <button id="btnDemo" class="secondary">Demo</button>
         </div>
       </div>
-      <div class="toast" style="margin-top:10px">
-        Tip: Choices stay on-screen (no scrolling).
-      </div>
+      <div class="toast" style="margin-top:10px">No scrolling needed—choices stay on-screen.</div>
     </section>
 
-    <!-- QUESTION -->
     <section id="screenGame" class="card hidden">
       <div class="qTop">
         <div>
@@ -120,7 +115,7 @@
           <p class="qTitle" id="qText">—</p>
         </div>
         <div class="status">
-          <div class="bar" aria-label="progress"><div id="barFill"></div></div>
+          <div class="bar"><div id="barFill"></div></div>
           <div class="toast"><span id="qCount">0</span>/<span id="qTotal">0</span></div>
         </div>
       </div>
@@ -141,15 +136,14 @@
       </div>
     </section>
 
-    <!-- COMPLETE -->
     <section id="screenDone" class="card hidden">
       <div class="row">
         <div>
-          <h2 style="margin:0 0 6px; font-size:16px;">Complete ✅</h2>
-          <div class="toast">100% accuracy achieved. Copy your completion log if your teacher requests it.</div>
+          <h2 id="doneTitle" style="margin:0 0 6px; font-size:16px;">Complete ✅</h2>
+          <div class="toast" id="doneMsg">Perfect run achieved. Copy your submit ticket.</div>
         </div>
         <div style="display:flex; gap:10px">
-          <button id="btnCopy" class="good">Copy Log</button>
+          <button id="btnCopy" class="good">Copy Ticket</button>
           <button id="btnPlayAgain" class="secondary">Play Again</button>
         </div>
       </div>
@@ -160,13 +154,11 @@
 
 <script>
 /* =========
-   DATASET (CS 14–18)
+   QUESTIONS — Block 3–4 (CS 14–18)
    ========= */
 const QUESTIONS = shuffle([
-  // --- CS14: U.S. emerges as world power (overseas expansion, Sp-Am War, WWI) ---
-  {
-    cs:"CS14",
-    prompt:"Which combination best explains why the U.S. pursued overseas expansion in the early 1900s?",
+  // CS14
+  { cs:"CS14", prompt:"Which combination best explains why the U.S. pursued overseas expansion in the early 1900s?",
     choices:[
       "Global competition for markets + desire for prestige + expanded navy",
       "Desire to end immigration + eliminate all trade",
@@ -174,21 +166,14 @@ const QUESTIONS = shuffle([
       "A plan to avoid contact with the rest of the world"
     ],
     answer:"Global competition for markets + desire for prestige + expanded navy",
-    hint:{
-      why:"The curriculum emphasizes competition for markets, prestige, a stronger navy, and beliefs in cultural superiority as drivers of expansion.",
-      keyPoints:["Markets","Prestige","Expanded navy","Cultural superiority attitudes"]
-    }
+    hint:{ why:"Expansion was driven by markets, prestige, naval power, and beliefs about superiority.", keyPoints:["Markets","Prestige","Navy","Cultural superiority"] }
   },
-  {
-    cs:"CS14",
-    prompt:"Which action is listed as part of U.S. overseas expansion tied to world-power status?",
-    choices:["Annexation of Hawaii","Kellogg–Briand Pact","Neutrality Acts","New Deal agencies"],
+  { cs:"CS14", prompt:"Which action is tied to U.S. overseas expansion and world-power status?",
+    choices:["Annexation of Hawaii","Neutrality Acts","Kellogg–Briand Pact","New Deal agencies"],
     answer:"Annexation of Hawaii",
-    hint:{ why:"The annexation of Hawaii is one of the overseas actions highlighted for this era.", keyPoints:["Overseas expansion actions include Hawaii, Spanish–American War, Big Stick Diplomacy"] }
+    hint:{ why:"Hawaii is a key example of overseas expansion.", keyPoints:["Overseas expansion example"] }
   },
-  {
-    cs:"CS14",
-    prompt:"Big Stick Diplomacy is most closely associated with which idea?",
+  { cs:"CS14", prompt:"Big Stick Diplomacy is most closely associated with which idea?",
     choices:[
       "Using military strength as leverage in foreign policy",
       "Ending all military spending to prevent wars",
@@ -196,11 +181,9 @@ const QUESTIONS = shuffle([
       "Refusing to trade with any nation"
     ],
     answer:"Using military strength as leverage in foreign policy",
-    hint:{ why:"“Big Stick” reflects projecting power—especially naval/military strength—to influence outcomes.", keyPoints:["Power projection","Foreign policy leverage","Linked to overseas actions"] }
+    hint:{ why:"‘Big Stick’ = project power to influence outcomes.", keyPoints:["Power projection","Foreign policy leverage"] }
   },
-  {
-    cs:"CS14",
-    prompt:"How did World War I contribute to the U.S. emerging as a world power after the war?",
+  { cs:"CS14", prompt:"How did World War I contribute to the U.S. emerging as a world power after the war?",
     choices:[
       "U.S. mobilized a large army/navy and Europe focused on rebuilding afterward",
       "U.S. avoided mobilization and Europe became stronger",
@@ -208,13 +191,11 @@ const QUESTIONS = shuffle([
       "U.S. withdrew from trade and became isolated permanently"
     ],
     answer:"U.S. mobilized a large army/navy and Europe focused on rebuilding afterward",
-    hint:{ why:"The model curriculum notes U.S. mobilization for Allied victory and Europe’s postwar rebuilding as key factors.", keyPoints:["Mobilization","Allied victory","Europe rebuilding → U.S. advantage"] }
+    hint:{ why:"Mobilization + Europe rebuilding helped shift global power.", keyPoints:["Mobilization","Europe rebuilding"] }
   },
 
-  // --- CS15: Post-WWI peace efforts → isolationism ---
-  {
-    cs:"CS15",
-    prompt:"Which event best shows the U.S. moving away from being a world peacekeeper after WWI?",
+  // CS15
+  { cs:"CS15", prompt:"Which event best shows the U.S. moving away from being a world peacekeeper after WWI?",
     choices:[
       "Senate defeat of the Treaty of Versailles and decision not to join the League of Nations",
       "Annexation of Hawaii",
@@ -222,143 +203,95 @@ const QUESTIONS = shuffle([
       "Signing the Lend-Lease Act"
     ],
     answer:"Senate defeat of the Treaty of Versailles and decision not to join the League of Nations",
-    hint:{ why:"Debate over Versailles and avoiding entanglements led to Senate rejection and not joining the League.", keyPoints:["Versailles ratification debate","League of Nations not joined"] }
+    hint:{ why:"The Versailles debate led to rejection and no League membership.", keyPoints:["Versailles debate","No League of Nations"] }
   },
-  {
-    cs:"CS15",
-    prompt:"Why did the U.S. support treaties addressing arms limitation and territorial expansion after WWI?",
-    choices:[
-      "To avoid another major war",
-      "To encourage immediate invasion of Europe",
-      "To abolish all international trade",
-      "To expand the British Empire"
-    ],
+  { cs:"CS15", prompt:"Why did the U.S. support treaties addressing arms limitation and territorial expansion after WWI?",
+    choices:["To avoid another major war","To encourage invasion of Europe","To abolish all trade","To expand the British Empire"],
     answer:"To avoid another major war",
-    hint:{ why:"A key motive in the curriculum: avoiding another major war drove peace efforts.", keyPoints:["Peacekeeping efforts","Avoid foreign entanglements","Arms limitation/territorial treaties"] }
+    hint:{ why:"These were peace efforts aimed at preventing another war.", keyPoints:["Peacekeeping motive"] }
   },
-  {
-    cs:"CS15",
-    prompt:"The Kellogg–Briand Pact (1928) is best described as an agreement to:",
+  { cs:"CS15", prompt:"The Kellogg–Briand Pact (1928) is best described as an agreement to:",
     choices:[
       "Prohibit war as an instrument of national policy",
-      "Create the North Atlantic Treaty Organization",
-      "Establish the Federal Reserve System",
+      "Create NATO",
+      "Establish the Federal Reserve",
       "Authorize U.S. annexation of foreign colonies"
     ],
     answer:"Prohibit war as an instrument of national policy",
-    hint:{ why:"The curriculum highlights Kellogg–Briand as an attempt to prohibit war as policy.", keyPoints:["1928 pact","Anti-war goal","Symbolic peace effort"] }
+    hint:{ why:"It attempted to outlaw war as national policy.", keyPoints:["Anti-war agreement"] }
   },
-  {
-    cs:"CS15",
-    prompt:"After WWI, later legislative acts were intended to:",
+  { cs:"CS15", prompt:"Later legislative acts after WWI were intended to:",
     choices:[
       "Limit U.S. involvement in international affairs",
-      "Increase U.S. colonial empire in Asia immediately",
-      "Require U.S. membership in the League of Nations",
-      "End American production of consumer goods"
+      "Require U.S. membership in the League",
+      "Expand colonies immediately",
+      "End consumer goods production"
     ],
     answer:"Limit U.S. involvement in international affairs",
-    hint:{ why:"The curriculum notes later laws aimed to limit involvement—part of the drift toward isolationism.", keyPoints:["Isolationism","Limiting involvement","Avoid entanglements"] }
+    hint:{ why:"This reflects the shift toward isolationism.", keyPoints:["Isolationism","Limit involvement"] }
   },
 
-  // --- CS16: Postwar social unrest (racial intolerance, nativism, Red Scare) ---
-  {
-    cs:"CS16",
-    prompt:"The Great Migration heightened racial tensions in northern cities primarily because it increased competition for:",
+  // CS16
+  { cs:"CS16", prompt:"The Great Migration heightened racial tensions in northern cities primarily because it increased competition for:",
     choices:["Jobs, housing, and public services","Ocean territory and naval bases","Voting rights for women","Gold and silver mines"],
     answer:"Jobs, housing, and public services",
-    hint:{ why:"The curriculum identifies competition for jobs, housing, and public services as a major source of tension.", keyPoints:["Great Migration","Competition","Urban tensions"] }
+    hint:{ why:"Competition in cities intensified tensions.", keyPoints:["Jobs","Housing","Services"] }
   },
-  {
-    cs:"CS16",
-    prompt:"Which example is listed as evidence of racial tension after WWI?",
+  { cs:"CS16", prompt:"Which example is evidence of racial tension after WWI?",
     choices:["Urban race riots","Atlantic Charter drafting","Homestead Act expansion","Kellogg–Briand signing"],
     answer:"Urban race riots",
-    hint:{ why:"Race riots are explicitly listed among evidence of racial tension in the postwar era.", keyPoints:["Race riots","Lynching threats","KKK revival","Jim Crow enforcement"] }
+    hint:{ why:"Race riots are highlighted as evidence of tension.", keyPoints:["Race riots"] }
   },
-  {
-    cs:"CS16",
-    prompt:"Nativism after WWI was reflected most directly in the passage of:",
-    choices:["Immigration quotas","Civil Rights Act","GI Bill","Sherman Antitrust Act"],
+  { cs:"CS16", prompt:"Nativism after WWI was reflected most directly in passage of:",
+    choices:["Immigration quotas","GI Bill","Civil Rights Act","Sherman Antitrust Act"],
     answer:"Immigration quotas",
-    hint:{ why:"The curriculum connects postwar nativism with restricting immigration via quotas.", keyPoints:["Anti-immigrant attitudes","Quotas","Southern/eastern European immigration context"] }
+    hint:{ why:"Quotas restricted immigration in response to nativism.", keyPoints:["Restrict immigration"] }
   },
-  {
-    cs:"CS16",
-    prompt:"Which statement best summarizes a major cause of the Red Scare of 1919–1920?",
+  { cs:"CS16", prompt:"A major cause of the Red Scare (1919–1920) was:",
     choices:[
       "Fear of revolution stirred by communism in Russia plus labor strikes and violence in the U.S.",
-      "A desire to expand U.S. territory in the Pacific",
+      "A desire to expand territory in the Pacific",
       "A plan to increase consumer credit for new cars",
       "A movement to establish national parks"
     ],
     answer:"Fear of revolution stirred by communism in Russia plus labor strikes and violence in the U.S.",
-    hint:{ why:"The model curriculum ties the Red Scare to fear of revolution and perceived threats from communism and unrest.", keyPoints:["Communism in Russia","Labor strikes/violence","Fear of revolution"] }
+    hint:{ why:"Fear of communism + unrest fueled the Red Scare.", keyPoints:["Communism fears","Labor unrest"] }
   },
-  {
-    cs:"CS16",
-    prompt:"A key result of the Red Scare (1919–1920) was:",
-    choices:[
-      "Incarceration and deportation of many immigrants",
-      "Repeal of the 19th Amendment",
-      "Creation of NATO",
-      "Ending all organized crime"
-    ],
+  { cs:"CS16", prompt:"A key result of the Red Scare (1919–1920) was:",
+    choices:["Incarceration and deportation of many immigrants","Repeal of the 19th Amendment","Creation of NATO","Ending organized crime"],
     answer:"Incarceration and deportation of many immigrants",
-    hint:{ why:"The curriculum states the Red Scare led to incarceration and deportation of many immigrants.", keyPoints:["Crackdown","Deportations","Civil liberties pressure"] }
+    hint:{ why:"Crackdowns included arrests and deportations.", keyPoints:["Deportations","Civil liberties pressure"] }
   },
-  {
-    cs:"CS16",
-    prompt:"Intolerance toward immigrants, Catholics, and Jews was exhibited by groups such as the:",
+  { cs:"CS16", prompt:"Intolerance toward immigrants, Catholics, and Jews was exhibited by groups such as the:",
     choices:["Ku Klux Klan","Federal Reserve","National Park Service","League of Nations"],
     answer:"Ku Klux Klan",
-    hint:{ why:"The KKK is referenced as a group exhibiting racial and religious/ethnic intolerance in this era.", keyPoints:["KKK revival","Racial + anti-immigrant intolerance"] }
+    hint:{ why:"The KKK promoted racial and nativist intolerance.", keyPoints:["KKK revival","Nativism"] }
   },
 
-  // --- CS17: 1920s standard of living + tech innovations → social/cultural tensions ---
-  {
-    cs:"CS17",
-    prompt:"After World War I, the U.S. experienced an economic boom that:",
-    choices:[
-      "Improved standards of living for many Americans",
-      "Eliminated the use of machines in factories",
-      "Ended mass media permanently",
-      "Stopped suburban growth for decades"
-    ],
+  // CS17
+  { cs:"CS17", prompt:"After World War I, the U.S. experienced an economic boom that:",
+    choices:["Improved standards of living for many Americans","Eliminated machines in factories","Ended mass media","Stopped suburban growth"],
     answer:"Improved standards of living for many Americans",
-    hint:{ why:"The curriculum emphasizes post-WWI prosperity and improved living standards for many.", keyPoints:["Economic boom","Successful advances in industry","Higher standard of living"] }
+    hint:{ why:"Prosperity raised living standards for many.", keyPoints:["Economic boom","Higher standard of living"] }
   },
-  {
-    cs:"CS17",
-    prompt:"Which innovation is listed under transportation changes that shaped the era?",
+  { cs:"CS17", prompt:"Which innovation is listed under transportation changes that shaped the era?",
     choices:["Commercial aircraft","Indian residential schools","Settlement houses","Immigration quotas"],
     answer:"Commercial aircraft",
-    hint:{ why:"Commercial aircraft is one of the innovations listed alongside automobiles and other changes.", keyPoints:["Transportation innovations","Commercial aircraft","Automobile"] }
+    hint:{ why:"Commercial aircraft is listed with automobiles as major changes.", keyPoints:["Transportation innovation"] }
   },
-  {
-    cs:"CS17",
-    prompt:"Talking motion pictures and commercial radio broadcasts are examples of innovations in:",
+  { cs:"CS17", prompt:"Talking motion pictures and commercial radio broadcasts are examples of innovations in:",
     choices:["Communication and entertainment","Reservation policy","Voting restrictions","Arms limitation treaties"],
     answer:"Communication and entertainment",
-    hint:{ why:"The curriculum highlights new media: talking movies, radio, and wider circulation of newspapers/magazines.", keyPoints:["Mass media","Radio","Movies","Newspapers/magazines"] }
+    hint:{ why:"These expanded mass communication and culture.", keyPoints:["Radio","Movies","Mass media"] }
   },
-  {
-    cs:"CS17",
-    prompt:"According to the curriculum, these innovations brought change, but also:",
-    choices:[
-      "Challenged social norms and increased tensions",
-      "Ended all cultural conflict immediately",
-      "Reduced communication between regions",
-      "Stopped consumer culture from growing"
-    ],
+  { cs:"CS17", prompt:"These innovations brought change, but also:",
+    choices:["Challenged social norms and increased tensions","Ended cultural conflict immediately","Reduced communication","Stopped consumer culture"],
     answer:"Challenged social norms and increased tensions",
-    hint:{ why:"A key point: rapid change created tension by challenging existing social norms.", keyPoints:["Cultural change","Norms challenged","Tensions increased"] }
+    hint:{ why:"Rapid change challenged traditional norms.", keyPoints:["Norms challenged","Tensions"] }
   },
 
-  // --- CS18: Harlem Renaissance, African-American migration, women’s suffrage, Prohibition ---
-  {
-    cs:"CS18",
-    prompt:"Which long-term factor and opportunity helped drive the Great Migration in this period?",
+  // CS18
+  { cs:"CS18", prompt:"Which push/pull factors helped drive African-American migration in this period?",
     choices:[
       "Jim Crow laws + job opportunities in the North",
       "Neutrality Acts + naval treaties",
@@ -366,11 +299,9 @@ const QUESTIONS = shuffle([
       "Prohibition enforcement + speakeasies"
     ],
     answer:"Jim Crow laws + job opportunities in the North",
-    hint:{ why:"The curriculum links Jim Crow and northern job opportunities to migration to northern cities.", keyPoints:["Push: Jim Crow","Pull: Jobs in North","Cultural centers formed"] }
+    hint:{ why:"Discrimination pushed, jobs pulled migrants north.", keyPoints:["Push: Jim Crow","Pull: jobs"] }
   },
-  {
-    cs:"CS18",
-    prompt:"The Harlem Renaissance is best described as a:",
+  { cs:"CS18", prompt:"The Harlem Renaissance is best described as a:",
     choices:[
       "Celebration of African American culture that contributed to social change",
       "Treaty that ended World War I",
@@ -378,11 +309,9 @@ const QUESTIONS = shuffle([
       "Policy designed to isolate the U.S. from Europe"
     ],
     answer:"Celebration of African American culture that contributed to social change",
-    hint:{ why:"The Harlem Renaissance is framed as cultural celebration with major social impact.", keyPoints:["Culture","Art/literature","Social change"] }
+    hint:{ why:"It was a cultural flowering with major social impact.", keyPoints:["Culture","Social change"] }
   },
-  {
-    cs:"CS18",
-    prompt:"A major effect of Harlem Renaissance art and literature was that it:",
+  { cs:"CS18", prompt:"A major effect of Harlem Renaissance art and literature was that it:",
     choices:[
       "Built pride and increased awareness of struggles related to intolerance and urban life",
       "Ended racism in all northern cities",
@@ -390,51 +319,34 @@ const QUESTIONS = shuffle([
       "Eliminated the need for political participation"
     ],
     answer:"Built pride and increased awareness of struggles related to intolerance and urban life",
-    hint:{ why:"Themes fostered pride and highlighted intolerance and challenges of urban living.", keyPoints:["Pride","Awareness","Urban struggles","Intolerance"] }
+    hint:{ why:"Themes fostered pride and highlighted real struggles.", keyPoints:["Pride","Awareness","Urban struggles"] }
   },
-  {
-    cs:"CS18",
-    prompt:"Which music genre flourished and became an established American genre during the Harlem Renaissance?",
+  { cs:"CS18", prompt:"Which music genre flourished and became an established American genre during the Harlem Renaissance?",
     choices:["Jazz","Bluegrass","Opera","Techno"],
     answer:"Jazz",
-    hint:{ why:"Jazz is explicitly noted as flourishing during the Harlem Renaissance.", keyPoints:["Jazz","Cultural influence"] }
+    hint:{ why:"Jazz is a signature cultural element of the era.", keyPoints:["Jazz"] }
   },
-  {
-    cs:"CS18",
-    prompt:"The main goal of the women’s suffrage movement was achieved through passage of the:",
+  { cs:"CS18", prompt:"The women’s suffrage movement achieved its main goal through passage of the:",
     choices:["19th Amendment","18th Amendment","21st Amendment","16th Amendment"],
     answer:"19th Amendment",
-    hint:{ why:"Women’s suffrage is tied directly to the 19th Amendment.", keyPoints:["Voting rights for women","Political participation"] }
+    hint:{ why:"The 19th Amendment granted women the right to vote.", keyPoints:["Women’s voting rights"] }
   },
-  {
-    cs:"CS18",
-    prompt:"After women gained suffrage, the curriculum emphasizes increased women’s:",
-    choices:["Economic and political participation, changing social attitudes","Use of naval power overseas","Support for immigration quotas only","Control of national banking policy"],
+  { cs:"CS18", prompt:"After suffrage, the curriculum emphasizes increased women’s:",
+    choices:["Economic and political participation, changing social attitudes","Use of naval power overseas","Support for quotas only","Control of banking policy"],
     answer:"Economic and political participation, changing social attitudes",
-    hint:{ why:"The curriculum links suffrage to broader participation and shifting social attitudes.", keyPoints:["Economic participation","Political participation","Social attitudes change"] }
+    hint:{ why:"Suffrage supported broader participation and changing attitudes.", keyPoints:["Political participation","Economic participation"] }
   },
-  {
-    cs:"CS18",
-    prompt:"Prohibition is best described as having:",
-    choices:[
-      "Mixed results and lacking popular support",
-      "Immediate universal approval and easy enforcement",
-      "No connection to organized crime",
-      "No constitutional amendments involved"
-    ],
+  { cs:"CS18", prompt:"Prohibition is best described as having:",
+    choices:["Mixed results and lacking popular support","Universal approval and easy enforcement","No connection to crime","No constitutional amendments involved"],
     answer:"Mixed results and lacking popular support",
-    hint:{ why:"The curriculum emphasizes mixed results and weak support.", keyPoints:["Lacked support","Mixed results","Hard to enforce"] }
+    hint:{ why:"Support was uneven and enforcement difficult.", keyPoints:["Mixed results","Lacked support"] }
   },
-  {
-    cs:"CS18",
-    prompt:"One major unintended effect of Prohibition was the rise of:",
+  { cs:"CS18", prompt:"One major unintended effect of Prohibition was the rise of:",
     choices:["Speakeasies and organized crime","The League of Nations","The U.S. Forest Service","The Federal Reserve"],
     answer:"Speakeasies and organized crime",
-    hint:{ why:"Speakeasies and organized crime are explicitly listed as outcomes.", keyPoints:["Speakeasies","Organized crime"] }
+    hint:{ why:"Illegal markets expanded organized crime.", keyPoints:["Speakeasies","Organized crime"] }
   },
-  {
-    cs:"CS18",
-    prompt:"Which pairing correctly matches the constitutional change related to Prohibition?",
+  { cs:"CS18", prompt:"Which pairing correctly matches the constitutional changes related to Prohibition?",
     choices:[
       "18th Amendment established Prohibition; 21st Amendment repealed it",
       "19th Amendment established Prohibition; 18th repealed it",
@@ -442,7 +354,7 @@ const QUESTIONS = shuffle([
       "16th Amendment established Prohibition; 17th repealed it"
     ],
     answer:"18th Amendment established Prohibition; 21st Amendment repealed it",
-    hint:{ why:"The curriculum notes Prohibition began with the 18th and ended with the 21st.", keyPoints:["18th = Prohibition","21st = repeal"] }
+    hint:{ why:"18th created Prohibition; 21st ended it.", keyPoints:["18th = Prohibition","21st = repeal"] }
   }
 ]);
 
@@ -459,7 +371,11 @@ const qUI = {
   hintBox: $("#hintBox"), hintText: $("#hintText"), hintSmall: $("#hintSmall")
 };
 
-let state = { startedAt:null, timerId:null, idx:0, misses:0, attempts:0, qOrder:[], perQMissed:new Set() };
+let state = {
+  startedAt:null, timerId:null,
+  idx:0, misses:0, attempts:0,
+  qOrder:[], perQMissed:new Set()
+};
 
 $("#btnDemo").addEventListener("click", ()=>{ $("#name").value="Demo Student"; $("#name").focus(); });
 $("#btnStart").addEventListener("click", startGame);
@@ -469,11 +385,19 @@ $("#btnCopy").addEventListener("click", async ()=>{
   try{
     await navigator.clipboard.writeText($("#logOut").innerText);
     $("#btnCopy").textContent="Copied ✅";
-    setTimeout(()=>$("#btnCopy").textContent="Copy Log", 1100);
+    setTimeout(()=>$("#btnCopy").textContent="Copy Ticket", 1100);
   }catch(e){
-    alert("Copy failed. You can manually select and copy the log text.");
+    alert("Copy failed. You can manually select and copy the ticket text.");
   }
 });
+
+function calcAccuracy(){
+  if(state.attempts <= 0) return 100;
+  return Math.round(((state.attempts - state.misses) / state.attempts) * 100);
+}
+function updateAccuracy(){
+  meta.acc.textContent = `${calcAccuracy()}%`;
+}
 
 function startGame(){
   const n = ($("#name").value||"").trim();
@@ -483,9 +407,7 @@ function startGame(){
   meta.name.textContent = n;
   meta.start.textContent = stamp(state.startedAt);
   meta.time.textContent = "00:00";
-  meta.acc.textContent = "100%";
 
-  // shuffle each load
   state.qOrder = shuffle([...QUESTIONS]);
   state.idx = 0;
   state.misses = 0;
@@ -493,6 +415,7 @@ function startGame(){
   state.perQMissed = new Set();
 
   $("#qTotal").textContent = String(state.qOrder.length);
+  updateAccuracy();
 
   switchTo("game");
   startTimer();
@@ -501,7 +424,7 @@ function startGame(){
 
 function renderQuestion(){
   const q = state.qOrder[state.idx];
-  if(!q){ return finish(); }
+  if(!q) return finish();
 
   qUI.kicker.textContent = `${q.cs} • Question ${state.idx+1}`;
   qUI.text.textContent = q.prompt;
@@ -529,6 +452,7 @@ function renderQuestion(){
 function submit(choice){
   const q = state.qOrder[state.idx];
   state.attempts++;
+  updateAccuracy();
 
   if(choice === q.answer){
     qUI.feedback.textContent = "Correct ✅";
@@ -542,6 +466,7 @@ function submit(choice){
   }
 
   state.misses++;
+  updateAccuracy();
   state.perQMissed.add(state.idx);
 
   qUI.feedback.textContent = "Not yet ❌ Try again.";
@@ -553,8 +478,6 @@ function submit(choice){
   qUI.hintSmall.textContent = q.hint?.keyPoints?.length
     ? ("Key points: " + q.hint.keyPoints.join(" • "))
     : "";
-
-  meta.acc.textContent = "100%"; // completion requires 100% (advance only on correct)
 }
 
 function finish(){
@@ -563,8 +486,34 @@ function finish(){
 
   const endedAt = new Date();
   const durationSec = Math.floor((endedAt - state.startedAt)/1000);
+  const accuracy = calcAccuracy();
 
-  const log = {
+  if(state.misses > 0){
+    $("#doneTitle").textContent = "Not Passed ❌";
+    $("#doneMsg").textContent = "You finished, but this attempt had misses. Retake for a perfect run to earn the submit ticket.";
+    $("#btnCopy").style.display = "none";
+
+    $("#logOut").textContent =
+`NOT PASSED — Retake Required
+
+Student: ${meta.name.textContent}
+Started: ${stamp(state.startedAt)}
+Ended:   ${stamp(endedAt)}
+Duration (sec): ${durationSec}
+Accuracy: ${accuracy}%
+Misses: ${state.misses}
+
+RULE: To earn a submit ticket, you must complete the game with 0 misses (100% accuracy).`;
+    switchTo("done");
+    return;
+  }
+
+  $("#doneTitle").textContent = "Complete ✅";
+  $("#doneMsg").textContent = "Perfect run achieved (0 misses). Copy your submit ticket.";
+  $("#btnCopy").style.display = "inline-flex";
+
+  const ticket = {
+    status: "PASSED",
     game: "American History — Block 3–4 (CS 14–18)",
     student: meta.name.textContent,
     started: stamp(state.startedAt),
@@ -572,11 +521,11 @@ function finish(){
     duration_seconds: durationSec,
     total_questions: state.qOrder.length,
     total_attempts: state.attempts,
-    total_misses: state.misses,
-    missed_question_numbers: [...state.perQMissed].map(i=>i+1)
+    misses: state.misses,
+    accuracy_percent: 100
   };
 
-  $("#logOut").textContent = JSON.stringify(log, null, 2);
+  $("#logOut").textContent = JSON.stringify(ticket, null, 2);
   switchTo("done");
 }
 
@@ -603,7 +552,8 @@ function resetAll(){
   meta.time.textContent="00:00";
   meta.acc.textContent="100%";
   $("#name").value="";
-  $("#btnCopy").textContent="Copy Log";
+  $("#btnCopy").textContent="Copy Ticket";
+  $("#btnCopy").style.display = "inline-flex";
   switchTo("start");
 }
 
