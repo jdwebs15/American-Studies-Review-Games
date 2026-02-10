@@ -6,7 +6,7 @@
 <title>American History — Block 1–2 (CS 8–13) Game</title>
 <style>
   :root{
-    --bg:#0b1220; --card:#111a2e; --text:#e7eefc; --muted:#a8b4cf;
+    --bg:#0b1220; --card:#111a2e; --ink:#e7eefc; --muted:#a8b4cf;
     --accent:#7aa2ff; --good:#2bd576; --bad:#ff5c7a; --warn:#ffd166;
     --border:rgba(255,255,255,.12); --shadow:0 18px 55px rgba(0,0,0,.35);
     --r:18px;
@@ -14,32 +14,33 @@
   *{box-sizing:border-box}
   body{
     margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-    background:radial-gradient(900px 500px at 20% 20%,rgba(122,162,255,.18),transparent 60%), var(--bg);
-    color:var(--text); min-height:100vh;
+    background:radial-gradient(1000px 650px at 18% 12%, rgba(122,162,255,.18), transparent 60%), var(--bg);
+    color:var(--ink); min-height:100vh;
     display:flex; align-items:center; justify-content:center; padding:18px;
   }
   .app{width:min(980px,100%); background:rgba(17,26,46,.9); border:1px solid var(--border);
     border-radius:var(--r); box-shadow:var(--shadow); overflow:hidden}
   header{padding:16px 18px; display:flex; gap:12px; align-items:flex-start; justify-content:space-between;
-    border-bottom:1px solid var(--border); background:linear-gradient(180deg,rgba(255,255,255,.05),transparent)}
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, rgba(255,255,255,.06), transparent)}
   .title{display:flex; flex-direction:column; gap:4px}
   .title h1{margin:0; font-size:16px; letter-spacing:.2px}
   .title .sub{color:var(--muted); font-size:12px; line-height:1.3}
   .meta{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center}
-  .pill{border:1px solid var(--border); border-radius:999px; padding:6px 10px; font-size:12px; color:var(--muted)}
-  .pill b{color:var(--text); font-weight:600}
+  .pill{border:1px solid var(--border); border-radius:999px; padding:6px 10px; font-size:12px; color:var(--muted); background:rgba(0,0,0,.18)}
+  .pill b{color:var(--ink); font-weight:700}
   main{padding:18px; display:grid; gap:14px}
   .card{background:rgba(0,0,0,.22); border:1px solid var(--border); border-radius:var(--r); padding:16px}
   .row{display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between}
   label{font-size:12px; color:var(--muted)}
   input[type="text"]{
     width:min(420px,100%); padding:10px 12px; border-radius:12px;
-    border:1px solid var(--border); background:rgba(0,0,0,.25); color:var(--text);
+    border:1px solid var(--border); background:rgba(0,0,0,.25); color:var(--ink);
     outline:none;
   }
   button{
     cursor:pointer; border:none; border-radius:14px; padding:12px 12px;
-    font-weight:700; color:var(--text); background:rgba(122,162,255,.18);
+    font-weight:800; color:var(--ink); background:rgba(122,162,255,.18);
     border:1px solid rgba(122,162,255,.35);
     transition:transform .08s ease, filter .12s ease;
   }
@@ -49,39 +50,37 @@
   button.good{background:rgba(43,213,118,.14); border:1px solid rgba(43,213,118,.35)}
   button.bad{background:rgba(255,92,122,.14); border:1px solid rgba(255,92,122,.35)}
   .qTop{display:flex; align-items:flex-start; justify-content:space-between; gap:10px}
-  .qTitle{margin:0; font-size:14px; line-height:1.35}
   .kicker{color:var(--muted); font-size:12px}
-  .grid{
-    display:grid; gap:10px; margin-top:10px;
-    grid-template-columns:repeat(2, minmax(0,1fr)); /* 2x2 = low scrolling */
-  }
-  @media (max-width:640px){
-    .grid{grid-template-columns:1fr}
-  }
-  .hint{
-    margin-top:10px; padding:10px 12px; border-radius:14px;
-    background:rgba(255,209,102,.12); border:1px solid rgba(255,209,102,.35);
-    color:var(--text); display:none;
-  }
-  .hint .small{color:var(--muted); font-size:12px; margin-top:4px}
+  .qTitle{margin:0; font-size:14px; line-height:1.35}
   .status{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
   .bar{height:10px; background:rgba(255,255,255,.08); border-radius:999px; overflow:hidden; border:1px solid var(--border); width:220px}
-  .bar > div{height:100%; width:0%; background:rgba(43,213,118,.75)}
+  .bar>div{height:100%; width:0%; background:rgba(43,213,118,.75)}
+  .grid{
+    display:grid; gap:10px; margin-top:10px;
+    grid-template-columns:repeat(2, minmax(0,1fr));
+  }
+  @media (max-width:640px){ .grid{grid-template-columns:1fr} }
+  .hint{
+    margin-top:10px; padding:10px 12px; border-radius:14px;
+    background:rgba(255,209,102,.10); border:1px solid rgba(255,209,102,.35);
+    display:none;
+  }
+  .hint .small{color:var(--muted); font-size:12px; margin-top:4px; line-height:1.35}
   .toast{font-size:12px; color:var(--muted)}
   .hidden{display:none !important}
   pre{
     white-space:pre-wrap; word-break:break-word;
-    background:rgba(0,0,0,.25); border:1px solid var(--border); padding:12px; border-radius:14px; color:var(--text);
-    font-size:12px; line-height:1.35; margin:10px 0 0;
+    background:rgba(0,0,0,.25); border:1px solid var(--border); padding:12px; border-radius:14px;
+    color:var(--ink); font-size:12px; line-height:1.35; margin:10px 0 0;
   }
 </style>
 </head>
 <body>
-<div class="app" role="application" aria-label="American History Block Game">
+<div class="app" role="application" aria-label="American History Block 1–2 Game">
   <header>
     <div class="title">
       <h1>American History — Block 1–2 Game (CS 8–13)</h1>
-      <div class="sub">100% accuracy required • Hints only after a miss • Auto-advance on correct</div>
+      <div class="sub">Perfect run required for submit ticket • Hints only after a miss • Auto-advance on correct</div>
     </div>
     <div class="meta">
       <div class="pill">Name: <b id="mName">—</b></div>
@@ -92,7 +91,6 @@
   </header>
 
   <main>
-    <!-- START -->
     <section id="screenStart" class="card">
       <div class="row">
         <div>
@@ -104,15 +102,12 @@
         </div>
         <div style="display:flex; gap:10px; align-items:center">
           <button id="btnStart">Start</button>
-          <button id="btnDemo" class="secondary" title="Quick-fill a demo name">Demo</button>
+          <button id="btnDemo" class="secondary">Demo</button>
         </div>
       </div>
-      <div class="toast" style="margin-top:10px">
-        Tip: No scrolling needed—choices stay on-screen.
-      </div>
+      <div class="toast" style="margin-top:10px">No scrolling needed—choices stay on-screen.</div>
     </section>
 
-    <!-- QUESTION -->
     <section id="screenGame" class="card hidden">
       <div class="qTop">
         <div>
@@ -120,7 +115,7 @@
           <p class="qTitle" id="qText">—</p>
         </div>
         <div class="status">
-          <div class="bar" aria-label="progress"><div id="barFill"></div></div>
+          <div class="bar"><div id="barFill"></div></div>
           <div class="toast"><span id="qCount">0</span>/<span id="qTotal">0</span></div>
         </div>
       </div>
@@ -128,7 +123,7 @@
       <div class="grid" id="choices"></div>
 
       <div class="hint" id="hintBox" role="note" aria-label="Hint">
-        <div><b>Hint (appears only after a miss):</b></div>
+        <div><b>Hint (only after a miss):</b></div>
         <div id="hintText" style="margin-top:6px"></div>
         <div class="small" id="hintSmall"></div>
       </div>
@@ -141,15 +136,14 @@
       </div>
     </section>
 
-    <!-- COMPLETE -->
     <section id="screenDone" class="card hidden">
       <div class="row">
         <div>
-          <h2 style="margin:0 0 6px; font-size:16px;">Complete ✅</h2>
-          <div class="toast">100% accuracy achieved. Copy your completion log and submit if requested.</div>
+          <h2 id="doneTitle" style="margin:0 0 6px; font-size:16px;">Complete ✅</h2>
+          <div class="toast" id="doneMsg">Perfect run achieved. Copy your submit ticket.</div>
         </div>
         <div style="display:flex; gap:10px">
-          <button id="btnCopy" class="good">Copy Log</button>
+          <button id="btnCopy" class="good">Copy Ticket</button>
           <button id="btnPlayAgain" class="secondary">Play Again</button>
         </div>
       </div>
@@ -159,16 +153,9 @@
 </div>
 
 <script>
-/** =========
- *  CONFIG
- *  =========
- * Question types kept minimal to limit scrolling:
- * - MCQ with 3–4 choices
- * Each question has:
- *  { cs: "CS8", prompt, choices:[...], answer:"...", hint:{why, keyPoints[]} }
- */
-
-// SAMPLE DATASET: Block 1–2 (CS 8–13), aligned to Ohio Model Curriculum elaborations.
+/* =========
+   QUESTIONS — Block 1–2 (CS 8–13)
+   ========= */
 const QUESTIONS = shuffle([
   {
     cs:"CS8",
@@ -180,20 +167,14 @@ const QUESTIONS = shuffle([
       "Skilled labor replaced mass production"
     ],
     answer:"Workers shifted from agriculture toward factory work and cities grew",
-    hint:{
-      why:"Industrialization created more factory jobs and encouraged urban living.",
-      keyPoints:["Shift from agricultural to factory workers","Rural → urban migration; crowded/unsanitary cities"]
-    }
+    hint:{ why:"Industrialization created more factory jobs and encouraged urban living.", keyPoints:["Agriculture → factories","Urban growth and crowding"] }
   },
   {
     cs:"CS8",
     prompt:"Which innovation best connects to mass production and the rise of unskilled labor?",
     choices:["Mechanized assembly line","Handcrafted tools","Barter trade","Crop rotation"],
     answer:"Mechanized assembly line",
-    hint:{
-      why:"Assembly lines standardized tasks and supported mass production.",
-      keyPoints:["Mass production","Transition from skilled → unskilled labor"]
-    }
+    hint:{ why:"Assembly lines standardized tasks and supported mass production.", keyPoints:["Mass production","Standardized tasks"] }
   },
   {
     cs:"CS9",
@@ -205,20 +186,14 @@ const QUESTIONS = shuffle([
       "Unions formed because government banned factories"
     ],
     answer:"Unions demanded reforms like safer conditions and shorter hours",
-    hint:{
-      why:"Unions pushed workplace reforms in response to unregulated conditions.",
-      keyPoints:["Shorter workdays","Safer conditions","Higher pay","Child labor restrictions"]
-    }
+    hint:{ why:"Unions organized to improve wages, hours, and safety.", keyPoints:["Safer conditions","Shorter hours","Better pay"] }
   },
   {
     cs:"CS9",
     prompt:"Which tactic is a union strategy used to pressure employers to negotiate?",
     choices:["Collective bargaining","Company monopoly","Laissez-faire","Trust formation"],
     answer:"Collective bargaining",
-    hint:{
-      why:"Collective bargaining is negotiation between workers (as a group) and management.",
-      keyPoints:["Collective bargaining","Strikes","Boycotts"]
-    }
+    hint:{ why:"Collective bargaining = negotiating as a group.", keyPoints:["Negotiation","Workers act together"] }
   },
   {
     cs:"CS10",
@@ -230,10 +205,7 @@ const QUESTIONS = shuffle([
       "It stopped internal migration from farms to cities"
     ],
     answer:"It increased diversity and helped fill demand for workers",
-    hint:{
-      why:"Immigration helped meet labor demand and shaped culture, but also fueled nativism.",
-      keyPoints:["Demand for workers","Diffusion of ethnic traits","City growth","Nativist sentiment"]
-    }
+    hint:{ why:"Immigration helped meet labor demand and reshaped cities, but also fueled nativism.", keyPoints:["Labor demand","Ethnic neighborhoods","Nativism"] }
   },
   {
     cs:"CS10",
@@ -245,20 +217,14 @@ const QUESTIONS = shuffle([
       "More western gold → migration to Alaska"
     ],
     answer:"Escape discrimination + seek jobs → growth and cultural change in northern cities",
-    hint:{
-      why:"African Americans moved from the rural South to the urban North for safety and opportunity.",
-      keyPoints:["Escape discrimination","Better-paying jobs","Northern economic + cultural transformation"]
-    }
+    hint:{ why:"Push + pull factors led to major northern urban growth and cultural change.", keyPoints:["Push: discrimination","Pull: jobs","Northern city growth"] }
   },
   {
     cs:"CS11",
     prompt:"Which U.S. policy/action is most directly tied to reinforcing the reservation system?",
     choices:["Dawes Act","Monroe Doctrine","Marshall Plan","Wagner Act"],
     answer:"Dawes Act",
-    hint:{
-      why:"Government actions like the Dawes Act supported displacement and assimilation pressures.",
-      keyPoints:["Treaties + government actions","Reservation system","Assimilation pressures"]
-    }
+    hint:{ why:"The Dawes Act pressured assimilation by breaking up tribal land.", keyPoints:["Allotment","Assimilation pressure"] }
   },
   {
     cs:"CS12",
@@ -270,66 +236,34 @@ const QUESTIONS = shuffle([
       "Homestead Act + Gold Rush"
     ],
     answer:"Jim Crow laws + Plessy v. Ferguson affirming segregation",
-    hint:{
-      why:"Jim Crow enforced segregation and Plessy upheld it legally.",
-      keyPoints:["Segregation","Limited ballot access","Plessy v. Ferguson","Violence/KKK revival"]
-    }
+    hint:{ why:"Jim Crow enforced segregation and Plessy upheld it legally.", keyPoints:["Segregation laws","‘Separate but equal’"] }
   },
   {
     cs:"CS13",
     prompt:"Which reform is most clearly Progressive and aimed at consumer protection?",
-    choices:[
-      "Pure Food and Drug Act",
-      "Treaty of Versailles",
-      "Dawes Act",
-      "Lend-Lease Act"
-    ],
+    choices:["Pure Food and Drug Act","Treaty of Versailles","Dawes Act","Lend-Lease Act"],
     answer:"Pure Food and Drug Act",
-    hint:{
-      why:"Progressives pushed laws to protect consumers from unsafe products and practices.",
-      keyPoints:["Consumer protection","Muckrakers exposed abuses","Reform agenda"]
-    }
+    hint:{ why:"Progressives pushed laws to protect consumers from unsafe products.", keyPoints:["Consumer protection","Reform laws"] }
   }
 ]);
 
-/** =========
- *  ENGINE
- *  ========= */
+/* =========
+   ENGINE
+   ========= */
 const $ = (s)=>document.querySelector(s);
-const screens = {
-  start: $("#screenStart"),
-  game:  $("#screenGame"),
-  done:  $("#screenDone")
-};
-
-const meta = {
-  name: $("#mName"),
-  start: $("#mStart"),
-  time: $("#mTime"),
-  acc:  $("#mAcc")
-};
-
+const screens = { start: $("#screenStart"), game: $("#screenGame"), done: $("#screenDone") };
+const meta = { name: $("#mName"), start: $("#mStart"), time: $("#mTime"), acc: $("#mAcc") };
 const qUI = {
-  kicker: $("#qKicker"),
-  text: $("#qText"),
-  choices: $("#choices"),
-  count: $("#qCount"),
-  total: $("#qTotal"),
-  bar: $("#barFill"),
+  kicker: $("#qKicker"), text: $("#qText"), choices: $("#choices"),
+  count: $("#qCount"), total: $("#qTotal"), bar: $("#barFill"),
   feedback: $("#feedback"),
-  hintBox: $("#hintBox"),
-  hintText: $("#hintText"),
-  hintSmall: $("#hintSmall")
+  hintBox: $("#hintBox"), hintText: $("#hintText"), hintSmall: $("#hintSmall")
 };
 
 let state = {
-  startedAt: null,
-  timerId: null,
-  idx: 0,
-  misses: 0,
-  attempts: 0,
-  qOrder: [],
-  perQMissed: new Set()
+  startedAt:null, timerId:null,
+  idx:0, misses:0, attempts:0,
+  qOrder:[], perQMissed:new Set()
 };
 
 $("#btnDemo").addEventListener("click", ()=>{ $("#name").value="Demo Student"; $("#name").focus(); });
@@ -340,11 +274,19 @@ $("#btnCopy").addEventListener("click", async ()=>{
   try{
     await navigator.clipboard.writeText($("#logOut").innerText);
     $("#btnCopy").textContent="Copied ✅";
-    setTimeout(()=>$("#btnCopy").textContent="Copy Log", 1100);
+    setTimeout(()=>$("#btnCopy").textContent="Copy Ticket", 1100);
   }catch(e){
-    alert("Copy failed. You can manually select and copy the log text.");
+    alert("Copy failed. You can manually select and copy the ticket text.");
   }
 });
+
+function calcAccuracy(){
+  if(state.attempts <= 0) return 100;
+  return Math.round(((state.attempts - state.misses) / state.attempts) * 100);
+}
+function updateAccuracy(){
+  meta.acc.textContent = `${calcAccuracy()}%`;
+}
 
 function startGame(){
   const n = ($("#name").value||"").trim();
@@ -354,9 +296,7 @@ function startGame(){
   meta.name.textContent = n;
   meta.start.textContent = stamp(state.startedAt);
   meta.time.textContent = "00:00";
-  meta.acc.textContent = "100%";
 
-  // shuffle question order each load
   state.qOrder = shuffle([...QUESTIONS]);
   state.idx = 0;
   state.misses = 0;
@@ -364,6 +304,7 @@ function startGame(){
   state.perQMissed = new Set();
 
   $("#qTotal").textContent = String(state.qOrder.length);
+  updateAccuracy();
 
   switchTo("game");
   startTimer();
@@ -372,7 +313,7 @@ function startGame(){
 
 function renderQuestion(){
   const q = state.qOrder[state.idx];
-  if(!q){ return finish(); }
+  if(!q) return finish();
 
   qUI.kicker.textContent = `${q.cs} • Question ${state.idx+1}`;
   qUI.text.textContent = q.prompt;
@@ -384,12 +325,10 @@ function renderQuestion(){
   qUI.feedback.textContent = "Choose the best answer.";
   qUI.feedback.style.color = "var(--muted)";
 
-  // hide hint until missed
   qUI.hintBox.style.display = "none";
   qUI.hintText.textContent = "";
   qUI.hintSmall.textContent = "";
 
-  // render choices (2x2 grid; 3 choices still looks clean)
   qUI.choices.innerHTML = "";
   q.choices.forEach(choice=>{
     const btn = document.createElement("button");
@@ -402,22 +341,21 @@ function renderQuestion(){
 function submit(choice){
   const q = state.qOrder[state.idx];
   state.attempts++;
+  updateAccuracy();
 
   if(choice === q.answer){
-    // correct: advance immediately
     qUI.feedback.textContent = "Correct ✅";
     qUI.feedback.style.color = "var(--good)";
-    // quick visual flash
     flashButtons(choice, true);
     setTimeout(()=>{
       state.idx++;
       renderQuestion();
-    }, 350);
+    }, 320);
     return;
   }
 
-  // incorrect: mark miss + show hint (only after miss)
   state.misses++;
+  updateAccuracy();
   state.perQMissed.add(state.idx);
 
   qUI.feedback.textContent = "Not yet ❌ Try again.";
@@ -429,10 +367,6 @@ function submit(choice){
   qUI.hintSmall.textContent = q.hint?.keyPoints?.length
     ? ("Key points: " + q.hint.keyPoints.join(" • "))
     : "";
-
-  // accuracy is always “what you end with” (100%), but we can still display live accuracy if you want.
-  // For now, keep it strict: completion only happens at 100% (because you can’t progress until correct).
-  meta.acc.textContent = "100%";
 }
 
 function finish(){
@@ -441,8 +375,34 @@ function finish(){
 
   const endedAt = new Date();
   const durationSec = Math.floor((endedAt - state.startedAt)/1000);
+  const accuracy = calcAccuracy();
 
-  const log = {
+  if(state.misses > 0){
+    $("#doneTitle").textContent = "Not Passed ❌";
+    $("#doneMsg").textContent = "You finished, but this attempt had misses. Retake for a perfect run to earn the submit ticket.";
+    $("#btnCopy").style.display = "none";
+
+    $("#logOut").textContent =
+`NOT PASSED — Retake Required
+
+Student: ${meta.name.textContent}
+Started: ${stamp(state.startedAt)}
+Ended:   ${stamp(endedAt)}
+Duration (sec): ${durationSec}
+Accuracy: ${accuracy}%
+Misses: ${state.misses}
+
+RULE: To earn a submit ticket, you must complete the game with 0 misses (100% accuracy).`;
+    switchTo("done");
+    return;
+  }
+
+  $("#doneTitle").textContent = "Complete ✅";
+  $("#doneMsg").textContent = "Perfect run achieved (0 misses). Copy your submit ticket.";
+  $("#btnCopy").style.display = "inline-flex";
+
+  const ticket = {
+    status: "PASSED",
     game: "American History — Block 1–2 (CS 8–13)",
     student: meta.name.textContent,
     started: stamp(state.startedAt),
@@ -450,11 +410,11 @@ function finish(){
     duration_seconds: durationSec,
     total_questions: state.qOrder.length,
     total_attempts: state.attempts,
-    total_misses: state.misses,
-    missed_questions_indexes: [...state.perQMissed].map(i=>i+1)
+    misses: state.misses,
+    accuracy_percent: 100
   };
 
-  $("#logOut").textContent = JSON.stringify(log, null, 2);
+  $("#logOut").textContent = JSON.stringify(ticket, null, 2);
   switchTo("done");
 }
 
@@ -481,7 +441,8 @@ function resetAll(){
   meta.time.textContent="00:00";
   meta.acc.textContent="100%";
   $("#name").value="";
-  $("#btnCopy").textContent="Copy Log";
+  $("#btnCopy").textContent="Copy Ticket";
+  $("#btnCopy").style.display = "inline-flex";
   switchTo("start");
 }
 
@@ -491,16 +452,10 @@ function fmtTime(sec){
   return `${m}:${s}`;
 }
 function stamp(d){
-  // local time stamp
-  return d.toLocaleString(undefined, {year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit", second:"2-digit"});
-}
-  function calcAccuracy(){
-  if(state.attempts <= 0) return 100;
-  return Math.round(((state.attempts - state.misses) / state.attempts) * 100);
-}
-
-function updateAccuracy(){
-  meta.acc.textContent = `${calcAccuracy()}%`;
+  return d.toLocaleString(undefined, {
+    year:"numeric", month:"2-digit", day:"2-digit",
+    hour:"2-digit", minute:"2-digit", second:"2-digit"
+  });
 }
 function shuffle(arr){
   for(let i=arr.length-1;i>0;i--){
@@ -513,7 +468,7 @@ function flashButtons(choice, correct){
   [...qUI.choices.querySelectorAll("button")].forEach(b=>{
     if(b.textContent === choice){
       b.classList.add(correct ? "good" : "bad");
-      setTimeout(()=>b.classList.remove("good","bad"), 350);
+      setTimeout(()=>b.classList.remove("good","bad"), 320);
     }
   });
 }
