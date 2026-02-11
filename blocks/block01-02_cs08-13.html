@@ -157,6 +157,9 @@
    QUESTIONS — Block 1–2 (CS 8–13)
    ========= */
 const QUESTIONS = shuffle([
+  /* =========================
+     CS 8 — Industrialization transforms economy/society
+     ========================= */
   {
     cs:"CS8",
     prompt:"Which change best shows how industrialization shifted the U.S. economy in the late 1800s?",
@@ -167,15 +170,50 @@ const QUESTIONS = shuffle([
       "Skilled labor replaced mass production"
     ],
     answer:"Workers shifted from agriculture toward factory work and cities grew",
-    hint:{ why:"Industrialization created more factory jobs and encouraged urban living.", keyPoints:["Agriculture → factories","Urban growth and crowding"] }
+    hint:{ why:"Industrialization created more factory jobs and encouraged urban living.", keyPoints:["Agriculture → factories","Urban growth"] }
   },
   {
     cs:"CS8",
     prompt:"Which innovation best connects to mass production and the rise of unskilled labor?",
     choices:["Mechanized assembly line","Handcrafted tools","Barter trade","Crop rotation"],
     answer:"Mechanized assembly line",
-    hint:{ why:"Assembly lines standardized tasks and supported mass production.", keyPoints:["Mass production","Standardized tasks"] }
+    hint:{ why:"Assembly lines standardized tasks and increased output.", keyPoints:["Mass production","Standardized tasks"] }
   },
+  {
+    cs:"CS8",
+    prompt:"Which development most directly encouraged the growth of national markets in the late 1800s?",
+    choices:["Railroads linking regions","Horse trails between towns","Local barter systems","Isolation from trade"],
+    answer:"Railroads linking regions",
+    hint:{ why:"Railroads moved raw materials and finished goods quickly across the country.", keyPoints:["National market","Faster transport"] }
+  },
+  {
+    cs:"CS8",
+    prompt:"Which statement best explains why cities grew rapidly during industrialization?",
+    choices:[
+      "Factories created jobs that pulled people into urban areas",
+      "Cities required everyone to farm nearby",
+      "People left cities because wages were too high",
+      "Urban areas eliminated all immigration"
+    ],
+    answer:"Factories created jobs that pulled people into urban areas",
+    hint:{ why:"Industrial jobs concentrated in cities, pulling workers from farms and abroad.", keyPoints:["Jobs in cities","Urbanization"] }
+  },
+  {
+    cs:"CS8",
+    prompt:"Which factor most likely increased immigration to the U.S. during industrial growth?",
+    choices:[
+      "High demand for factory labor",
+      "A national ban on hiring immigrants",
+      "A shrinking need for workers",
+      "An end to industrial production"
+    ],
+    answer:"High demand for factory labor",
+    hint:{ why:"Industrial expansion increased demand for workers in cities.", keyPoints:["Labor demand","Factory jobs"] }
+  },
+
+  /* =========================
+     CS 9 — Labor organizations and conflict
+     ========================= */
   {
     cs:"CS9",
     prompt:"Which pairing is most accurate about labor unions during industrialization?",
@@ -186,15 +224,50 @@ const QUESTIONS = shuffle([
       "Unions formed because government banned factories"
     ],
     answer:"Unions demanded reforms like safer conditions and shorter hours",
-    hint:{ why:"Unions organized to improve wages, hours, and safety.", keyPoints:["Safer conditions","Shorter hours","Better pay"] }
+    hint:{ why:"Unions organized to improve wages, hours, and safety.", keyPoints:["Wages","Hours","Safety"] }
   },
   {
     cs:"CS9",
     prompt:"Which tactic is a union strategy used to pressure employers to negotiate?",
-    choices:["Collective bargaining","Company monopoly","Laissez-faire","Trust formation"],
-    answer:"Collective bargaining",
-    hint:{ why:"Collective bargaining = negotiating as a group.", keyPoints:["Negotiation","Workers act together"] }
+    choices:["Strike","Monopoly","Trust formation","Laissez-faire"],
+    answer:"Strike",
+    hint:{ why:"Strikes stop labor to pressure owners to negotiate.", keyPoints:["Withhold labor","Pressure employers"] }
   },
+  {
+    cs:"CS9",
+    prompt:"Which statement best explains collective bargaining?",
+    choices:[
+      "Workers negotiate as a group to improve wages and conditions",
+      "Workers negotiate alone with no organization",
+      "Employers negotiate only with the federal government",
+      "Workers avoid negotiation and accept any terms"
+    ],
+    answer:"Workers negotiate as a group to improve wages and conditions",
+    hint:{ why:"Collective bargaining is group negotiation between workers and employers.", keyPoints:["Group negotiation","Wages/conditions"] }
+  },
+  {
+    cs:"CS9",
+    prompt:"Why did conflicts between labor and big business sometimes become violent in the late 1800s?",
+    choices:[
+      "Employers and government forces tried to break strikes and protect profits",
+      "Workers and employers agreed easily on all terms",
+      "Factories stopped production permanently",
+      "Unions only protested through voting"
+    ],
+    answer:"Employers and government forces tried to break strikes and protect profits",
+    hint:{ why:"Strikes threatened profits; owners often used police, guards, or courts to break them.", keyPoints:["Strikebreaking","Profit conflict"] }
+  },
+  {
+    cs:"CS9",
+    prompt:"Which workplace issue was most common in industrial-era factories and helped fuel union growth?",
+    choices:["Unsafe conditions","Short 4-hour workdays","Guaranteed pensions","Universal health care"],
+    answer:"Unsafe conditions",
+    hint:{ why:"Dangerous work and poor conditions pushed workers to organize.", keyPoints:["Safety hazards","Union growth"] }
+  },
+
+  /* =========================
+     CS 10 — Immigration, internal migration, and urbanization
+     ========================= */
   {
     cs:"CS10",
     prompt:"Which statement best explains one major effect of mass immigration around 1900?",
@@ -205,7 +278,7 @@ const QUESTIONS = shuffle([
       "It stopped internal migration from farms to cities"
     ],
     answer:"It increased diversity and helped fill demand for workers",
-    hint:{ why:"Immigration helped meet labor demand and reshaped cities, but also fueled nativism.", keyPoints:["Labor demand","Ethnic neighborhoods","Nativism"] }
+    hint:{ why:"Immigration met labor demand and reshaped city culture; it also fueled nativism.", keyPoints:["Labor demand","Diversity","Nativism"] }
   },
   {
     cs:"CS10",
@@ -217,35 +290,172 @@ const QUESTIONS = shuffle([
       "More western gold → migration to Alaska"
     ],
     answer:"Escape discrimination + seek jobs → growth and cultural change in northern cities",
-    hint:{ why:"Push + pull factors led to major northern urban growth and cultural change.", keyPoints:["Push: discrimination","Pull: jobs","Northern city growth"] }
+    hint:{ why:"Push (racism/violence) and pull (jobs) factors drove major northern urban growth.", keyPoints:["Push + pull","Northern growth"] }
+  },
+  {
+    cs:"CS10",
+    prompt:"Which is the best example of a 'pull factor' encouraging immigration to U.S. cities?",
+    choices:["Factory job opportunities","War in Europe","Crop failures","Religious persecution"],
+    answer:"Factory job opportunities",
+    hint:{ why:"A pull factor is something attractive in the destination.", keyPoints:["Jobs as pull factor"] }
+  },
+  {
+    cs:"CS10",
+    prompt:"Why did ethnic neighborhoods form in many U.S. cities during this period?",
+    choices:[
+      "Immigrants often settled near people with shared language and culture",
+      "Cities required everyone to live in one mixed neighborhood",
+      "Immigrants were banned from urban areas",
+      "Most immigrants lived only on farms"
+    ],
+    answer:"Immigrants often settled near people with shared language and culture",
+    hint:{ why:"Shared culture and support networks encouraged clustering.", keyPoints:["Shared language","Community support"] }
+  },
+  {
+    cs:"CS10",
+    prompt:"Which urban problem was most strongly linked to rapid population growth and overcrowding?",
+    choices:["Disease outbreaks and poor sanitation","More open farmland","Lower demand for housing","Less need for transportation"],
+    answer:"Disease outbreaks and poor sanitation",
+    hint:{ why:"Overcrowding + poor sewage/water systems increased disease spread.", keyPoints:["Sanitation","Overcrowding","Disease"] }
+  },
+
+  /* =========================
+     CS 11 — Westward expansion, conflict, reservation/assimilation
+     ========================= */
+  {
+    cs:"CS11",
+    prompt:"Which U.S. policy/action is most directly tied to reinforcing the reservation system and assimilation pressure?",
+    choices:["Dawes Act","Marshall Plan","Wagner Act","G.I. Bill"],
+    answer:"Dawes Act",
+    hint:{ why:"Dawes divided tribal land into allotments to push assimilation.", keyPoints:["Allotment","Assimilation"] }
   },
   {
     cs:"CS11",
-    prompt:"Which U.S. policy/action is most directly tied to reinforcing the reservation system?",
-    choices:["Dawes Act","Monroe Doctrine","Marshall Plan","Wagner Act"],
-    answer:"Dawes Act",
-    hint:{ why:"The Dawes Act pressured assimilation by breaking up tribal land.", keyPoints:["Allotment","Assimilation pressure"] }
+    prompt:"Which statement best explains how westward expansion affected American Indians?",
+    choices:[
+      "It increased tribal control of land and resources",
+      "It increased conflict as settlers and the U.S. Army pressured tribes off land",
+      "It ended treaty making and guaranteed tribal sovereignty",
+      "It stopped all migration into western territories"
+    ],
+    answer:"It increased conflict as settlers and the U.S. Army pressured tribes off land",
+    hint:{ why:"Settlement, railroads, and resource competition increased conflict and displacement.", keyPoints:["Displacement","Conflict"] }
   },
+  {
+    cs:"CS11",
+    prompt:"How did the reservation system most directly change Native life?",
+    choices:[
+      "Forced many tribes onto restricted land with federal control",
+      "Expanded tribal independence and access to resources",
+      "Guaranteed equal political representation in Congress",
+      "Required settlers to leave the West"
+    ],
+    answer:"Forced many tribes onto restricted land with federal control",
+    hint:{ why:"Reservations restricted movement and often broke traditional economic/cultural patterns.", keyPoints:["Restricted land","Federal control"] }
+  },
+  {
+    cs:"CS11",
+    prompt:"Which goal was central to the use of Indian boarding schools?",
+    choices:["Cultural assimilation into Euro-American norms","Strengthening tribal languages","Expanding tribal landholdings","Creating Native-run governments"],
+    answer:"Cultural assimilation into Euro-American norms",
+    hint:{ why:"Boarding schools aimed to replace Native languages and traditions with mainstream culture.", keyPoints:["Assimilation","Language/culture suppression"] }
+  },
+  {
+    cs:"CS11",
+    prompt:"Which cause-and-effect best explains why Plains conflicts increased in the late 1800s?",
+    choices:[
+      "Railroads + settlers moved in → competition over land/resources → more conflict",
+      "Settlers left the West → tribes gained more land → conflict increased",
+      "Buffalo herds grew rapidly → conflict ended",
+      "Treaties were always honored → violence disappeared"
+    ],
+    answer:"Railroads + settlers moved in → competition over land/resources → more conflict",
+    hint:{ why:"Expansion increased competition and treaty violations.", keyPoints:["Settlement","Treaty violations","Resource competition"] }
+  },
+
+  /* =========================
+     CS 12 — Post-Reconstruction, Jim Crow, institutionalized racism
+     ========================= */
   {
     cs:"CS12",
     prompt:"Which combination best reflects how racism was institutionalized after Reconstruction?",
     choices:[
-      "Jim Crow laws + Plessy v. Ferguson affirming segregation",
+      "Jim Crow laws + Plessy v. Ferguson upholding segregation",
       "New Deal programs + Social Security",
       "Marshall Plan + NATO",
       "Homestead Act + Gold Rush"
     ],
-    answer:"Jim Crow laws + Plessy v. Ferguson affirming segregation",
-    hint:{ why:"Jim Crow enforced segregation and Plessy upheld it legally.", keyPoints:["Segregation laws","‘Separate but equal’"] }
+    answer:"Jim Crow laws + Plessy v. Ferguson upholding segregation",
+    hint:{ why:"Jim Crow enforced segregation; Plessy upheld 'separate but equal.'", keyPoints:["Segregation","Plessy decision"] }
   },
+  {
+    cs:"CS12",
+    prompt:"What did Plessy v. Ferguson (1896) allow states to do?",
+    choices:[
+      "Maintain segregated public facilities under 'separate but equal'",
+      "Require integrated schools immediately",
+      "Ban all discriminatory state laws",
+      "End voting restrictions nationwide"
+    ],
+    answer:"Maintain segregated public facilities under 'separate but equal'",
+    hint:{ why:"The ruling accepted legal segregation if facilities were 'equal.'", keyPoints:["Segregation upheld","‘Separate but equal’"] }
+  },
+  {
+    cs:"CS12",
+    prompt:"Which practice was most commonly used to suppress African American voting in the South?",
+    choices:["Poll taxes and literacy tests","Expanded universal suffrage","Lower voting age to 18","Automatic voter registration"],
+    answer:"Poll taxes and literacy tests",
+    hint:{ why:"These barriers were designed to block Black voters while avoiding direct racial language.", keyPoints:["Voting suppression","Barriers"] }
+  },
+  {
+    cs:"CS12",
+    prompt:"Which statement best describes the role of the Ku Klux Klan in the post-Reconstruction era?",
+    choices:[
+      "Used intimidation and violence to enforce white supremacy",
+      "Protected Black voting rights through federal courts",
+      "Promoted integration in public schools",
+      "Worked to expand civil liberties for immigrants"
+    ],
+    answer:"Used intimidation and violence to enforce white supremacy",
+    hint:{ why:"The Klan used terror to control politics and society.", keyPoints:["Intimidation","Violence","White supremacy"] }
+  },
+  {
+    cs:"CS12",
+    prompt:"Which cause-and-effect best explains the rise of Jim Crow laws after Reconstruction?",
+    choices:[
+      "Federal troops withdrew → Southern governments regained control → segregation laws expanded",
+      "Voting rights expanded → segregation ended → equality achieved",
+      "Congress increased enforcement → segregation grew weaker",
+      "Industrialization ended → Jim Crow disappeared"
+    ],
+    answer:"Federal troops withdrew → Southern governments regained control → segregation laws expanded",
+    hint:{ why:"With less federal enforcement, many Southern states restricted rights and enforced segregation.", keyPoints:["End of Reconstruction","State control","Segregation"] }
+  },
+
+  /* =========================
+     CS 13 — Progressive Era reforms
+     ========================= */
   {
     cs:"CS13",
     prompt:"Which reform is most clearly Progressive and aimed at consumer protection?",
     choices:["Pure Food and Drug Act","Treaty of Versailles","Dawes Act","Lend-Lease Act"],
     answer:"Pure Food and Drug Act",
-    hint:{ why:"Progressives pushed laws to protect consumers from unsafe products.", keyPoints:["Consumer protection","Reform laws"] }
+    hint:{ why:"Progressives pushed laws to protect consumers from unsafe products.", keyPoints:["Consumer protection","Regulation"] }
+  },
+  {
+    cs:"CS13",
+    prompt:"Which Progressive goal is best reflected by antitrust actions?",
+    choices:[
+      "Limiting the power of monopolies and trusts",
+      "Expanding child labor in factories",
+      "Eliminating all business regulation",
+      "Ending elections for senators"
+    ],
+    answer:"Limiting the power of monopolies and trusts",
+    hint:{ why:"Antitrust laws targeted monopolies that reduced competition.", keyPoints:["Competition","Trust-busting"] }
   }
 ]);
+
 
 /* =========
    ENGINE
