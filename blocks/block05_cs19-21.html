@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>American History — Block 5 (CS 19–21) Game</title>
+<style>
+  :root{
+    --bg:#0b1220; --card:#111a2e; --ink:#e7eefc; --muted:#a8b4cf;
+    --accent:#7aa2ff; --good:#2bd576; --bad:#ff5c7a; --warn:#ffd166;
+    --border:rgba(255,255,255,.12); --shadow:0 18px 55px rgba(0,0,0,.35);
+    --r:18px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:radial-gradient(1000px 650px at 18% 12%, rgba(122,162,255,.18), transparent 60%), var(--bg);
+    color:var(--ink); min-height:100vh;
+    display:flex; align-items:center; justify-content:center; padding:18px;
+  }
+  .app{width:min(980px,100%); background:rgba(17,26,46,.9); border:1px solid var(--border);
+    border-radius:var(--r); box-shadow:var(--shadow); overflow:hidden}
+  header{padding:16px 18px; display:flex; gap:12px; align-items:flex-start; justify-content:space-between;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, rgba(255,255,255,.06), transparent)}
+  .title{display:flex; flex-direction:column; gap:4px}
+  .title h1{margin:0; font-size:16px; letter-spacing:.2px}
+  .title .sub{color:var(--muted); font-size:12px; line-height:1.3}
+  .meta{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center}
+  .pill{border:1px solid var(--border); border-radius:999px; padding:6px 10px; font-size:12px; color:var(--muted); background:rgba(0,0,0,.18)}
+  .pill b{color:var(--ink); font-weight:700}
+  main{padding:18px; display:grid; gap:14px}
+  .card{background:rgba(0,0,0,.22); border:1px solid var(--border); border-radius:var(--r); padding:16px}
+  .row{display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between}
+  label{font-size:12px; color:var(--muted)}
+  input[type="text"]{
+    width:min(420px,100%); padding:10px 12px; border-radius:12px;
+    border:1px solid var(--border); background:rgba(0,0,0,.25); color:var(--ink);
+    outline:none;
+  }
+  button{
+    cursor:pointer; border:none; border-radius:14px; padding:12px 12px;
+    font-weight:800; color:var(--ink); background:rgba(122,162,255,.18);
+    border:1px solid rgba(122,162,255,.35);
+    transition:transform .08s ease, filter .12s ease;
+  }
+  button:hover{filter:brightness(1.06)}
+  button:active{transform:scale(.99)}
+  button.secondary{background:rgba(255,255,255,.06); border:1px solid var(--border); color:var(--muted)}
+  button.good{background:rgba(43,213,118,.14); border:1px solid rgba(43,213,118,.35)}
+  button.bad{background:rgba(255,92,122,.14); border:1px solid rgba(255,92,122,.35)}
+  .qTop{display:flex; align-items:flex-start; justify-content:space-between; gap:10px}
+  .kicker{color:var(--muted); font-size:12px}
+  .qTitle{margin:0; font-size:14px; line-height:1.35}
+  .status{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  .bar{height:10px; background:rgba(255,255,255,.08); border-radius:999px; overflow:hidden; border:1px solid var(--border); width:220px}
+  .bar>div{height:100%; width:0%; background:rgba(43,213,118,.75)}
+  .grid{
+    display:grid; gap:10px; margin-top:10px;
+    grid-template-columns:repeat(2, minmax(0,1fr));
+  }
+  @media (max-width:640px){ .grid{grid-template-columns:1fr} }
+  .hint{
+    margin-top:10px; padding:10px 12px; border-radius:14px;
+    background:rgba(255,209,102,.10); border:1px solid rgba(255,209,102,.35);
+    display:none;
+  }
+  .hint .small{color:var(--muted); font-size:12px; margin-top:4px; line-height:1.35}
+  .toast{font-size:12px; color:var(--muted)}
+  .hidden{display:none !important}
+  pre{
+    white-space:pre-wrap; word-break:break-word;
+    background:rgba(0,0,0,.25); border:1px solid var(--border); padding:12px; border-radius:14px;
+    color:var(--ink); font-size:12px; line-height:1.35; margin:10px 0 0;
+  }
+</style>
+</head>
+<body>
+<div class="app" role="application" aria-label="American History Block 5 Game">
+  <header>
+    <div class="title">
+      <h1>American History — Block 5 Game (CS 19–21)</h1>
+      <div class="sub">Great Depression causes + federal response + New Deal impacts • Perfect run required for submit ticket</div>
+    </div>
+    <div class="meta">
+      <div class="pill">Name: <b id="mName">—</b></div>
+      <div class="pill">Started: <b id="mStart">—</b></div>
+      <div class="pill">Time: <b id="mTime">00:00</b></div>
+      <div class="pill">Accuracy: <b id="mAcc">100%</b></div>
+    </div>
+  </header>
+
+  <main>
+    <section id="screenStart" class="card">
+      <div class="row">
+        <div>
+          <div class="kicker">Enter your name to begin</div>
+          <div style="margin-top:8px">
+            <label for="name">Student Name</label><br/>
+            <input id="name" type="text" autocomplete="name" placeholder="Type your name…" />
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center">
+          <button id="btnStart">Start</button>
+          <button id="btnDemo" class="secondary">Demo</button>
+        </div>
+      </div>
+      <div class="toast" style="margin-top:10px">Rules: hints only after a miss • must finish with 0 misses to earn a submit ticket.</div>
+    </section>
+
+    <section id="screenGame" class="card hidden">
+      <div class="qTop">
+        <div>
+          <div class="kicker" id="qKicker">Question</div>
+          <p class="qTitle" id="qText">—</p>
+        </div>
+        <div class="status">
+          <div class="bar"><div id="barFill"></div></div>
+          <div class="toast"><span id="qCount">0</span>/<span id="qTotal">0</span></div>
+        </div>
+      </div>
+
+      <div class="grid" id="choices"></div>
+
+      <div class="hint" id="hintBox" role="note" aria-label="Hint">
+        <div><b>Hint (only after a miss):</b></div>
+        <div id="hintText" style="margin-top:6px"></div>
+        <div class="small" id="hintSmall"></div>
+      </div>
+
+      <div class="row" style="margin-top:14px">
+        <div class="toast" id="feedback">—</div>
+        <div style="display:flex; gap:10px">
+          <button id="btnReset" class="secondary">Reset</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screenDone" class="card hidden">
+      <div class="row">
+        <div>
+          <h2 id="doneTitle" style="margin:0 0 6px; font-size:16px;">Complete ✅</h2>
+          <div class="toast" id="doneMsg">Perfect run achieved. Copy your submit ticket.</div>
+        </div>
+        <div style="display:flex; gap:10px">
+          <button id="btnCopy" class="good">Copy Ticket</button>
+          <button id="btnPlayAgain" class="secondary">Play Again</button>
+        </div>
+      </div>
+      <pre id="logOut"></pre>
+    </section>
+  </main>
+</div>
+
+<script>
+/* =========
+   QUESTIONS — Block 5 (CS 19–21)
+   Notes: Built to match Ohio AH themes you've been using: causes of the Great Depression + expanded federal role + key New Deal programs.
+   ========= */
+const QUESTIONS = shuffle([
+  // CS19 — Causes of the Great Depression
+  {
+    cs:"CS19",
+    prompt:"Which factor best describes how stock market speculation contributed to the Great Depression?",
+    choices:[
+      "Investors bought on margin, prices became inflated, and a crash wiped out wealth",
+      "Investors only bought government bonds, preventing any crash",
+      "Speculation reduced risk by requiring full payment up front",
+      "Speculation eliminated bank lending entirely"
+    ],
+    answer:"Investors bought on margin, prices became inflated, and a crash wiped out wealth",
+    hint:{ why:"Buying on margin meant borrowing to invest; when prices fell, many couldn’t repay loans.", keyPoints:["Margin buying","Inflated prices","Crash wiped out wealth"] }
+  },
+  {
+    cs:"CS19",
+    prompt:"Which chain best shows how bank failures spread economic damage during the early 1930s?",
+    choices:[
+      "Bank failure → depositors lose savings → spending drops → businesses cut jobs",
+      "Bank failure → wages rise → more spending → more hiring",
+      "Bank failure → everyone shifts to gold mines → economy grows",
+      "Bank failure → no effect because deposits were always insured"
+    ],
+    answer:"Bank failure → depositors lose savings → spending drops → businesses cut jobs",
+    hint:{ why:"Bank collapses destroyed savings and credit, shrinking demand and increasing unemployment.", keyPoints:["Savings lost","Credit dries up","Demand falls","Unemployment rises"] }
+  },
+  {
+    cs:"CS19",
+    prompt:"How did consumer debt help deepen the Great Depression?",
+    choices:[
+      "People bought on credit, then couldn’t repay, so demand and production collapsed",
+      "People avoided credit, so businesses had too much cash",
+      "Debt increased wages for all workers automatically",
+      "Debt guaranteed full employment"
+    ],
+    answer:"People bought on credit, then couldn’t repay, so demand and production collapsed",
+    hint:{ why:"Heavy installment buying left families unable to repay when incomes fell.", keyPoints:["Installment buying","Defaults","Demand drops"] }
+  },
+  {
+    cs:"CS19",
+    prompt:"Which statement best reflects the role of Federal Reserve monetary policy as a cause of the Great Depression?",
+    choices:[
+      "Actions that reduced money supply and tightened credit worsened the downturn",
+      "The Fed required banks to lend unlimited money to anyone",
+      "The Fed ended all interest rates permanently",
+      "The Fed created unemployment benefits in 1929"
+    ],
+    answer:"Actions that reduced money supply and tightened credit worsened the downturn",
+    hint:{ why:"Tight credit and a shrinking money supply make it harder to borrow and spend.", keyPoints:["Tight credit","Money supply shrinks","Spending slows"] }
+  },
+  {
+    cs:"CS19",
+    prompt:"Which is the best overall explanation for why the Great Depression became so severe?",
+    choices:[
+      "Multiple factors interacted: speculation, banking failures, debt, and policy mistakes",
+      "One single cause explains everything: fashion trends",
+      "The economy failed because the U.S. stopped using machines",
+      "The economy grew quickly because wages doubled"
+    ],
+    answer:"Multiple factors interacted: speculation, banking failures, debt, and policy mistakes",
+    hint:{ why:"The Depression’s severity came from interacting causes, not a single trigger.", keyPoints:["Multiple causes","Reinforcing effects"] }
+  },
+
+  // CS20 — Expanded role of the federal government / New Deal response
+  {
+    cs:"CS20",
+    prompt:"Which goal best matches the New Deal’s overall purpose during the Great Depression?",
+    choices:[
+      "Provide relief, promote recovery, and reform the economic system",
+      "End elections and suspend Congress permanently",
+      "Return to complete isolation from all trade forever",
+      "Eliminate all federal programs created after 1791"
+    ],
+    answer:"Provide relief, promote recovery, and reform the economic system",
+    hint:{ why:"The New Deal is commonly summarized as relief, recovery, and reform.", keyPoints:["Relief","Recovery","Reform"] }
+  },
+  {
+    cs:"CS20",
+    prompt:"Which program is most directly connected to providing jobs through large public works projects?",
+    choices:["WPA / public works programs","SEC","FDIC","Social Security"],
+    answer:"WPA / public works programs",
+    hint:{ why:"Work programs paid wages for building infrastructure and public projects.", keyPoints:["Jobs","Infrastructure projects"] }
+  },
+  {
+    cs:"CS20",
+    prompt:"What is the best explanation for how the FDIC addressed a major Great Depression problem?",
+    choices:[
+      "It insured bank deposits, rebuilding confidence and reducing bank runs",
+      "It outlawed all banks nationwide",
+      "It forced everyone to invest in the stock market",
+      "It created the League of Nations"
+    ],
+    answer:"It insured bank deposits, rebuilding confidence and reducing bank runs",
+    hint:{ why:"Deposit insurance reduced panic withdrawals.", keyPoints:["Deposit insurance","Confidence","Fewer bank runs"] }
+  },
+  {
+    cs:"CS20",
+    prompt:"Which agency/program best fits the goal of regulating the stock market to prevent fraud and restore trust?",
+    choices:["SEC","WPA","FDIC","TVA"],
+    answer:"SEC",
+    hint:{ why:"The SEC was created to regulate securities markets and reduce fraud/manipulation.", keyPoints:["Stock market regulation","Investor protection"] }
+  },
+  {
+    cs:"CS20",
+    prompt:"How did the New Deal change the role of the federal government for many Americans?",
+    choices:[
+      "It expanded federal involvement in economic stability and social welfare",
+      "It eliminated all federal authority in the economy",
+      "It banned all taxes and spending permanently",
+      "It ended banking and replaced it with barter"
+    ],
+    answer:"It expanded federal involvement in economic stability and social welfare",
+    hint:{ why:"New Deal programs expanded the federal government’s responsibility in the economy.", keyPoints:["Expanded federal role","Stability","Welfare"] }
+  },
+
+  // CS21 — Lasting impacts / debates / major reforms (linked to your course emphasis)
+  {
+    cs:"CS21",
+    prompt:"Which statement best describes Social Security’s long-term significance?",
+    choices:[
+      "It created a federal safety net for retirement (and later other groups), expanding social welfare",
+      "It ended unemployment instantly in 1933",
+      "It abolished private property",
+      "It created term limits for Congress"
+    ],
+    answer:"It created a federal safety net for retirement (and later other groups), expanding social welfare",
+    hint:{ why:"Social Security established a long-term federal role in supporting retirees.", keyPoints:["Safety net","Retirement support","Expanded welfare role"] }
+  },
+  {
+    cs:"CS21",
+    prompt:"A major criticism of some New Deal programs was that they:",
+    choices:[
+      "Increased federal power and spending, raising debates about government’s role",
+      "Eliminated all government regulations permanently",
+      "Stopped people from voting",
+      "Ended the Constitution"
+    ],
+    answer:"Increased federal power and spending, raising debates about government’s role",
+    hint:{ why:"A central debate was how large the federal role should be in economic life.", keyPoints:["Power","Spending","Role of government debate"] }
+  },
+  {
+    cs:"CS21",
+    prompt:"Which cause-and-effect statement best connects New Deal reforms to the financial system?",
+    choices:[
+      "Bank/market reforms helped restore confidence, reducing panic and stabilizing banking",
+      "Reforms increased bank runs by removing trust",
+      "Reforms banned all savings accounts",
+      "Reforms guaranteed that stock prices never fall"
+    ],
+    answer:"Bank/market reforms helped restore confidence, reducing panic and stabilizing banking",
+    hint:{ why:"FDIC/SEC reforms targeted trust and stability.", keyPoints:["Confidence","Stability","Reduced panic"] }
+  },
+  {
+    cs:"CS21",
+    prompt:"Which example best represents a New Deal 'reform' rather than immediate 'relief'?",
+    choices:["Creating the SEC to regulate markets","Distributing emergency food","Direct cash assistance in a crisis","Short-term soup kitchens"],
+    answer:"Creating the SEC to regulate markets",
+    hint:{ why:"Reform changes rules/systems to prevent future crises.", keyPoints:["Reform = long-term rules","SEC regulation"] }
+  },
+  {
+    cs:"CS21",
+    prompt:"Which statement best captures the overall legacy of the New Deal era?",
+    choices:[
+      "It permanently reshaped expectations that the federal government should respond to major economic crises",
+      "It proved the federal government can never influence the economy",
+      "It ended all future recessions forever",
+      "It eliminated the need for elections"
+    ],
+    answer:"It permanently reshaped expectations that the federal government should respond to major economic crises",
+    hint:{ why:"A key legacy is expanded expectations for federal crisis response.", keyPoints:["Expanded expectations","Crisis response"] }
+  }
+]);
+
+/* =========
+   ENGINE — same as your fixed games
+   ========= */
+const $ = (s)=>document.querySelector(s);
+const screens = { start: $("#screenStart"), game: $("#screenGame"), done: $("#screenDone") };
+const meta = { name: $("#mName"), start: $("#mStart"), time: $("#mTime"), acc: $("#mAcc") };
+const qUI = {
+  kicker: $("#qKicker"), text: $("#qText"), choices: $("#choices"),
+  count: $("#qCount"), total: $("#qTotal"), bar: $("#barFill"),
+  feedback: $("#feedback"),
+  hintBox: $("#hintBox"), hintText: $("#hintText"), hintSmall: $("#hintSmall")
+};
+
+let state = {
+  startedAt:null, timerId:null,
+  idx:0, misses:0, attempts:0,
+  qOrder:[]
+};
+
+$("#btnDemo").addEventListener("click", ()=>{ $("#name").value="Demo Student"; $("#name").focus(); });
+$("#btnStart").addEventListener("click", startGame);
+$("#btnReset").addEventListener("click", resetAll);
+$("#btnPlayAgain").addEventListener("click", resetAll);
+$("#btnCopy").addEventListener("click", async ()=>{
+  try{
+    await navigator.clipboard.writeText($("#logOut").innerText);
+    $("#btnCopy").textContent="Copied ✅";
+    setTimeout(()=>$("#btnCopy").textContent="Copy Ticket", 1100);
+  }catch(e){
+    alert("Copy failed. You can manually select and copy the ticket text.");
+  }
+});
+
+function calcAccuracy(){
+  if(state.attempts <= 0) return 100;
+  return Math.round(((state.attempts - state.misses) / state.attempts) * 100);
+}
+function updateAccuracy(){
+  meta.acc.textContent = `${calcAccuracy()}%`;
+}
+
+function startGame(){
+  const n = ($("#name").value||"").trim();
+  if(!n){ alert("Please enter your name."); return; }
+
+  state.startedAt = new Date();
+  meta.name.textContent = n;
+  meta.start.textContent = stamp(state.startedAt);
+  meta.time.textContent = "00:00";
+
+  state.qOrder = shuffle([...QUESTIONS]);
+  state.idx = 0;
+  state.misses = 0;
+  state.attempts = 0;
+
+  $("#qTotal").textContent = String(state.qOrder.length);
+  updateAccuracy();
+
+  switchTo("game");
+  startTimer();
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = state.qOrder[state.idx];
+  if(!q) return finish();
+
+  qUI.kicker.textContent = `${q.cs} • Question ${state.idx+1}`;
+  qUI.text.textContent = q.prompt;
+
+  qUI.count.textContent = String(state.idx+1);
+  qUI.total.textContent = String(state.qOrder.length);
+  qUI.bar.style.width = `${Math.round((state.idx/state.qOrder.length)*100)}%`;
+
+  qUI.feedback.textContent = "Choose the best answer.";
+  qUI.feedback.style.color = "var(--muted)";
+
+  qUI.hintBox.style.display = "none";
+  qUI.hintText.textContent = "";
+  qUI.hintSmall.textContent = "";
+
+  qUI.choices.innerHTML = "";
+  q.choices.forEach(choice=>{
+    const btn = document.createElement("button");
+    btn.textContent = choice;
+    btn.addEventListener("click", ()=>submit(choice));
+    qUI.choices.appendChild(btn);
+  });
+}
+
+function submit(choice){
+  const q = state.qOrder[state.idx];
+  state.attempts++;
+  updateAccuracy();
+
+  if(choice === q.answer){
+    qUI.feedback.textContent = "Correct ✅";
+    qUI.feedback.style.color = "var(--good)";
+    flashButtons(choice, true);
+    setTimeout(()=>{
+      state.idx++;
+      renderQuestion();
+    }, 320);
+    return;
+  }
+
+  state.misses++;
+  updateAccuracy();
+
+  qUI.feedback.textContent = "Not yet ❌ Try again.";
+  qUI.feedback.style.color = "var(--bad)";
+  flashButtons(choice, false);
+
+  qUI.hintBox.style.display = "block";
+  qUI.hintText.textContent = q.hint?.why || "Think back to the lesson details.";
+  qUI.hintSmall.textContent = q.hint?.keyPoints?.length
+    ? ("Key points: " + q.hint.keyPoints.join(" • "))
+    : "";
+}
+
+function finish(){
+  stopTimer();
+  qUI.bar.style.width = "100%";
+
+  const endedAt = new Date();
+  const durationSec = Math.floor((endedAt - state.startedAt)/1000);
+  const accuracy = calcAccuracy();
+
+  if(state.misses > 0){
+    $("#doneTitle").textContent = "Not Passed ❌";
+    $("#doneMsg").textContent = "You finished, but this attempt had misses. Retake for a perfect run to earn the submit ticket.";
+    $("#btnCopy").style.display = "none";
+
+    $("#logOut").textContent =
+`NOT PASSED — Retake Required
+
+Student: ${meta.name.textContent}
+Started: ${stamp(state.startedAt)}
+Ended:   ${stamp(endedAt)}
+Duration (sec): ${durationSec}
+Accuracy: ${accuracy}%
+Misses: ${state.misses}
+
+RULE: To earn a submit ticket, you must complete the game with 0 misses (100% accuracy).`;
+    switchTo("done");
+    return;
+  }
+
+  $("#doneTitle").textContent = "Complete ✅";
+  $("#doneMsg").textContent = "Perfect run achieved (0 misses). Copy your submit ticket.";
+  $("#btnCopy").style.display = "inline-flex";
+
+  const ticket = {
+    status: "PASSED",
+    game: "American History — Block 5 (CS 19–21)",
+    student: meta.name.textContent,
+    started: stamp(state.startedAt),
+    ended: stamp(endedAt),
+    duration_seconds: durationSec,
+    total_questions: state.qOrder.length,
+    total_attempts: state.attempts,
+    misses: state.misses,
+    accuracy_percent: 100
+  };
+
+  $("#logOut").textContent = JSON.stringify(ticket, null, 2);
+  switchTo("done");
+}
+
+function switchTo(which){
+  Object.values(screens).forEach(el=>el.classList.add("hidden"));
+  screens[which].classList.remove("hidden");
+}
+
+function startTimer(){
+  stopTimer();
+  state.timerId = setInterval(()=>{
+    const s = Math.floor((new Date() - state.startedAt)/1000);
+    meta.time.textContent = fmtTime(s);
+  }, 250);
+}
+function stopTimer(){
+  if(state.timerId){ clearInterval(state.timerId); state.timerId=null; }
+}
+
+function resetAll(){
+  stopTimer();
+  meta.name.textContent="—";
+  meta.start.textContent="—";
+  meta.time.textContent="00:00";
+  meta.acc.textContent="100%";
+  $("#name").value="";
+  $("#btnCopy").textContent="Copy Ticket";
+  $("#btnCopy").style.display = "inline-flex";
+  switchTo("start");
+}
+
+function fmtTime(sec){
+  const m = String(Math.floor(sec/60)).padStart(2,"0");
+  const s = String(sec%60).padStart(2,"0");
+  return `${m}:${s}`;
+}
+function stamp(d){
+  return d.toLocaleString(undefined, {
+    year:"numeric", month:"2-digit", day:"2-digit",
+    hour:"2-digit", minute:"2-digit", second:"2-digit"
+  });
+}
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+function flashButtons(choice, correct){
+  [...qUI.choices.querySelectorAll("button")].forEach(b=>{
+    if(b.textContent === choice){
+      b.classList.add(correct ? "good" : "bad");
+      setTimeout(()=>b.classList.remove("good","bad"), 320);
+    }
+  });
+}
+</script>
+</body>
+</html>
