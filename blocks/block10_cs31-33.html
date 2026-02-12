@@ -80,7 +80,7 @@
   <header>
     <div class="title">
       <h1>American History — Block 10 Game (CS 31–33)</h1>
-      <div class="sub">Post–Cold War foreign policy • Globalization & economic change • Social/demographic/tech change • Perfect run required</div>
+      <div class="sub">CS31: Globalization & economic restructuring • CS32: Domestic policy challenges post-9/11 • CS33: Foreign policy challenges post-9/11 • Perfect run required</div>
     </div>
     <div class="meta">
       <div class="pill">Name: <b id="mName">—</b></div>
@@ -155,377 +155,379 @@
 <script>
 /* =========================================================
    QUESTIONS — Block 10 (CS 31–33) — 30 items (balanced)
-   - CS31 (10): U.S. foreign policy since the Cold War
-   - CS32 (10): Economic/political changes (globalization, restructuring)
-   - CS33 (10): Social/demographic/tech change in contemporary America
+   CS31 (10): Globalization / trade / overseas competition / restructuring
+   CS32 (10): Domestic policy challenges post–Cold War & post-9/11
+   CS33 (10): Foreign policy challenges post–Cold War & post-9/11
    ========================================================= */
+
 const QUESTIONS = shuffle([
 
-  /* -------------------- CS31 (10) -------------------- */
+  /* -------------------- CS31 (10) — ECONOMY / GLOBALIZATION -------------------- */
   {
     cs:"CS31",
-    prompt:"Which statement best describes a major change in U.S. foreign policy after the Cold War ended?",
+    prompt:"Which development BEST represents globalization’s impact on the U.S. economy?",
     choices:[
-      "The U.S. faced new security challenges, including regional conflicts and terrorism",
-      "The U.S. ended all alliances and stopped participating in world affairs",
-      "Foreign policy focused only on colonial expansion",
-      "The U.S. refused to use diplomacy in any form"
+      "International trade and overseas competition increased pressure on U.S. producers",
+      "The U.S. ended all imports and exports permanently",
+      "All jobs became agricultural again",
+      "Competition between companies disappeared"
     ],
-    answer:"The U.S. faced new security challenges, including regional conflicts and terrorism",
-    hint:{ why:"After 1991, threats shifted from a single superpower rivalry to diverse challenges.", keyPoints:["New threats","Terrorism","Regional conflicts"] }
+    answer:"International trade and overseas competition increased pressure on U.S. producers",
+    hint:{ why:"CS31 highlights trade and overseas competition challenging U.S. producers and communities.", keyPoints:["Trade","Overseas competition","Pressure on producers"] }
   },
   {
     cs:"CS31",
-    prompt:"Which event most directly led the United States to launch a large-scale “War on Terror”?",
+    prompt:"Which outcome is MOST associated with increased overseas competition for American producers?",
     choices:[
-      "Terrorist attacks on September 11, 2001",
-      "The signing of the Treaty of Versailles",
-      "The start of the Great Depression",
-      "The Louisiana Purchase"
+      "Closing of some factories and a decrease in manufacturing jobs",
+      "A guaranteed rise in manufacturing employment everywhere",
+      "A nationwide ban on foreign goods",
+      "The elimination of the service sector"
     ],
-    answer:"Terrorist attacks on September 11, 2001",
-    hint:{ why:"9/11 reshaped U.S. security priorities and foreign policy decisions.", keyPoints:["9/11","Security shift"] }
+    answer:"Closing of some factories and a decrease in manufacturing jobs",
+    hint:{ why:"CS31 notes factory closings and fewer manufacturing jobs in many communities.", keyPoints:["Plant closings","Manufacturing decline"] }
   },
   {
     cs:"CS31",
-    prompt:"Which goal most closely matches U.S. participation in NATO after the Cold War?",
+    prompt:"Which shift in the U.S. economy is commonly linked to globalization and restructuring?",
     choices:[
-      "Maintain collective security through cooperation among member nations",
-      "End international trade between allies",
-      "Replace elections with military rule",
-      "Prevent all immigration into the U.S."
+      "A shift from manufacturing toward service industries",
+      "A shift from services back to frontier trading posts",
+      "An end to business ownership",
+      "A return to barter with no money"
     ],
-    answer:"Maintain collective security through cooperation among member nations",
-    hint:{ why:"NATO is a collective defense alliance based on mutual security commitments.", keyPoints:["Alliances","Collective defense"] }
+    answer:"A shift from manufacturing toward service industries",
+    hint:{ why:"CS31 includes the shift from manufacturing toward service work.", keyPoints:["Restructuring","Service economy"] }
   },
   {
     cs:"CS31",
-    prompt:"Cause → effect: The collapse of the Soviet Union most directly contributed to:",
+    prompt:"Cause → effect: Growth in transnational business organizations and global trade MOST directly contributed to:",
     choices:[
-      "A shift in U.S. focus toward new global issues and emerging regional conflicts",
-      "An immediate end to all U.S. military spending",
-      "A return to isolationism with no global involvement",
-      "The abolition of all international organizations"
+      "Changes in local job markets as companies moved work and supply chains across borders",
+      "An end to all consumer choice in the U.S.",
+      "Guaranteed identical wages worldwide",
+      "The abolition of technology jobs"
     ],
-    answer:"A shift in U.S. focus toward new global issues and emerging regional conflicts",
-    hint:{ why:"With the USSR gone, U.S. policy pivoted toward new types of global challenges.", keyPoints:["Post-1991 shift","Regional conflicts"] }
+    answer:"Changes in local job markets as companies moved work and supply chains across borders",
+    hint:{ why:"Global firms and trade can reshape where jobs are located and how goods are made.", keyPoints:["Transnational firms","Job shifts","Supply chains"] }
   },
   {
     cs:"CS31",
-    prompt:"Which action best reflects how the U.S. often addresses global crises in the post–Cold War era?",
+    prompt:"Which trend is MOST closely tied to economic restructuring in the U.S. since the late 1900s?",
     choices:[
-      "Working with international partners through coalitions or organizations",
-      "Avoiding all diplomacy and refusing negotiation",
-      "Ending foreign aid entirely",
-      "Only using state governments to conduct foreign policy"
+      "Growth in lower-paying jobs in some sectors",
+      "Only higher-paying jobs in every region",
+      "No change in wages or employment patterns",
+      "The disappearance of all corporations"
     ],
-    answer:"Working with international partners through coalitions or organizations",
-    hint:{ why:"Coalitions and international cooperation are common in post–Cold War interventions.", keyPoints:["Coalitions","International cooperation"] }
+    answer:"Growth in lower-paying jobs in some sectors",
+    hint:{ why:"CS31 notes growth in lower-paying jobs as part of restructuring effects.", keyPoints:["Lower-paying jobs","Restructuring"] }
   },
   {
     cs:"CS31",
-    prompt:"Which statement best explains why the Middle East has remained important in U.S. foreign policy since the late 20th century?",
+    prompt:"Which sector is identified as growing as the economy shifted away from manufacturing?",
     choices:[
-      "Its strategic importance includes security concerns, regional stability, and energy resources",
-      "It is the only region with elections",
-      "It has no connection to U.S. interests",
-      "It contains all NATO headquarters"
+      "Information technology jobs",
+      "Horse-and-buggy repair shops",
+      "Subsistence farming",
+      "Blacksmithing"
     ],
-    answer:"Its strategic importance includes security concerns, regional stability, and energy resources",
-    hint:{ why:"U.S. involvement often relates to security, stability, and economic interests.", keyPoints:["Security","Stability","Resources"] }
+    answer:"Information technology jobs",
+    hint:{ why:"CS31 highlights growth in information technology jobs.", keyPoints:["IT growth","New economy"] }
   },
   {
     cs:"CS31",
-    prompt:"A student says, “After the Cold War, the U.S. no longer used diplomacy.” Which correction is strongest?",
+    prompt:"Which statement BEST explains why a U.S. trade deficit can grow in a globalized economy?",
     choices:[
-      "The U.S. continued to use diplomacy, alliances, and negotiations alongside military action when needed",
-      "Diplomacy ended permanently in 1991",
-      "Diplomacy only existed during World War I",
-      "Diplomacy is illegal under the Constitution"
+      "The U.S. can import more goods than it exports in value",
+      "The U.S. stops trading with other countries",
+      "Imports are illegal under the Constitution",
+      "Trade deficits only happen during wartime"
     ],
-    answer:"The U.S. continued to use diplomacy, alliances, and negotiations alongside military action when needed",
-    hint:{ why:"Foreign policy uses a mix of tools: diplomacy, alliances, aid, and sometimes force.", keyPoints:["Multiple tools","Diplomacy continues"] }
+    answer:"The U.S. can import more goods than it exports in value",
+    hint:{ why:"A trade deficit occurs when imports exceed exports in value.", keyPoints:["Imports vs exports","Trade deficit"] }
   },
   {
     cs:"CS31",
-    prompt:"Which scenario best illustrates the challenge of “nation-building” in U.S. foreign policy?",
+    prompt:"Which example BEST shows how globalization can affect local communities?",
     choices:[
-      "Rebuilding institutions and stability in a country after conflict is difficult and takes time",
-      "Winning a war automatically guarantees stable democracy",
-      "All countries adopt U.S. laws immediately after intervention",
-      "International aid always fails in every case"
+      "A plant closes after facing international competition, changing local employment",
+      "A community bans all technology",
+      "A city eliminates schools to reduce costs",
+      "A town becomes isolated from all markets"
     ],
-    answer:"Rebuilding institutions and stability in a country after conflict is difficult and takes time",
-    hint:{ why:"Nation-building is complex due to politics, security, culture, and economics.", keyPoints:["Complexity","Long-term stability"] }
+    answer:"A plant closes after facing international competition, changing local employment",
+    hint:{ why:"CS31 emphasizes impacts on producers and local communities, including plant closings.", keyPoints:["Local impact","Plant closing"] }
   },
   {
     cs:"CS31",
-    prompt:"Which best describes how terrorism influenced U.S. foreign policy after 2001?",
+    prompt:"A student says, “Globalization only benefits the U.S.” Which correction is strongest?",
     choices:[
-      "It increased focus on homeland security and international counterterrorism efforts",
-      "It ended the use of intelligence agencies",
-      "It eliminated all global travel",
-      "It caused the U.S. to withdraw from every alliance"
+      "Globalization creates benefits and challenges, including job shifts and competition pressures",
+      "Globalization guarantees no economic change",
+      "Globalization ended competition completely",
+      "Globalization only affects sports"
     ],
-    answer:"It increased focus on homeland security and international counterterrorism efforts",
-    hint:{ why:"Post-2001 policy emphasized preventing attacks and disrupting terror networks.", keyPoints:["Homeland security","Counterterrorism"] }
+    answer:"Globalization creates benefits and challenges, including job shifts and competition pressures",
+    hint:{ why:"CS31 stresses mixed effects: new opportunities AND real disruptions.", keyPoints:["Benefits + challenges","Competition","Job shifts"] }
   },
   {
     cs:"CS31",
     prompt:"Which statement BEST summarizes CS31?",
     choices:[
-      "Since the Cold War, U.S. foreign policy has addressed new threats and used alliances, diplomacy, and military power in different combinations",
-      "Since the Cold War, the U.S. has avoided global involvement entirely",
-      "Since the Cold War, U.S. foreign policy focused only on settling the frontier",
-      "Since the Cold War, the U.S. has had no security concerns"
+      "Global trade and overseas competition reshaped U.S. jobs and industries, impacting producers and communities",
+      "The U.S. economy stayed unchanged by global trade",
+      "Manufacturing expanded everywhere with no disruptions",
+      "Globalization eliminated all U.S. exports"
     ],
-    answer:"Since the Cold War, U.S. foreign policy has addressed new threats and used alliances, diplomacy, and military power in different combinations",
-    hint:{ why:"CS31 focuses on post–Cold War challenges and U.S. responses.", keyPoints:["New threats","Mixed strategies"] }
+    answer:"Global trade and overseas competition reshaped U.S. jobs and industries, impacting producers and communities",
+    hint:{ why:"CS31 focuses on global trade/competition and the resulting restructuring impacts.", keyPoints:["Global trade","Competition","Restructuring"] }
   },
 
-  /* -------------------- CS32 (10) -------------------- */
+  /* -------------------- CS32 (10) — DOMESTIC POLICY CHALLENGES -------------------- */
   {
     cs:"CS32",
-    prompt:"Which statement best explains how globalization affected the U.S. economy?",
+    prompt:"Which domestic challenge after September 11, 2001 involved balancing national security with civil liberties?",
     choices:[
-      "It increased global trade and competition, impacting jobs and industries",
-      "It ended international trade completely",
-      "It guaranteed the same wages in all countries",
-      "It eliminated the need for education"
+      "Debates about the USA PATRIOT Act",
+      "The Louisiana Purchase",
+      "The Homestead Act",
+      "The Emancipation Proclamation"
     ],
-    answer:"It increased global trade and competition, impacting jobs and industries",
-    hint:{ why:"Globalization connects markets, creating benefits and challenges for workers and companies.", keyPoints:["Trade","Competition","Job shifts"] }
+    answer:"Debates about the USA PATRIOT Act",
+    hint:{ why:"CS32 includes the tension between security and civil liberties (PATRIOT Act).", keyPoints:["Security vs liberty","PATRIOT Act"] }
   },
   {
     cs:"CS32",
-    prompt:"Which example best illustrates economic restructuring in the late 20th century?",
+    prompt:"Which agency was created to address transportation security concerns after 9/11?",
     choices:[
-      "A decline in some manufacturing jobs and growth in service/technology sectors",
-      "A return to an economy based mostly on small farms",
-      "The disappearance of all corporations",
-      "A nationwide ban on computers"
+      "Transportation Security Administration (TSA)",
+      "Federal Reserve",
+      "National Park Service",
+      "Peace Corps"
     ],
-    answer:"A decline in some manufacturing jobs and growth in service/technology sectors",
-    hint:{ why:"Many regions experienced deindustrialization while other sectors expanded.", keyPoints:["Deindustrialization","Service/tech growth"] }
+    answer:"Transportation Security Administration (TSA)",
+    hint:{ why:"CS32 specifically lists creation of the TSA as a national security response.", keyPoints:["TSA","Transportation security"] }
   },
   {
     cs:"CS32",
-    prompt:"Cause → effect: Increased competition from overseas manufacturers most directly led to:",
+    prompt:"Cause → effect: After 9/11, one domestic social effect noted in the model curriculum was:",
     choices:[
-      "Pressure on U.S. industries to modernize, relocate, or reduce labor costs",
-      "An end to consumer choice",
-      "A complete stop in world trade",
-      "Guaranteed job security for all workers"
+      "An increase in Islamophobia and xenophobia",
+      "A complete end to discrimination",
+      "A ban on political debate nationwide",
+      "The elimination of airport travel"
     ],
-    answer:"Pressure on U.S. industries to modernize, relocate, or reduce labor costs",
-    hint:{ why:"Competition can force businesses to change production strategies.", keyPoints:["Competition","Business adaptation"] }
+    answer:"An increase in Islamophobia and xenophobia",
+    hint:{ why:"CS32 identifies increased Islamophobia/xenophobia as a domestic challenge.", keyPoints:["Islamophobia","Xenophobia"] }
   },
   {
     cs:"CS32",
-    prompt:"Which best describes a potential benefit of free trade agreements for consumers?",
+    prompt:"Which issue is MOST directly connected to fears of domestic terrorism as a post-9/11 domestic challenge?",
     choices:[
-      "Lower prices and more product choices",
-      "Guaranteed higher prices for all goods",
-      "An end to imports",
-      "Elimination of competition"
+      "Heightened concern about attacks within the U.S.",
+      "Ending all federal law enforcement",
+      "Abolishing national borders",
+      "Eliminating elections"
     ],
-    answer:"Lower prices and more product choices",
-    hint:{ why:"Trade can lower costs and expand availability of goods.", keyPoints:["Lower prices","More variety"] }
+    answer:"Heightened concern about attacks within the U.S.",
+    hint:{ why:"CS32 mentions increasing fears of domestic terrorism as a domestic issue.", keyPoints:["Domestic terrorism fears","Security"] }
   },
   {
     cs:"CS32",
-    prompt:"Which concern is most often raised about globalization’s impact on workers?",
+    prompt:"Which pair BEST reflects a continuing domestic debate about state vs. federal roles in policy?",
     choices:[
-      "Job loss or wage pressure in industries facing outsourcing or import competition",
-      "Too many factories returning to the U.S.",
-      "A complete end to technology jobs",
-      "No effect on any worker"
+      "Gun rights and gun control",
+      "The geography of the Great Plains",
+      "The construction of the Erie Canal",
+      "The causes of the French and Indian War"
     ],
-    answer:"Job loss or wage pressure in industries facing outsourcing or import competition",
-    hint:{ why:"Some workers face displacement when production moves or competition increases.", keyPoints:["Outsourcing","Wage pressure"] }
+    answer:"Gun rights and gun control",
+    hint:{ why:"CS32 lists disagreements over gun rights/control within state-federal debates.", keyPoints:["State vs federal debate","Gun policy"] }
   },
   {
     cs:"CS32",
-    prompt:"Which statement best explains why energy prices can influence the U.S. economy?",
+    prompt:"Which issue below is included as part of the continuing state vs. federal debate in the post–Cold War era?",
     choices:[
-      "Higher energy costs can raise transportation and production expenses across industries",
-      "Energy costs only matter for farmers in 1800",
-      "Energy prices never affect inflation or spending",
-      "Energy costs determine Supreme Court decisions"
+      "Health care",
+      "Territorial expansion into the Louisiana Territory",
+      "The abolition of slavery in 1865",
+      "The creation of the Articles of Confederation"
     ],
-    answer:"Higher energy costs can raise transportation and production expenses across industries",
-    hint:{ why:"Energy is an input for many goods/services, so prices ripple through the economy.", keyPoints:["Costs","Ripple effects"] }
+    answer:"Health care",
+    hint:{ why:"CS32 names health care among major modern domestic policy debates.", keyPoints:["Health care","Domestic policy"] }
   },
   {
     cs:"CS32",
-    prompt:"Which scenario best illustrates the relationship between technology and productivity?",
+    prompt:"Which is an example of a social/political issue included in modern domestic policy disagreements?",
     choices:[
-      "Automation allows firms to produce more output with fewer inputs",
-      "Technology always reduces output",
-      "Automation forces everyone to stop working",
-      "Technology only affects sports and entertainment"
+      "LGBTQ+ rights",
+      "The invention of the cotton gin",
+      "The building of the transcontinental railroad",
+      "The ratification of the 15th Amendment"
     ],
-    answer:"Automation allows firms to produce more output with fewer inputs",
-    hint:{ why:"Technology can improve efficiency, increasing productivity.", keyPoints:["Automation","Efficiency"] }
+    answer:"LGBTQ+ rights",
+    hint:{ why:"CS32 explicitly includes LGBTQ+ rights in state/federal debate topics.", keyPoints:["LGBTQ+ rights","Policy debate"] }
   },
   {
     cs:"CS32",
-    prompt:"A student claims, “Economic change only affects business owners.” Which correction is strongest?",
+    prompt:"Which economic issue is identified as a major domestic challenge in the post–Cold War era?",
     choices:[
-      "Economic change affects workers, communities, and government policy decisions too",
-      "Workers are never affected by economic change",
-      "Only presidents are affected by economic change",
-      "Economic change ended in 1945"
+      "The mortgage crisis and government bailouts",
+      "The Panic of 1837",
+      "The creation of the first colonies",
+      "The Dust Bowl of the 1930s"
     ],
-    answer:"Economic change affects workers, communities, and government policy decisions too",
-    hint:{ why:"Job markets, wages, tax bases, and policy debates shift with economic change.", keyPoints:["Workers","Communities","Policy"] }
+    answer:"The mortgage crisis and government bailouts",
+    hint:{ why:"CS32 lists mortgage crisis and government bailouts as modern domestic economic issues.", keyPoints:["Mortgage crisis","Bailouts"] }
   },
   {
     cs:"CS32",
-    prompt:"Which best explains how the U.S. economy can be linked to global events?",
+    prompt:"Which change is connected to domestic economic challenges after the Cold War?",
     choices:[
-      "International crises can disrupt supply chains and affect prices and markets",
-      "Global events never affect U.S. prices",
-      "The U.S. does not trade with any country",
-      "Only state governments respond to global markets"
+      "A decrease in defense spending after the Cold War",
+      "A permanent end to government spending",
+      "A ban on private banking",
+      "The elimination of taxes nationwide"
     ],
-    answer:"International crises can disrupt supply chains and affect prices and markets",
-    hint:{ why:"Connected markets mean global events can impact U.S. consumers and businesses.", keyPoints:["Interdependence","Supply chains"] }
+    answer:"A decrease in defense spending after the Cold War",
+    hint:{ why:"CS32 notes a post–Cold War decrease in defense spending among domestic economic issues.", keyPoints:["Defense spending","Post–Cold War economy"] }
   },
   {
     cs:"CS32",
     prompt:"Which statement BEST summarizes CS32?",
     choices:[
-      "Globalization and restructuring changed the U.S. economy, creating new opportunities and new challenges",
-      "The U.S. economy stayed exactly the same after 1945",
-      "Globalization eliminated all U.S. jobs",
-      "Economic change only occurred during the Progressive Era"
+      "U.S. domestic policy faced new security, social, political, and economic challenges after the Cold War and 9/11",
+      "Domestic policy ended after 1991",
+      "Only foreign policy changed after 2001",
+      "Domestic issues were limited to westward expansion"
     ],
-    answer:"Globalization and restructuring changed the U.S. economy, creating new opportunities and new challenges",
-    hint:{ why:"CS32 focuses on major late-20th/early-21st economic shifts and impacts.", keyPoints:["Globalization","Restructuring","Impacts"] }
+    answer:"U.S. domestic policy faced new security, social, political, and economic challenges after the Cold War and 9/11",
+    hint:{ why:"CS32 focuses on domestic challenges: security/liberty, social tensions, policy debates, and economic shocks.", keyPoints:["Domestic challenges","Post-9/11","Economy"] }
   },
 
-  /* -------------------- CS33 (10) -------------------- */
+  /* -------------------- CS33 (10) — FOREIGN POLICY CHALLENGES -------------------- */
   {
     cs:"CS33",
-    prompt:"Which statement best explains how the internet changed American society?",
+    prompt:"Which foreign policy challenge is MOST connected to economic globalization in the model curriculum?",
     choices:[
-      "It increased access to information and changed communication, work, and politics",
-      "It ended all forms of communication",
-      "It eliminated the need for businesses",
-      "It stopped the spread of media"
+      "Balancing trade and the balance of trade in a global economy",
+      "Ending all international travel permanently",
+      "Eliminating international currencies",
+      "Banning all imports and exports by law"
     ],
-    answer:"It increased access to information and changed communication, work, and politics",
-    hint:{ why:"The internet reshaped information access and social/political interaction.", keyPoints:["Information access","Communication change"] }
+    answer:"Balancing trade and the balance of trade in a global economy",
+    hint:{ why:"CS33 lists economic challenges including balance of trade and global partnerships.", keyPoints:["Balance of trade","Global economy"] }
   },
   {
     cs:"CS33",
-    prompt:"Which trend is most associated with demographic change in contemporary America?",
+    prompt:"Which international partnerships/organizations are listed as examples of economic connections in a globalized world?",
     choices:[
-      "Increasing diversity due to immigration and changing birth rates",
-      "A permanent end to migration",
-      "A return to 1800 population patterns",
-      "The elimination of cities"
+      "World Economic Forum and World Trade Organization",
+      "NAACP and SNCC",
+      "FDA and EPA",
+      "CIA and FBI"
     ],
-    answer:"Increasing diversity due to immigration and changing birth rates",
-    hint:{ why:"Demographic shifts include diversity changes and population movement patterns.", keyPoints:["Diversity","Demographics"] }
+    answer:"World Economic Forum and World Trade Organization",
+    hint:{ why:"CS33 explicitly names WEF and WTO as examples of international economic partnerships.", keyPoints:["WEF","WTO","Partnerships"] }
   },
   {
     cs:"CS33",
-    prompt:"Cause → effect: The rise of social media most directly contributed to:",
+    prompt:"Cause → effect: Globalization created political and social challenges for U.S. foreign policy such as:",
     choices:[
-      "Faster spread of information and increased debates about misinformation and privacy",
-      "An end to political discussion",
-      "A disappearance of advertising",
-      "A complete stop to news reporting"
+      "Pandemic diseases and refugee migration from war-torn regions",
+      "Ending all humanitarian concerns worldwide",
+      "Guaranteeing no migration across borders",
+      "Stopping the spread of disease permanently"
     ],
-    answer:"Faster spread of information and increased debates about misinformation and privacy",
-    hint:{ why:"Social media accelerates information flow and raises accuracy/privacy concerns.", keyPoints:["Speed","Misinformation","Privacy"] }
+    answer:"Pandemic diseases and refugee migration from war-torn regions",
+    hint:{ why:"CS33 includes pandemics and refugee migration as global social/political challenges.", keyPoints:["Pandemics","Refugees"] }
   },
   {
     cs:"CS33",
-    prompt:"Which issue best illustrates a challenge created by rapid technological change?",
+    prompt:"Which is an example of a foreign policy challenge involving values and law during conflict?",
     choices:[
-      "Debates over data privacy and cybersecurity",
-      "A return to handwritten-only records",
-      "An end to electricity use",
-      "Eliminating all computers"
+      "Debates over the treatment of enemy combatants",
+      "The regulation of local school lunch menus",
+      "The location of state capitals",
+      "The building of interstate highways"
     ],
-    answer:"Debates over data privacy and cybersecurity",
-    hint:{ why:"Digital life increases privacy and security risks and policy debates.", keyPoints:["Privacy","Cybersecurity"] }
+    answer:"Debates over the treatment of enemy combatants",
+    hint:{ why:"CS33 highlights debate over how enemy combatants should be treated.", keyPoints:["Enemy combatants","Law/values"] }
   },
   {
     cs:"CS33",
-    prompt:"Which scenario best shows how demographic change can affect local communities?",
+    prompt:"Which military-related impact is connected to the War on Terror?",
     choices:[
-      "Schools and services adjust to new languages, cultures, and population needs",
-      "Communities never change when populations shift",
-      "Local governments stop providing services",
-      "Population change has no effect on schools"
+      "Increased defense spending as a result of the war on terrorism",
+      "A permanent elimination of the U.S. military",
+      "A ban on all intelligence gathering",
+      "Ending all alliances worldwide"
     ],
-    answer:"Schools and services adjust to new languages, cultures, and population needs",
-    hint:{ why:"Population shifts can change service needs, schooling, and politics.", keyPoints:["Schools","Services","Community change"] }
+    answer:"Increased defense spending as a result of the war on terrorism",
+    hint:{ why:"CS33 notes increased defense spending linked to the war on terrorism.", keyPoints:["War on terror","Defense spending"] }
   },
   {
     cs:"CS33",
-    prompt:"Which best describes a social challenge linked to economic and technological change?",
+    prompt:"Which statement BEST describes a foreign policy challenge involving international cooperation in the Middle East?",
     choices:[
-      "Unequal access to technology and opportunity can widen gaps between groups",
-      "Everyone receives equal access automatically",
-      "Technology eliminates the need for jobs",
-      "Economic change always lowers inequality"
+      "Debates about the roles of the United States and the United Nations in addressing unrest",
+      "A plan to end the UN worldwide",
+      "A policy to avoid all diplomacy forever",
+      "A requirement that states run U.S. foreign policy"
     ],
-    answer:"Unequal access to technology and opportunity can widen gaps between groups",
-    hint:{ why:"Access and opportunity can be uneven, shaping outcomes.", keyPoints:["Digital divide","Opportunity gaps"] }
+    answer:"Debates about the roles of the United States and the United Nations in addressing unrest",
+    hint:{ why:"CS33 includes the role of the U.S. and UN in addressing Middle East unrest.", keyPoints:["U.S. + UN roles","Middle East unrest"] }
   },
   {
     cs:"CS33",
-    prompt:"Which statement best explains why polarization is often discussed in contemporary politics?",
+    prompt:"Which issue BEST reflects foreign policy concerns about global stability and security?",
     choices:[
-      "Citizens and parties can become more divided in beliefs, affecting compromise and governance",
-      "Polarization means everyone agrees",
-      "Polarization ends elections",
-      "Polarization only happens during wartime"
+      "Control of weapons of mass destruction in regions seen as threats",
+      "A city passing a local noise ordinance",
+      "Scheduling school calendars",
+      "Funding a new public park"
     ],
-    answer:"Citizens and parties can become more divided in beliefs, affecting compromise and governance",
-    hint:{ why:"Polarization can increase conflict and reduce compromise.", keyPoints:["Division","Compromise challenges"] }
+    answer:"Control of weapons of mass destruction in regions seen as threats",
+    hint:{ why:"CS33 identifies WMD control as a major foreign policy/security challenge.", keyPoints:["WMD control","Global stability"] }
   },
   {
     cs:"CS33",
-    prompt:"Which example best shows a continuity in American civic life despite new technology?",
+    prompt:"Which economic factor is listed as part of foreign policy challenges in a globalized world?",
     choices:[
-      "People still organize, debate issues, and influence policy—now often using digital tools",
-      "Civic participation ended after the internet began",
-      "Voting no longer exists",
-      "Courts stopped hearing cases"
+      "International demand for the U.S. dollar",
+      "A permanent ban on currency exchange",
+      "Eliminating banking systems worldwide",
+      "Outlawing international markets"
     ],
-    answer:"People still organize, debate issues, and influence policy—now often using digital tools",
-    hint:{ why:"Methods change, but civic engagement continues through new platforms.", keyPoints:["Engagement","New tools"] }
+    answer:"International demand for the U.S. dollar",
+    hint:{ why:"CS33 names international demand for the U.S. dollar among economic challenges.", keyPoints:["U.S. dollar demand","Global economy"] }
   },
   {
     cs:"CS33",
-    prompt:"A student says, “Technology only affects entertainment.” Which correction is strongest?",
+    prompt:"Which statement BEST connects outsourcing to foreign policy challenges in a globalized world?",
     choices:[
-      "Technology affects work, education, politics, privacy, and the economy—not just entertainment",
-      "Technology is illegal in schools",
-      "Technology ended economic growth",
-      "Technology only matters in 1800s factories"
+      "Global economic ties can encourage companies to move some jobs overseas",
+      "Outsourcing only happened in the 1800s",
+      "Outsourcing is unrelated to global trade",
+      "Outsourcing guarantees higher U.S. manufacturing employment"
     ],
-    answer:"Technology affects work, education, politics, privacy, and the economy—not just entertainment",
-    hint:{ why:"Tech has broad effects across society.", keyPoints:["Work","Education","Politics","Privacy"] }
+    answer:"Global economic ties can encourage companies to move some jobs overseas",
+    hint:{ why:"CS33 includes outsourcing of U.S. jobs as an economic challenge of globalization.", keyPoints:["Outsourcing","Global ties"] }
   },
   {
     cs:"CS33",
     prompt:"Which statement BEST summarizes CS33?",
     choices:[
-      "Social, demographic, and technological changes reshaped American life and created new opportunities and challenges",
-      "American society stopped changing after WWII",
-      "Demographic change ended in 1965",
-      "Technology eliminated the need for civic participation"
+      "U.S. foreign policy faced economic, social, political, and military challenges after the Cold War and 9/11",
+      "Foreign policy ended after 2001",
+      "Only domestic policy changed after the Cold War",
+      "Foreign policy focused mainly on westward expansion"
     ],
-    answer:"Social, demographic, and technological changes reshaped American life and created new opportunities and challenges",
-    hint:{ why:"CS33 focuses on how modern changes affect society and civic life.", keyPoints:["Societal change","Opportunities","Challenges"] }
+    answer:"U.S. foreign policy faced economic, social, political, and military challenges after the Cold War and 9/11",
+    hint:{ why:"CS33 is explicitly foreign policy challenges in the post-Cold War and post-9/11 world.", keyPoints:["Foreign policy","Global challenges","Post-9/11"] }
   }
+
 ]);
 
 /* =========
@@ -569,7 +571,7 @@ function updateAccuracy(){
   meta.acc.textContent = `${calcAccuracy()}%`;
 }
 
-/* ✅ Your fix: shuffle answer choices each render */
+/* ✅ shuffle answer choices each render */
 function shuffledChoices(q){
   const arr = [...q.choices];
   for(let i=arr.length-1;i>0;i--){
