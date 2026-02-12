@@ -174,20 +174,35 @@ const QUESTIONS = shuffle([
     answer:"helping veterans attend college and buy homes",
     hint:{ why:"The GI Bill expanded education and homeownership, boosting growth.", keyPoints:["Education","Home loans","Middle class growth"] }
   },
+
+  /* ✅ REPLACEMENT (keeps CS27, avoids Block 9 suburb focus) */
   {
     cs:"CS27",
-    prompt:"Which trend best describes many Americans’ living patterns during the postwar boom?",
-    choices:["Suburban growth as families moved out of cities","Mass return to rural farming","End of automobile ownership","Collapse of homebuilding"],
-    answer:"Suburban growth as families moved out of cities",
-    hint:{ why:"Suburbs expanded due to housing demand, highways, and car culture.", keyPoints:["Suburbs","Housing boom"] }
+    prompt:"Which development best reflects rising standards of living during the postwar economic boom?",
+    choices:[
+      "More families could afford homes, cars, and household appliances",
+      "Most Americans returned to subsistence farming",
+      "Consumer production dropped sharply after WWII",
+      "Americans stopped using credit to buy goods"
+    ],
+    answer:"More families could afford homes, cars, and household appliances",
+    hint:{ why:"Higher wages and mass production increased access to consumer goods and improved living standards.", keyPoints:["Rising standard of living","Consumer goods"] }
   },
+
+  /* ✅ REPLACEMENT (keeps CS27, avoids Interstate/suburb commuting focus) */
   {
     cs:"CS27",
-    prompt:"Which development most helped connect suburbs to cities and expanded car-centered life?",
-    choices:["Interstate Highway System","Homestead Act","Transatlantic slave trade","Dawes Act"],
-    answer:"Interstate Highway System",
-    hint:{ why:"Highways made commuting and suburban living easier.", keyPoints:["Highways","Commuting"] }
+    prompt:"Which change most directly helped expand a consumer-based economy after WWII?",
+    choices:[
+      "Mass production and advertising promoted purchasing new goods",
+      "A nationwide ban on televisions",
+      "The end of large corporations",
+      "A sharp decline in consumer demand"
+    ],
+    answer:"Mass production and advertising promoted purchasing new goods",
+    hint:{ why:"Businesses used mass production and advertising to encourage consumption of new products.", keyPoints:["Mass production","Advertising","Consumer culture"] }
   },
+
   {
     cs:"CS27",
     prompt:"Which is a major demographic change linked to the postwar era?",
@@ -216,13 +231,21 @@ const QUESTIONS = shuffle([
     answer:"More households bought labor-saving appliances",
     hint:{ why:"Appliances and consumer goods became more common in homes.", keyPoints:["Appliances","Standard of living"] }
   },
+
+  /* ✅ REPLACEMENT (keeps CS27, avoids Sun Belt/suburb migration focus) */
   {
     cs:"CS27",
-    prompt:"Which statement best connects postwar prosperity to migration patterns inside the U.S.?",
-    choices:["Job growth and new industries encouraged movement to growing regions (Sunbelt/suburbs)","Most Americans were forced onto reservations","All Americans moved to Europe","The population became completely stationary"],
-    answer:"Job growth and new industries encouraged movement to growing regions (Sunbelt/suburbs)",
-    hint:{ why:"Economic opportunity drove internal migration to growth regions.", keyPoints:["Sunbelt growth","Jobs"] }
+    prompt:"Which statement best explains how the GI Bill contributed to long-term prosperity?",
+    choices:[
+      "It expanded education and job opportunities, strengthening the middle class",
+      "It ended college education for civilians",
+      "It reduced homeownership by limiting loans",
+      "It caused an economic depression"
+    ],
+    answer:"It expanded education and job opportunities, strengthening the middle class",
+    hint:{ why:"GI Bill benefits helped many veterans gain education and stable careers, supporting middle-class growth.", keyPoints:["Education access","Job opportunity","Middle class"] }
   },
+
   {
     cs:"CS27",
     prompt:"Which factor most directly helped expand the American middle class after WWII?",
@@ -230,19 +253,27 @@ const QUESTIONS = shuffle([
     answer:"Higher education access, stable jobs, and homeownership growth",
     hint:{ why:"Education + jobs + homes expanded middle-class stability.", keyPoints:["GI Bill","Jobs","Homes"] }
   },
+
+  /* ✅ REPLACEMENT (keeps CS27, avoids suburbanization/urban decline) */
   {
     cs:"CS27",
-    prompt:"Which scenario best shows a downside of rapid suburban growth?",
-    choices:["Urban decline and increased segregation patterns in many areas","End of housing demand","Complete elimination of traffic","Guaranteed equal opportunity everywhere"],
-    answer:"Urban decline and increased segregation patterns in many areas",
-    hint:{ why:"Suburbanization sometimes contributed to city tax-base loss and unequal access.", keyPoints:["Urban decline","Segregation patterns"] }
+    prompt:"Which concern is most closely linked to the growth of consumerism in the postwar era?",
+    choices:[
+      "Increased emphasis on material goods and conformity in popular culture",
+      "The complete disappearance of advertising",
+      "Americans refusing to buy new products",
+      "A total end to mass entertainment"
+    ],
+    answer:"Increased emphasis on material goods and conformity in popular culture",
+    hint:{ why:"Boom-era prosperity increased consumption and shaped cultural expectations about lifestyle and success.", keyPoints:["Materialism","Conformity","Consumer culture"] }
   },
+
   {
     cs:"CS27",
     prompt:"A historian says, “Postwar prosperity reshaped how Americans spent time and money.” Which evidence best supports this claim?",
     choices:["Rising purchases of cars, TVs, and suburban homes","A sharp decrease in consumer advertising","An end to mass production","A decline in consumer credit"],
     answer:"Rising purchases of cars, TVs, and suburban homes",
-    hint:{ why:"Big-ticket goods and suburban housing were key boom-era symbols.", keyPoints:["Cars","TVs","Homes"] }
+    hint:{ why:"Big-ticket goods and new housing were key boom-era symbols.", keyPoints:["Cars","TVs","Homes"] }
   },
   {
     cs:"CS27",
@@ -263,7 +294,7 @@ const QUESTIONS = shuffle([
     prompt:"Which statement best summarizes postwar prosperity’s long-term impact?",
     choices:["It expanded the middle class and reshaped housing, culture, and consumer life","It ended all economic inequality permanently","It eliminated cities completely","It stopped technological innovation"],
     answer:"It expanded the middle class and reshaped housing, culture, and consumer life",
-    hint:{ why:"Boom-era growth changed where/how Americans lived and consumed.", keyPoints:["Middle class","Suburbs","Consumer culture"] }
+    hint:{ why:"Boom-era growth changed how Americans lived, worked, and consumed.", keyPoints:["Middle class","Culture","Consumer life"] }
   },
 
   /* ---------- CS28 (15) Movements for equality & civil rights expansion ---------- */
@@ -415,7 +446,7 @@ function updateAccuracy(){
   meta.acc.textContent = `${calcAccuracy()}%`;
 }
 
-/* ✅ Your fix: shuffle answer choices each render */
+/* ✅ Shuffle answer choices each render */
 function shuffledChoices(q){
   const arr = [...q.choices];
   for(let i=arr.length-1;i>0;i--){
