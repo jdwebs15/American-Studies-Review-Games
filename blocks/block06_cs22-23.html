@@ -1,0 +1,729 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>American History — Block 6 (CS 22–23) Game</title>
+<style>
+  :root{
+    --bg:#0b1220; --card:#111a2e; --ink:#e7eefc; --muted:#a8b4cf;
+    --accent:#7aa2ff; --good:#2bd576; --bad:#ff5c7a; --warn:#ffd166;
+    --border:rgba(255,255,255,.12); --shadow:0 18px 55px rgba(0,0,0,.35);
+    --r:18px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:radial-gradient(1000px 650px at 18% 12%, rgba(122,162,255,.18), transparent 60%), var(--bg);
+    color:var(--ink); min-height:100vh;
+    display:flex; align-items:center; justify-content:center; padding:18px;
+  }
+  .app{width:min(980px,100%); background:rgba(17,26,46,.9); border:1px solid var(--border);
+    border-radius:var(--r); box-shadow:var(--shadow); overflow:hidden}
+  header{padding:16px 18px; display:flex; gap:12px; align-items:flex-start; justify-content:space-between;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, rgba(255,255,255,.06), transparent)}
+  .title{display:flex; flex-direction:column; gap:4px}
+  .title h1{margin:0; font-size:16px; letter-spacing:.2px}
+  .title .sub{color:var(--muted); font-size:12px; line-height:1.3}
+  .meta{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center}
+  .pill{border:1px solid var(--border); border-radius:999px; padding:6px 10px; font-size:12px; color:var(--muted); background:rgba(0,0,0,.18)}
+  .pill b{color:var(--ink); font-weight:700}
+  main{padding:18px; display:grid; gap:14px}
+  .card{background:rgba(0,0,0,.22); border:1px solid var(--border); border-radius:var(--r); padding:16px}
+  .row{display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between}
+  label{font-size:12px; color:var(--muted)}
+  input[type="text"]{
+    width:min(420px,100%); padding:10px 12px; border-radius:12px;
+    border:1px solid var(--border); background:rgba(0,0,0,.25); color:var(--ink);
+    outline:none;
+  }
+  button{
+    cursor:pointer; border:none; border-radius:14px; padding:12px 12px;
+    font-weight:800; color:var(--ink); background:rgba(122,162,255,.18);
+    border:1px solid rgba(122,162,255,.35);
+    transition:transform .08s ease, filter .12s ease;
+  }
+  button:hover{filter:brightness(1.06)}
+  button:active{transform:scale(.99)}
+  button.secondary{background:rgba(255,255,255,.06); border:1px solid var(--border); color:var(--muted)}
+  button.good{background:rgba(43,213,118,.14); border:1px solid rgba(43,213,118,.35)}
+  button.bad{background:rgba(255,92,122,.14); border:1px solid rgba(255,92,122,.35)}
+  .qTop{display:flex; align-items:flex-start; justify-content:space-between; gap:10px}
+  .kicker{color:var(--muted); font-size:12px}
+  .qTitle{margin:0; font-size:14px; line-height:1.35}
+  .status{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  .bar{height:10px; background:rgba(255,255,255,.08); border-radius:999px; overflow:hidden; border:1px solid var(--border); width:220px}
+  .bar>div{height:100%; width:0%; background:rgba(43,213,118,.75)}
+  .grid{
+    display:grid; gap:10px; margin-top:10px;
+    grid-template-columns:repeat(2, minmax(0,1fr));
+  }
+  @media (max-width:640px){ .grid{grid-template-columns:1fr} }
+  .hint{
+    margin-top:10px; padding:10px 12px; border-radius:14px;
+    background:rgba(255,209,102,.10); border:1px solid rgba(255,209,102,.35);
+    display:none;
+  }
+  .hint .small{color:var(--muted); font-size:12px; margin-top:4px; line-height:1.35}
+  .toast{font-size:12px; color:var(--muted)}
+  .hidden{display:none !important}
+  pre{
+    white-space:pre-wrap; word-break:break-word;
+    background:rgba(0,0,0,.25); border:1px solid var(--border); padding:12px; border-radius:14px;
+    color:var(--ink); font-size:12px; line-height:1.35; margin:10px 0 0;
+  }
+</style>
+</head>
+<body>
+<div class="app" role="application" aria-label="American History Block 6 Game">
+  <header>
+    <div class="title">
+      <h1>American History — Block 6 Game (CS 22–23)</h1>
+      <div class="sub">Perfect run required for submit ticket • Hints only after a miss • Auto-advance on correct • Shuffles each load</div>
+    </div>
+    <div class="meta">
+      <div class="pill">Name: <b id="mName">—</b></div>
+      <div class="pill">Started: <b id="mStart">—</b></div>
+      <div class="pill">Time: <b id="mTime">00:00</b></div>
+      <div class="pill">Accuracy: <b id="mAcc">100%</b></div>
+    </div>
+  </header>
+
+  <main>
+    <section id="screenStart" class="card">
+      <div class="row">
+        <div>
+          <div class="kicker">Enter your name to begin</div>
+          <div style="margin-top:8px">
+            <label for="name">Student Name</label><br/>
+            <input id="name" type="text" autocomplete="name" placeholder="Type your name…" />
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center">
+          <button id="btnStart">Start</button>
+          <button id="btnDemo" class="secondary">Demo</button>
+        </div>
+      </div>
+      <div class="toast" style="margin-top:10px">No scrolling needed—choices stay on-screen.</div>
+    </section>
+
+    <section id="screenGame" class="card hidden">
+      <div class="qTop">
+        <div>
+          <div class="kicker" id="qKicker">Question</div>
+          <p class="qTitle" id="qText">—</p>
+        </div>
+        <div class="status">
+          <div class="bar"><div id="barFill"></div></div>
+          <div class="toast"><span id="qCount">0</span>/<span id="qTotal">0</span></div>
+        </div>
+      </div>
+
+      <div class="grid" id="choices"></div>
+
+      <div class="hint" id="hintBox" role="note" aria-label="Hint">
+        <div><b>Hint (only after a miss):</b></div>
+        <div id="hintText" style="margin-top:6px"></div>
+        <div class="small" id="hintSmall"></div>
+      </div>
+
+      <div class="row" style="margin-top:14px">
+        <div class="toast" id="feedback">—</div>
+        <div style="display:flex; gap:10px">
+          <button id="btnReset" class="secondary">Reset</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screenDone" class="card hidden">
+      <div class="row">
+        <div>
+          <h2 id="doneTitle" style="margin:0 0 6px; font-size:16px;">Complete ✅</h2>
+          <div class="toast" id="doneMsg">Perfect run achieved. Copy your submit ticket.</div>
+        </div>
+        <div style="display:flex; gap:10px">
+          <button id="btnCopy" class="good">Copy Ticket</button>
+          <button id="btnPlayAgain" class="secondary">Play Again</button>
+        </div>
+      </div>
+      <pre id="logOut"></pre>
+    </section>
+  </main>
+</div>
+
+<script>
+/* =========================================================
+   QUESTIONS — Block 6 (CS 22–23) — 28 items (>=25 rule met)
+   CS 22: Nuclear Age
+   CS 23: Containment
+   ========================================================= */
+const QUESTIONS = shuffle([
+  /* ---------- CS 22 (14) ---------- */
+  {
+    cs:"CS22",
+    prompt:"Which event is widely considered the beginning of the nuclear age?",
+    choices:[
+      "The dropping of atomic bombs on Japan",
+      "The creation of NATO",
+      "The Marshall Plan",
+      "The Berlin Airlift"
+    ],
+    answer:"The dropping of atomic bombs on Japan",
+    hint:{ why:"Atomic bombs on Japan hastened WWII’s end and marked the start of the nuclear age.", keyPoints:["WWII ends faster","Nuclear age begins"] }
+  },
+  {
+    cs:"CS22",
+    prompt:"Atomic weapons changed the nature of war mainly because they:",
+    choices:[
+      "could cause mass destruction on a new scale",
+      "ended the need for alliances",
+      "made conventional armies obsolete immediately",
+      "eliminated fear of global conflict"
+    ],
+    answer:"could cause mass destruction on a new scale",
+    hint:{ why:"Atomic bombs introduced unprecedented mass destruction capacity.", keyPoints:["Mass destruction","New level of threat"] }
+  },
+  {
+    cs:"CS22",
+    prompt:"Which outcome best explains how nuclear weapons altered global power dynamics after WWII?",
+    choices:[
+      "Nuclear nations gained major influence in the balance of power",
+      "Small neutral nations became dominant superpowers",
+      "All military conflict ended permanently",
+      "Colonial empires expanded rapidly"
+    ],
+    answer:"Nuclear nations gained major influence in the balance of power",
+    hint:{ why:"Possession of nuclear weapons shifted influence toward nuclear powers.", keyPoints:["Balance of power","Nuclear capability"] }
+  },
+  {
+    cs:"CS22",
+    prompt:"Why did possession of nuclear weapons contribute to U.S. superpower status after WWII?",
+    choices:[
+      "It gave the U.S. unmatched military capability and influence",
+      "It ended domestic political conflict",
+      "It forced the U.S. to withdraw from world affairs",
+      "It eliminated the need for conventional forces"
+    ],
+    answer:"It gave the U.S. unmatched military capability and influence",
+    hint:{ why:"Nuclear capability increased U.S. military power and international influence.", keyPoints:["Superpower influence","Military capability"] }
+  },
+  {
+    cs:"CS22",
+    prompt:"What major 1949 development escalated the Cold War arms race?",
+    choices:[
+      "The Soviet Union successfully developed/detonated an atomic bomb",
+      "The U.S. joined the League of Nations",
+      "Japan surrendered to the Allies",
+      "The U.S. passed the Neutrality Acts"
+    ],
+    answer:"The Soviet Union successfully developed/detonated an atomic bomb",
+    hint:{ why:"The Soviet atomic bomb (1949) escalated an arms race and fear of nuclear war.", keyPoints:["1949 Soviet test","Arms race escalates"] }
+  },
+  {
+    cs:"CS22",
+    prompt:"Which cause-and-effect best fits the Cold War nuclear arms race?",
+    choices:[
+      "Soviet atomic bomb (1949) → heightened fears and accelerated arms race",
+      "Marshall Plan → U.S. isolationism increases",
+      "NATO forms → WWII begins",
+      "Berlin Wall falls → Korean War begins"
+    ],
+    answer:"Soviet atomic bomb (1949) → heightened fears and accelerated arms race",
+    hint:{ why:"Soviet nuclear capability increased fear and competition in weapons development.", keyPoints:["Arms race","Fear of nuclear war"] }
+  },
+  {
+    cs:"CS22",
+    prompt:"Which statement best describes the nuclear arms race?",
+    choices:[
+      "Competition to build more powerful nuclear weapons and delivery systems",
+      "A plan to end all alliances in Europe",
+      "A U.S. policy to stop inflation",
+      "A treaty to ban all military research"
+    ],
+    answer:"Competition to build more powerful nuclear weapons and delivery systems",
+    hint:{ why:"Both superpowers competed to outbuild and outmatch nuclear capability.", keyPoints:["Competition","Nuclear buildup"] }
+  },
+  {
+    cs:"CS22",
+    prompt:"Why did nuclear weapons increase fear during the Cold War?",
+    choices:[
+      "They made war potentially catastrophic within minutes",
+      "They reduced international tension",
+      "They eliminated the possibility of conflict",
+      "They only threatened soldiers, not civilians"
+    ],
+    answer:"They made war potentially catastrophic within minutes",
+    hint:{ why:"Nuclear conflict threatened mass casualties and rapid escalation.", keyPoints:["Catastrophic impact","Rapid escalation"] }
+  },
+  {
+    cs:"CS22",
+    prompt:"Which scenario best illustrates 'brinkmanship' in the nuclear age?",
+    choices:[
+      "Two nuclear powers escalating threats to the edge of war to force a concession",
+      "One country refusing any diplomacy under all circumstances",
+      "A country increasing taxes to fight inflation",
+      "A nation avoiding all contact with rivals"
+    ],
+    answer:"Two nuclear powers escalating threats to the edge of war to force a concession",
+    hint:{ why:"Brinkmanship means pushing to the edge to gain leverage without triggering war.", keyPoints:["Edge of war","Leverage"] }
+  },
+  {
+    cs:"CS22",
+    prompt:"Which event most clearly demonstrated the risk of nuclear war during the Cold War?",
+    choices:[
+      "The Cuban Missile Crisis (1962)",
+      "The signing of the Atlantic Charter",
+      "The passage of the Homestead Act",
+      "The building of the Erie Canal"
+    ],
+    answer:"The Cuban Missile Crisis (1962)",
+    hint:{ why:"1962 brought the U.S. and USSR close to nuclear confrontation.", keyPoints:["1962","Near nuclear war"] }
+  },
+  {
+    cs:"CS22",
+    prompt:"In 1962, the world came close to nuclear war mainly because:",
+    choices:[
+      "the Soviet Union placed nuclear missiles in Cuba",
+      "the U.S. invaded Vietnam",
+      "NATO dissolved unexpectedly",
+      "Japan tested a nuclear weapon"
+    ],
+    answer:"the Soviet Union placed nuclear missiles in Cuba",
+    hint:{ why:"Soviet missiles in Cuba triggered a major U.S.–Soviet crisis.", keyPoints:["Missiles in Cuba","Direct confrontation"] }
+  },
+  {
+    cs:"CS22",
+    prompt:"Which statement best explains why the Soviet Union became a second superpower?",
+    choices:[
+      "Developing nuclear weapons increased Soviet military and political power",
+      "Ending the New Deal expanded Soviet influence",
+      "Winning the Spanish-American War created Soviet dominance",
+      "Passing the Neutrality Acts made the USSR stronger"
+    ],
+    answer:"Developing nuclear weapons increased Soviet military and political power",
+    hint:{ why:"Soviet nuclear capability boosted its status as a global rival superpower.", keyPoints:["Nuclear capability","Second superpower"] }
+  },
+  {
+    cs:"CS22",
+    prompt:"Which option best shows a long-term global effect of nuclear weapons after WWII?",
+    choices:[
+      "Ongoing arms competition and policies focused on deterrence",
+      "Immediate end of all international conflict",
+      "Collapse of all alliances",
+      "Elimination of conventional warfare worldwide"
+    ],
+    answer:"Ongoing arms competition and policies focused on deterrence",
+    hint:{ why:"Nuclear weapons shaped long-term strategy: deterrence and arms competition.", keyPoints:["Deterrence","Arms competition"] }
+  },
+  {
+    cs:"CS22",
+    prompt:"Which choice is the BEST summary of how atomic weapons affected war and power after WWII?",
+    choices:[
+      "They introduced mass destruction, shifted power to nuclear nations, and began the nuclear age",
+      "They ended all international rivalry and created permanent peace",
+      "They reduced the importance of military technology",
+      "They caused the U.S. to withdraw from global leadership"
+    ],
+    answer:"They introduced mass destruction, shifted power to nuclear nations, and began the nuclear age",
+    hint:{ why:"That combination matches CS 22: nature of war + balance of power + nuclear age.", keyPoints:["Mass destruction","Balance of power","Nuclear age"] }
+  },
+
+  /* ---------- CS 23 (14) ---------- */
+  {
+    cs:"CS23",
+    prompt:"What was the primary purpose of the U.S. policy of containment during the Cold War?",
+    choices:[
+      "To prevent the spread of communism to new regions",
+      "To expand communism into Western Europe",
+      "To isolate the U.S. from world affairs",
+      "To end all international alliances"
+    ],
+    answer:"To prevent the spread of communism to new regions",
+    hint:{ why:"Containment aimed to halt communism’s spread (not necessarily roll it back everywhere).", keyPoints:["Stop spread","Cold War strategy"] }
+  },
+  {
+    cs:"CS23",
+    prompt:"Containment began in the late 1940s primarily in response to:",
+    choices:[
+      "fear of Soviet expansion in Europe and Asia",
+      "the discovery of gold in California",
+      "U.S. neutrality in World War I",
+      "the end of the Progressive Era"
+    ],
+    answer:"fear of Soviet expansion in Europe and Asia",
+    hint:{ why:"A key reason was fear of Soviet expansion after WWII.", keyPoints:["Soviet expansion fear","Late 1940s"] }
+  },
+  {
+    cs:"CS23",
+    prompt:"Which development in Asia was a major reason the U.S. pursued containment?",
+    choices:[
+      "The rise of communism in China",
+      "The Louisiana Purchase",
+      "The annexation of Hawaii",
+      "The end of the Civil War"
+    ],
+    answer:"The rise of communism in China",
+    hint:{ why:"The spread of communism in China increased U.S. fear of expansion in Asia.", keyPoints:["China","Communism spreads"] }
+  },
+  {
+    cs:"CS23",
+    prompt:"Which pattern best explains why containment expanded beyond Europe over time?",
+    choices:[
+      "Communism spread through Latin America and Asia",
+      "All colonies became U.S. states",
+      "The U.S. ended trade with Europe permanently",
+      "The Soviet Union joined NATO"
+    ],
+    answer:"Communism spread through Latin America and Asia",
+    hint:{ why:"Containment expanded as U.S. leaders feared communism spreading globally.", keyPoints:["Latin America","Asia"] }
+  },
+  {
+    cs:"CS23",
+    prompt:"Which U.S. policy provided aid to nations resisting communist pressure?",
+    choices:[
+      "The Truman Doctrine",
+      "The Dawes Act",
+      "The Sherman Antitrust Act",
+      "The Compromise of 1850"
+    ],
+    answer:"The Truman Doctrine",
+    hint:{ why:"Truman Doctrine = U.S. aid to nations resisting communism.", keyPoints:["Aid to resist communism","Containment tool"] }
+  },
+  {
+    cs:"CS23",
+    prompt:"Which program provided economic assistance to rebuild Europe and reduce communist appeal?",
+    choices:[
+      "The Marshall Plan",
+      "The Monroe Doctrine",
+      "The G.I. Bill",
+      "The Kansas-Nebraska Act"
+    ],
+    answer:"The Marshall Plan",
+    hint:{ why:"Marshall Plan rebuilt economies to stabilize democracy and weaken communist influence.", keyPoints:["Economic aid","Europe rebuilding"] }
+  },
+  {
+    cs:"CS23",
+    prompt:"Which international organization formed in 1949 to counter Soviet influence?",
+    choices:[
+      "NATO",
+      "League of Nations",
+      "United States–Mexico Alliance",
+      "Warsaw Treaty of 1812"
+    ],
+    answer:"NATO",
+    hint:{ why:"NATO (1949) was a military alliance to deter Soviet expansion.", keyPoints:["1949","Military alliance"] }
+  },
+  {
+    cs:"CS23",
+    prompt:"Which statement best explains NATO’s role in containment?",
+    choices:[
+      "A collective defense alliance meant to deter Soviet aggression",
+      "A plan to divide Germany into zones forever",
+      "An agreement to end U.S. involvement in Asia",
+      "A policy to increase tariffs on imports"
+    ],
+    answer:"A collective defense alliance meant to deter Soviet aggression",
+    hint:{ why:"NATO’s collective defense commitment supported containment by deterrence.", keyPoints:["Collective defense","Deterrence"] }
+  },
+  {
+    cs:"CS23",
+    prompt:"In Asia, containment was the basis for U.S. involvement in which conflicts?",
+    choices:[
+      "The Korean War and the Vietnam War",
+      "The Civil War and the Spanish-American War",
+      "World War I and World War II",
+      "The Mexican-American War and the War of 1812"
+    ],
+    answer:"The Korean War and the Vietnam War",
+    hint:{ why:"CS 23 explicitly ties containment to Korea and Vietnam.", keyPoints:["Korea","Vietnam"] }
+  },
+  {
+    cs:"CS23",
+    prompt:"Which outcome of the Korean War reinforced Cold War tensions?",
+    choices:[
+      "Korea remained divided into communist and non-communist states",
+      "Korea unified under a single democratic government",
+      "The U.S. withdrew from Europe permanently",
+      "NATO dissolved after the war"
+    ],
+    answer:"Korea remained divided into communist and non-communist states",
+    hint:{ why:"The war ended with continued division, reinforcing Cold War confrontation.", keyPoints:["Division persists","Cold War tension"] }
+  },
+  {
+    cs:"CS23",
+    prompt:"Which reasoning best explains U.S. escalation in Vietnam during the 1960s?",
+    choices:[
+      "U.S. leaders feared communism would spread if South Vietnam fell",
+      "The U.S. wanted Vietnam to become a U.S. territory",
+      "Vietnam demanded the U.S. end containment",
+      "NATO required all members to fight in Southeast Asia"
+    ],
+    answer:"U.S. leaders feared communism would spread if South Vietnam fell",
+    hint:{ why:"Containment logic: stop spread by supporting non-communist South Vietnam.", keyPoints:["Domino logic","Containment in Asia"] }
+  },
+  {
+    cs:"CS23",
+    prompt:"Which cause-and-effect best represents containment policy tools?",
+    choices:[
+      "Economic and military support to allies → reduced Soviet influence in key regions",
+      "Higher U.S. tariffs → end of the Cold War",
+      "New Deal programs → formation of NATO",
+      "Isolationism → increased U.S. involvement in Asia"
+    ],
+    answer:"Economic and military support to allies → reduced Soviet influence in key regions",
+    hint:{ why:"Containment used aid, alliances, and support to resist communist expansion.", keyPoints:["Aid + alliances","Resist expansion"] }
+  },
+  {
+    cs:"CS23",
+    prompt:"Which example best fits containment expanding beyond Europe?",
+    choices:[
+      "U.S. involvement in Korea and Vietnam as communism spread in Asia",
+      "U.S. purchase of Alaska to stop communism",
+      "U.S. support for prohibition to stop communism",
+      "U.S. creation of the SEC to stop communism"
+    ],
+    answer:"U.S. involvement in Korea and Vietnam as communism spread in Asia",
+    hint:{ why:"CS 23 highlights Asia as a major arena where containment expanded.", keyPoints:["Asia focus","Korea/Vietnam"] }
+  },
+  {
+    cs:"CS23",
+    prompt:"Which statement BEST summarizes why the U.S. adopted containment?",
+    choices:[
+      "Fear of communist expansion led the U.S. to use aid, alliances, and war to halt its spread",
+      "The U.S. wanted to end global trade and return to isolationism",
+      "The U.S. hoped to replace democracies with dictatorships",
+      "The U.S. aimed to unify all communist nations under NATO"
+    ],
+    answer:"Fear of communist expansion led the U.S. to use aid, alliances, and war to halt its spread",
+    hint:{ why:"This matches the reasons + tools + conflicts listed under CS 23.", keyPoints:["Reasons","Tools","Asia conflicts"] }
+  }
+]);
+
+/* =========
+   ENGINE
+   ========= */
+const $ = (s)=>document.querySelector(s);
+const screens = { start: $("#screenStart"), game: $("#screenGame"), done: $("#screenDone") };
+const meta = { name: $("#mName"), start: $("#mStart"), time: $("#mTime"), acc: $("#mAcc") };
+const qUI = {
+  kicker: $("#qKicker"), text: $("#qText"), choices: $("#choices"),
+  count: $("#qCount"), total: $("#qTotal"), bar: $("#barFill"),
+  feedback: $("#feedback"),
+  hintBox: $("#hintBox"), hintText: $("#hintText"), hintSmall: $("#hintSmall")
+};
+
+let state = {
+  startedAt:null, timerId:null,
+  idx:0, misses:0, attempts:0,
+  qOrder:[]
+};
+
+$("#btnDemo").addEventListener("click", ()=>{ $("#name").value="Demo Student"; $("#name").focus(); });
+$("#btnStart").addEventListener("click", startGame);
+$("#btnReset").addEventListener("click", resetAll);
+$("#btnPlayAgain").addEventListener("click", resetAll);
+$("#btnCopy").addEventListener("click", async ()=>{
+  try{
+    await navigator.clipboard.writeText($("#logOut").innerText);
+    $("#btnCopy").textContent="Copied ✅";
+    setTimeout(()=>$("#btnCopy").textContent="Copy Ticket", 1100);
+  }catch(e){
+    alert("Copy failed. You can manually select and copy the ticket text.");
+  }
+});
+
+function calcAccuracy(){
+  if(state.attempts <= 0) return 100;
+  return Math.round(((state.attempts - state.misses) / state.attempts) * 100);
+}
+function updateAccuracy(){
+  meta.acc.textContent = `${calcAccuracy()}%`;
+}
+
+function startGame(){
+  const n = ($("#name").value||"").trim();
+  if(!n){ alert("Please enter your name."); return; }
+
+  state.startedAt = new Date();
+  meta.name.textContent = n;
+  meta.start.textContent = stamp(state.startedAt);
+  meta.time.textContent = "00:00";
+
+  state.qOrder = shuffle([...QUESTIONS]);
+  state.idx = 0;
+  state.misses = 0;
+  state.attempts = 0;
+
+  $("#qTotal").textContent = String(state.qOrder.length);
+  updateAccuracy();
+
+  switchTo("game");
+  startTimer();
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = state.qOrder[state.idx];
+  if(!q) return finish();
+
+  qUI.kicker.textContent = `${q.cs} • Question ${state.idx+1}`;
+  qUI.text.textContent = q.prompt;
+
+  qUI.count.textContent = String(state.idx+1);
+  qUI.total.textContent = String(state.qOrder.length);
+  qUI.bar.style.width = `${Math.round((state.idx/state.qOrder.length)*100)}%`;
+
+  qUI.feedback.textContent = "Choose the best answer.";
+  qUI.feedback.style.color = "var(--muted)";
+
+  qUI.hintBox.style.display = "none";
+  qUI.hintText.textContent = "";
+  qUI.hintSmall.textContent = "";
+
+  qUI.choices.innerHTML = "";
+  q.choices.forEach(choice=>{
+    const btn = document.createElement("button");
+    btn.textContent = choice;
+    btn.addEventListener("click", ()=>submit(choice));
+    qUI.choices.appendChild(btn);
+  });
+}
+
+function submit(choice){
+  const q = state.qOrder[state.idx];
+
+  state.attempts++;
+  updateAccuracy();
+
+  if(choice === q.answer){
+    qUI.feedback.textContent = "Correct ✅";
+    qUI.feedback.style.color = "var(--good)";
+    flashButtons(choice, true);
+    setTimeout(()=>{
+      state.idx++;
+      renderQuestion();
+    }, 320);
+    return;
+  }
+
+  state.misses++;
+  updateAccuracy();
+
+  qUI.feedback.textContent = "Not yet ❌ Try again.";
+  qUI.feedback.style.color = "var(--bad)";
+  flashButtons(choice, false);
+
+  qUI.hintBox.style.display = "block";
+  qUI.hintText.textContent = q.hint?.why || "Think back to the content elaboration details.";
+  qUI.hintSmall.textContent = q.hint?.keyPoints?.length
+    ? ("Key points: " + q.hint.keyPoints.join(" • "))
+    : "";
+}
+
+function finish(){
+  stopTimer();
+  qUI.bar.style.width = "100%";
+
+  const endedAt = new Date();
+  const durationSec = Math.floor((endedAt - state.startedAt)/1000);
+  const accuracy = calcAccuracy();
+
+  if(state.misses > 0){
+    $("#doneTitle").textContent = "Not Passed ❌";
+    $("#doneMsg").textContent = "You finished, but this attempt had misses. Retake for a perfect run to earn the submit ticket.";
+    $("#btnCopy").style.display = "none";
+
+    $("#logOut").textContent =
+`NOT PASSED — Retake Required
+
+Student: ${meta.name.textContent}
+Started: ${stamp(state.startedAt)}
+Ended:   ${stamp(endedAt)}
+Duration (sec): ${durationSec}
+Accuracy: ${accuracy}%
+Misses: ${state.misses}
+
+RULE: To earn a submit ticket, you must complete the game with 0 misses (100% accuracy).`;
+    switchTo("done");
+    return;
+  }
+
+  $("#doneTitle").textContent = "Complete ✅";
+  $("#doneMsg").textContent = "Perfect run achieved (0 misses). Copy your submit ticket.";
+  $("#btnCopy").style.display = "inline-flex";
+
+  const ticket = {
+    status: "PASSED",
+    game: "American History — Block 6 (CS 22–23)",
+    student: meta.name.textContent,
+    started: stamp(state.startedAt),
+    ended: stamp(endedAt),
+    duration_seconds: durationSec,
+    total_questions: state.qOrder.length,
+    total_attempts: state.attempts,
+    misses: state.misses,
+    accuracy_percent: 100
+  };
+
+  $("#logOut").textContent = JSON.stringify(ticket, null, 2);
+  switchTo("done");
+}
+
+function switchTo(which){
+  Object.values(screens).forEach(el=>el.classList.add("hidden"));
+  screens[which].classList.remove("hidden");
+}
+
+function startTimer(){
+  stopTimer();
+  state.timerId = setInterval(()=>{
+    const s = Math.floor((new Date() - state.startedAt)/1000);
+    meta.time.textContent = fmtTime(s);
+  }, 250);
+}
+function stopTimer(){
+  if(state.timerId){ clearInterval(state.timerId); state.timerId=null; }
+}
+
+function resetAll(){
+  stopTimer();
+  meta.name.textContent="—";
+  meta.start.textContent="—";
+  meta.time.textContent="00:00";
+  meta.acc.textContent="100%";
+  $("#name").value="";
+  $("#btnCopy").textContent="Copy Ticket";
+  $("#btnCopy").style.display = "inline-flex";
+  switchTo("start");
+}
+
+function fmtTime(sec){
+  const m = String(Math.floor(sec/60)).padStart(2,"0");
+  const s = String(sec%60).padStart(2,"0");
+  return `${m}:${s}`;
+}
+function stamp(d){
+  return d.toLocaleString(undefined, {
+    year:"numeric", month:"2-digit", day:"2-digit",
+    hour:"2-digit", minute:"2-digit", second:"2-digit"
+  });
+}
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+function flashButtons(choice, correct){
+  [...qUI.choices.querySelectorAll("button")].forEach(b=>{
+    if(b.textContent === choice){
+      b.classList.add(correct ? "good" : "bad");
+      setTimeout(()=>b.classList.remove("good","bad"), 320);
+    }
+  });
+}
+</script>
+</body>
+</html>
