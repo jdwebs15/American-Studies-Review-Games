@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>American History — Block 8 (CS 27–28) Game</title>
+<style>
+  :root{
+    --bg:#0b1220; --card:#111a2e; --ink:#e7eefc; --muted:#a8b4cf;
+    --accent:#7aa2ff; --good:#2bd576; --bad:#ff5c7a; --warn:#ffd166;
+    --border:rgba(255,255,255,.12); --shadow:0 18px 55px rgba(0,0,0,.35);
+    --r:18px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:radial-gradient(1000px 650px at 18% 12%, rgba(122,162,255,.18), transparent 60%), var(--bg);
+    color:var(--ink); min-height:100vh;
+    display:flex; align-items:center; justify-content:center; padding:18px;
+  }
+  .app{width:min(980px,100%); background:rgba(17,26,46,.9); border:1px solid var(--border);
+    border-radius:var(--r); box-shadow:var(--shadow); overflow:hidden}
+  header{padding:16px 18px; display:flex; gap:12px; align-items:flex-start; justify-content:space-between;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, rgba(255,255,255,.06), transparent)}
+  .title{display:flex; flex-direction:column; gap:4px}
+  .title h1{margin:0; font-size:16px; letter-spacing:.2px}
+  .title .sub{color:var(--muted); font-size:12px; line-height:1.3}
+  .meta{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center}
+  .pill{border:1px solid var(--border); border-radius:999px; padding:6px 10px; font-size:12px; color:var(--muted); background:rgba(0,0,0,.18)}
+  .pill b{color:var(--ink); font-weight:700}
+  main{padding:18px; display:grid; gap:14px}
+  .card{background:rgba(0,0,0,.22); border:1px solid var(--border); border-radius:var(--r); padding:16px}
+  .row{display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between}
+  label{font-size:12px; color:var(--muted)}
+  input[type="text"]{
+    width:min(420px,100%); padding:10px 12px; border-radius:12px;
+    border:1px solid var(--border); background:rgba(0,0,0,.25); color:var(--ink);
+    outline:none;
+  }
+  button{
+    cursor:pointer; border:none; border-radius:14px; padding:12px 12px;
+    font-weight:800; color:var(--ink); background:rgba(122,162,255,.18);
+    border:1px solid rgba(122,162,255,.35);
+    transition:transform .08s ease, filter .12s ease;
+  }
+  button:hover{filter:brightness(1.06)}
+  button:active{transform:scale(.99)}
+  button.secondary{background:rgba(255,255,255,.06); border:1px solid var(--border); color:var(--muted)}
+  button.good{background:rgba(43,213,118,.14); border:1px solid rgba(43,213,118,.35)}
+  button.bad{background:rgba(255,92,122,.14); border:1px solid rgba(255,92,122,.35)}
+  .qTop{display:flex; align-items:flex-start; justify-content:space-between; gap:10px}
+  .kicker{color:var(--muted); font-size:12px}
+  .qTitle{margin:0; font-size:14px; line-height:1.35}
+  .status{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  .bar{height:10px; background:rgba(255,255,255,.08); border-radius:999px; overflow:hidden; border:1px solid var(--border); width:220px}
+  .bar>div{height:100%; width:0%; background:rgba(43,213,118,.75)}
+  .grid{
+    display:grid; gap:10px; margin-top:10px;
+    grid-template-columns:repeat(2, minmax(0,1fr));
+  }
+  @media (max-width:640px){ .grid{grid-template-columns:1fr} }
+  .hint{
+    margin-top:10px; padding:10px 12px; border-radius:14px;
+    background:rgba(255,209,102,.10); border:1px solid rgba(255,209,102,.35);
+    display:none;
+  }
+  .hint .small{color:var(--muted); font-size:12px; margin-top:4px; line-height:1.35}
+  .toast{font-size:12px; color:var(--muted)}
+  .hidden{display:none !important}
+  pre{
+    white-space:pre-wrap; word-break:break-word;
+    background:rgba(0,0,0,.25); border:1px solid var(--border); padding:12px; border-radius:14px;
+    color:var(--ink); font-size:12px; line-height:1.35; margin:10px 0 0;
+  }
+</style>
+</head>
+<body>
+<div class="app" role="application" aria-label="American History Block 8 Game">
+  <header>
+    <div class="title">
+      <h1>American History — Block 8 Game (CS 27–28)</h1>
+      <div class="sub">Postwar prosperity + movements for equality • Perfect run required for submit ticket • Hints only after a miss</div>
+    </div>
+    <div class="meta">
+      <div class="pill">Name: <b id="mName">—</b></div>
+      <div class="pill">Started: <b id="mStart">—</b></div>
+      <div class="pill">Time: <b id="mTime">00:00</b></div>
+      <div class="pill">Accuracy: <b id="mAcc">100%</b></div>
+    </div>
+  </header>
+
+  <main>
+    <section id="screenStart" class="card">
+      <div class="row">
+        <div>
+          <div class="kicker">Enter your name to begin</div>
+          <div style="margin-top:8px">
+            <label for="name">Student Name</label><br/>
+            <input id="name" type="text" autocomplete="name" placeholder="Type your name…" />
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center">
+          <button id="btnStart">Start</button>
+          <button id="btnDemo" class="secondary">Demo</button>
+        </div>
+      </div>
+      <div class="toast" style="margin-top:10px">Rules: hints only after a miss • accuracy reflects misses • must finish with 0 misses to earn ticket.</div>
+    </section>
+
+    <section id="screenGame" class="card hidden">
+      <div class="qTop">
+        <div>
+          <div class="kicker" id="qKicker">Question</div>
+          <p class="qTitle" id="qText">—</p>
+        </div>
+        <div class="status">
+          <div class="bar"><div id="barFill"></div></div>
+          <div class="toast"><span id="qCount">0</span>/<span id="qTotal">0</span></div>
+        </div>
+      </div>
+
+      <div class="grid" id="choices"></div>
+
+      <div class="hint" id="hintBox" role="note" aria-label="Hint">
+        <div><b>Hint (only after a miss):</b></div>
+        <div id="hintText" style="margin-top:6px"></div>
+        <div class="small" id="hintSmall"></div>
+      </div>
+
+      <div class="row" style="margin-top:14px">
+        <div class="toast" id="feedback">—</div>
+        <div style="display:flex; gap:10px">
+          <button id="btnReset" class="secondary">Reset</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screenDone" class="card hidden">
+      <div class="row">
+        <div>
+          <h2 id="doneTitle" style="margin:0 0 6px; font-size:16px;">Complete ✅</h2>
+          <div class="toast" id="doneMsg">Perfect run achieved. Copy your submit ticket.</div>
+        </div>
+        <div style="display:flex; gap:10px">
+          <button id="btnCopy" class="good">Copy Ticket</button>
+          <button id="btnPlayAgain" class="secondary">Play Again</button>
+        </div>
+      </div>
+      <pre id="logOut"></pre>
+    </section>
+  </main>
+</div>
+
+<script>
+/* =========================================================
+   QUESTIONS — Block 8 (CS 27–28) — 30 items (>=25 rule met)
+   CS27: Postwar prosperity & social change
+   CS28: Struggle for equality & extension of civil rights
+   ========================================================= */
+const QUESTIONS = shuffle([
+  /* ---------- CS27 (15) Postwar prosperity & social change ---------- */
+  {
+    cs:"CS27",
+    prompt:"Which factor most directly helped create a post–World War II economic boom in the United States?",
+    choices:["High consumer demand and expanded production after wartime","The end of all government spending","A collapse of manufacturing capacity","A sharp decline in population"],
+    answer:"High consumer demand and expanded production after wartime",
+    hint:{ why:"After WWII, demand for homes, cars, and goods surged and industry expanded.", keyPoints:["Consumer demand","Production expansion"] }
+  },
+  {
+    cs:"CS27",
+    prompt:"The GI Bill most directly contributed to postwar prosperity by:",
+    choices:["helping veterans attend college and buy homes","ending public education in the U.S.","requiring veterans to relocate overseas","banning new housing construction"],
+    answer:"helping veterans attend college and buy homes",
+    hint:{ why:"The GI Bill expanded education and homeownership, boosting growth.", keyPoints:["Education","Home loans","Middle class growth"] }
+  },
+  {
+    cs:"CS27",
+    prompt:"Which trend best describes many Americans’ living patterns during the postwar boom?",
+    choices:["Suburban growth as families moved out of cities","Mass return to rural farming","End of automobile ownership","Collapse of homebuilding"],
+    answer:"Suburban growth as families moved out of cities",
+    hint:{ why:"Suburbs expanded due to housing demand, highways, and car culture.", keyPoints:["Suburbs","Housing boom"] }
+  },
+  {
+    cs:"CS27",
+    prompt:"Which development most helped connect suburbs to cities and expanded car-centered life?",
+    choices:["Interstate Highway System","Homestead Act","Transatlantic slave trade","Dawes Act"],
+    answer:"Interstate Highway System",
+    hint:{ why:"Highways made commuting and suburban living easier.", keyPoints:["Highways","Commuting"] }
+  },
+  {
+    cs:"CS27",
+    prompt:"Which is a major demographic change linked to the postwar era?",
+    choices:["The Baby Boom","The end of immigration permanently","A return to colonial population patterns","A sudden disappearance of cities"],
+    answer:"The Baby Boom",
+    hint:{ why:"Birth rates rose sharply after WWII.", keyPoints:["Rising birth rates","Population growth"] }
+  },
+  {
+    cs:"CS27",
+    prompt:"Which statement best explains how television influenced American culture in the 1950s?",
+    choices:["It helped create shared mass culture through news, advertising, and entertainment","It ended national advertising","It reduced consumer spending sharply","It eliminated political campaigns"],
+    answer:"It helped create shared mass culture through news, advertising, and entertainment",
+    hint:{ why:"TV shaped culture, politics, and consumer behavior nationwide.", keyPoints:["Mass culture","Advertising"] }
+  },
+  {
+    cs:"CS27",
+    prompt:"Which cause-and-effect best fits postwar consumerism?",
+    choices:["Higher wages + mass production → increased purchases of homes, cars, and appliances","Less production + less income → record consumer buying","No suburbs → growth in shopping malls","Farm expansion → decline in cities"],
+    answer:"Higher wages + mass production → increased purchases of homes, cars, and appliances",
+    hint:{ why:"Boom conditions supported large-scale consumer purchasing.", keyPoints:["Wages","Mass production","Consumer goods"] }
+  },
+  {
+    cs:"CS27",
+    prompt:"What is the best example of how postwar prosperity changed daily life for many families?",
+    choices:["More households bought labor-saving appliances","Most families abandoned electricity","Americans stopped commuting","College attendance disappeared"],
+    answer:"More households bought labor-saving appliances",
+    hint:{ why:"Appliances and consumer goods became more common in homes.", keyPoints:["Appliances","Standard of living"] }
+  },
+  {
+    cs:"CS27",
+    prompt:"Which statement best connects postwar prosperity to migration patterns inside the U.S.?",
+    choices:["Job growth and new industries encouraged movement to growing regions (Sunbelt/suburbs)","Most Americans were forced onto reservations","All Americans moved to Europe","The population became completely stationary"],
+    answer:"Job growth and new industries encouraged movement to growing regions (Sunbelt/suburbs)",
+    hint:{ why:"Economic opportunity drove internal migration to growth regions.", keyPoints:["Sunbelt growth","Jobs"] }
+  },
+  {
+    cs:"CS27",
+    prompt:"Which factor most directly helped expand the American middle class after WWII?",
+    choices:["Higher education access, stable jobs, and homeownership growth","A return to sharecropping","Widespread bank failures","A ban on mortgages"],
+    answer:"Higher education access, stable jobs, and homeownership growth",
+    hint:{ why:"Education + jobs + homes expanded middle-class stability.", keyPoints:["GI Bill","Jobs","Homes"] }
+  },
+  {
+    cs:"CS27",
+    prompt:"Which scenario best shows a downside of rapid suburban growth?",
+    choices:["Urban decline and increased segregation patterns in many areas","End of housing demand","Complete elimination of traffic","Guaranteed equal opportunity everywhere"],
+    answer:"Urban decline and increased segregation patterns in many areas",
+    hint:{ why:"Suburbanization sometimes contributed to city tax-base loss and unequal access.", keyPoints:["Urban decline","Segregation patterns"] }
+  },
+  {
+    cs:"CS27",
+    prompt:"A historian says, “Postwar prosperity reshaped how Americans spent time and money.” Which evidence best supports this claim?",
+    choices:["Rising purchases of cars, TVs, and suburban homes","A sharp decrease in consumer advertising","An end to mass production","A decline in consumer credit"],
+    answer:"Rising purchases of cars, TVs, and suburban homes",
+    hint:{ why:"Big-ticket goods and suburban housing were key boom-era symbols.", keyPoints:["Cars","TVs","Homes"] }
+  },
+  {
+    cs:"CS27",
+    prompt:"Which best describes how the Cold War and prosperity could exist at the same time in the U.S.?",
+    choices:["Strong economy and consumer spending continued while foreign policy tensions increased","Foreign policy tensions ended the economy immediately","Prosperity required isolationism","Prosperity eliminated all global conflict"],
+    answer:"Strong economy and consumer spending continued while foreign policy tensions increased",
+    hint:{ why:"Domestic prosperity expanded even as Cold War tensions shaped foreign policy.", keyPoints:["Domestic boom","Foreign tension"] }
+  },
+  {
+    cs:"CS27",
+    prompt:"Which cause-and-effect best explains why college enrollment increased after WWII?",
+    choices:["GI Bill benefits → more veterans afford college → enrollment rises","Segregation laws → enrollment rises nationwide","World War I ends → GI Bill begins","Isolationism → colleges close"],
+    answer:"GI Bill benefits → more veterans afford college → enrollment rises",
+    hint:{ why:"The GI Bill expanded higher education access.", keyPoints:["GI Bill","College access"] }
+  },
+  {
+    cs:"CS27",
+    prompt:"Which statement best summarizes postwar prosperity’s long-term impact?",
+    choices:["It expanded the middle class and reshaped housing, culture, and consumer life","It ended all economic inequality permanently","It eliminated cities completely","It stopped technological innovation"],
+    answer:"It expanded the middle class and reshaped housing, culture, and consumer life",
+    hint:{ why:"Boom-era growth changed where/how Americans lived and consumed.", keyPoints:["Middle class","Suburbs","Consumer culture"] }
+  },
+
+  /* ---------- CS28 (15) Movements for equality & civil rights expansion ---------- */
+  {
+    cs:"CS28",
+    prompt:"Brown v. Board of Education (1954) is best known for:",
+    choices:["declaring school segregation unconstitutional","creating the GI Bill","ending the Vietnam War","establishing NATO"],
+    answer:"declaring school segregation unconstitutional",
+    hint:{ why:"Brown overturned ‘separate but equal’ in public education.", keyPoints:["School desegregation","14th Amendment equality"] }
+  },
+  {
+    cs:"CS28",
+    prompt:"Which event is most directly associated with Rosa Parks and the strategy of nonviolent protest?",
+    choices:["Montgomery Bus Boycott","Cuban Missile Crisis","Berlin Airlift","Bay of Pigs Invasion"],
+    answer:"Montgomery Bus Boycott",
+    hint:{ why:"The boycott used nonviolent resistance to challenge segregation.", keyPoints:["Boycott","Nonviolence"] }
+  },
+  {
+    cs:"CS28",
+    prompt:"Which tactic was most associated with Martin Luther King Jr. and many civil rights groups in the 1950s–1960s?",
+    choices:["Nonviolent direct action (marches, boycotts, sit-ins)","Armed invasion of states","Ending elections","Isolationism"],
+    answer:"Nonviolent direct action (marches, boycotts, sit-ins)",
+    hint:{ why:"Nonviolent direct action aimed to force change and win public support.", keyPoints:["Nonviolence","Direct action"] }
+  },
+  {
+    cs:"CS28",
+    prompt:"Which law most directly outlawed segregation in many public places and banned job discrimination based on race?",
+    choices:["Civil Rights Act of 1964","Homestead Act","Neutrality Act","Sherman Antitrust Act"],
+    answer:"Civil Rights Act of 1964",
+    hint:{ why:"The 1964 law targeted segregation and employment discrimination.", keyPoints:["Public accommodations","Employment"] }
+  },
+  {
+    cs:"CS28",
+    prompt:"Which law most directly targeted barriers that prevented African Americans from voting in the South?",
+    choices:["Voting Rights Act of 1965","Kansas-Nebraska Act","GI Bill","Pure Food and Drug Act"],
+    answer:"Voting Rights Act of 1965",
+    hint:{ why:"The VRA attacked discriminatory practices like literacy tests.", keyPoints:["Voting access","Federal enforcement"] }
+  },
+  {
+    cs:"CS28",
+    prompt:"Cause → effect: Televised images of violence against peaceful protesters often led to:",
+    choices:["greater public support and pressure for federal civil rights legislation","the end of all media coverage","a repeal of the Bill of Rights","no change in public opinion ever"],
+    answer:"greater public support and pressure for federal civil rights legislation",
+    hint:{ why:"Media coverage helped shape national opinion and policy pressure.", keyPoints:["TV coverage","Public opinion","Federal action"] }
+  },
+  {
+    cs:"CS28",
+    prompt:"Which event best illustrates federal enforcement of school desegregation against state resistance?",
+    choices:["Little Rock crisis (integration of Central High)","Louisiana Purchase","Teapot Dome scandal","New Deal banking reform"],
+    answer:"Little Rock crisis (integration of Central High)",
+    hint:{ why:"Federal action was used to enforce desegregation orders.", keyPoints:["State resistance","Federal enforcement"] }
+  },
+  {
+    cs:"CS28",
+    prompt:"Which statement best explains the purpose of sit-ins during the civil rights movement?",
+    choices:["To challenge segregation in public spaces through peaceful direct action","To promote segregation by force","To end voting rights campaigns","To discourage public participation"],
+    answer:"To challenge segregation in public spaces through peaceful direct action",
+    hint:{ why:"Sit-ins pressured businesses and communities to desegregate.", keyPoints:["Direct action","Desegregation"] }
+  },
+  {
+    cs:"CS28",
+    prompt:"Which is the best example of legislation expanding opportunities for women in education?",
+    choices:["Title IX","Truman Doctrine","Marshall Plan","Dawes Act"],
+    answer:"Title IX",
+    hint:{ why:"Title IX bans sex discrimination in federally funded education.", keyPoints:["Education equity","Sex discrimination"] }
+  },
+  {
+    cs:"CS28",
+    prompt:"Which description best fits the women’s movement of the 1960s–1970s?",
+    choices:["A push for equal opportunities in work, education, and legal rights","A plan to rebuild Europe after WWII","A policy of containment in Asia","An effort to expand segregation laws"],
+    answer:"A push for equal opportunities in work, education, and legal rights",
+    hint:{ why:"The movement sought expanded equality in multiple areas of life.", keyPoints:["Work","Education","Legal rights"] }
+  },
+  {
+    cs:"CS28",
+    prompt:"Which labor/rights campaign is most closely associated with César Chávez?",
+    choices:["Improving conditions for farmworkers through organizing and boycotts","Creating NATO to stop Soviet expansion","Building the interstate highway system","Passing the GI Bill"],
+    answer:"Improving conditions for farmworkers through organizing and boycotts",
+    hint:{ why:"Chávez used organization and boycotts to push for farmworker rights.", keyPoints:["Farmworkers","Boycotts","Organizing"] }
+  },
+  {
+    cs:"CS28",
+    prompt:"Which best describes how civil rights gains often occurred?",
+    choices:["Grassroots activism + court decisions + federal legislation worked together","One court case ended all discrimination instantly","Only the President acted with no public support","Only state governments expanded rights nationally"],
+    answer:"Grassroots activism + court decisions + federal legislation worked together",
+    hint:{ why:"Movements used multiple strategies: activism, courts, and laws.", keyPoints:["Activism","Courts","Legislation"] }
+  },
+  {
+    cs:"CS28",
+    prompt:"Which cause-and-effect best matches the Voting Rights Act’s impact?",
+    choices:["Federal enforcement limited discriminatory barriers → increased voter participation","Voting ended nationwide → participation dropped","States gained power to restrict voting freely","Courts banned elections"],
+    answer:"Federal enforcement limited discriminatory barriers → increased voter participation",
+    hint:{ why:"Reducing barriers increased participation and representation.", keyPoints:["Reduced barriers","More participation"] }
+  },
+  {
+    cs:"CS28",
+    prompt:"A student says, “Civil rights only affected African Americans.” Which correction is strongest?",
+    choices:["Movements also expanded rights and opportunities for women, Latinos, Native Americans, and other groups","Only one group gained any rights after WWII","Civil rights only involved foreign policy","Civil rights ended in 1900"],
+    answer:"Movements also expanded rights and opportunities for women, Latinos, Native Americans, and other groups",
+    hint:{ why:"Postwar movements broadened participation and rights for multiple groups.", keyPoints:["Multiple movements","Expanded participation"] }
+  },
+  {
+    cs:"CS28",
+    prompt:"Which statement BEST summarizes CS 28’s theme?",
+    choices:["Americans used activism, courts, and laws to expand civil rights and equality after WWII","The U.S. returned to isolationism and ended reform","Economic prosperity eliminated discrimination automatically","Civil liberties disappeared permanently after WWII"],
+    answer:"Americans used activism, courts, and laws to expand civil rights and equality after WWII",
+    hint:{ why:"CS 28 focuses on the struggle for equality and expansion of civil rights through many methods.", keyPoints:["Activism","Courts","Legislation","Equality"] }
+  }
+]);
+
+/* =========
+   ENGINE — includes your choice-shuffle fix
+   ========= */
+const $ = (s)=>document.querySelector(s);
+const screens = { start: $("#screenStart"), game: $("#screenGame"), done: $("#screenDone") };
+const meta = { name: $("#mName"), start: $("#mStart"), time: $("#mTime"), acc: $("#mAcc") };
+const qUI = {
+  kicker: $("#qKicker"), text: $("#qText"), choices: $("#choices"),
+  count: $("#qCount"), total: $("#qTotal"), bar: $("#barFill"),
+  feedback: $("#feedback"),
+  hintBox: $("#hintBox"), hintText: $("#hintText"), hintSmall: $("#hintSmall")
+};
+
+let state = {
+  startedAt:null, timerId:null,
+  idx:0, misses:0, attempts:0,
+  qOrder:[]
+};
+
+$("#btnDemo").addEventListener("click", ()=>{ $("#name").value="Demo Student"; $("#name").focus(); });
+$("#btnStart").addEventListener("click", startGame);
+$("#btnReset").addEventListener("click", resetAll);
+$("#btnPlayAgain").addEventListener("click", resetAll);
+$("#btnCopy").addEventListener("click", async ()=>{
+  try{
+    await navigator.clipboard.writeText($("#logOut").innerText);
+    $("#btnCopy").textContent="Copied ✅";
+    setTimeout(()=>$("#btnCopy").textContent="Copy Ticket", 1100);
+  }catch(e){
+    alert("Copy failed. You can manually select and copy the ticket text.");
+  }
+});
+
+function calcAccuracy(){
+  if(state.attempts <= 0) return 100;
+  return Math.round(((state.attempts - state.misses) / state.attempts) * 100);
+}
+function updateAccuracy(){
+  meta.acc.textContent = `${calcAccuracy()}%`;
+}
+
+/* ✅ Your fix: shuffle answer choices each render */
+function shuffledChoices(q){
+  const arr = [...q.choices];
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]] = [arr[j],arr[i]];
+  }
+  return arr;
+}
+
+function startGame(){
+  const n = ($("#name").value||"").trim();
+  if(!n){ alert("Please enter your name."); return; }
+
+  state.startedAt = new Date();
+  meta.name.textContent = n;
+  meta.start.textContent = stamp(state.startedAt);
+  meta.time.textContent = "00:00";
+
+  state.qOrder = shuffle([...QUESTIONS]);
+  state.idx = 0;
+  state.misses = 0;
+  state.attempts = 0;
+
+  $("#qTotal").textContent = String(state.qOrder.length);
+  updateAccuracy();
+
+  switchTo("game");
+  startTimer();
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = state.qOrder[state.idx];
+  if(!q) return finish();
+
+  qUI.kicker.textContent = `${q.cs} • Question ${state.idx+1}`;
+  qUI.text.textContent = q.prompt;
+
+  qUI.count.textContent = String(state.idx+1);
+  qUI.total.textContent = String(state.qOrder.length);
+  qUI.bar.style.width = `${Math.round((state.idx/state.qOrder.length)*100)}%`;
+
+  qUI.feedback.textContent = "Choose the best answer.";
+  qUI.feedback.style.color = "var(--muted)";
+
+  qUI.hintBox.style.display = "none";
+  qUI.hintText.textContent = "";
+  qUI.hintSmall.textContent = "";
+
+  qUI.choices.innerHTML = "";
+  shuffledChoices(q).forEach(choice=>{
+    const btn = document.createElement("button");
+    btn.textContent = choice;
+    btn.addEventListener("click", ()=>submit(choice));
+    qUI.choices.appendChild(btn);
+  });
+}
+
+function submit(choice){
+  const q = state.qOrder[state.idx];
+
+  state.attempts++;
+  updateAccuracy();
+
+  if(choice === q.answer){
+    qUI.feedback.textContent = "Correct ✅";
+    qUI.feedback.style.color = "var(--good)";
+    flashButtons(choice, true);
+    setTimeout(()=>{
+      state.idx++;
+      renderQuestion();
+    }, 320);
+    return;
+  }
+
+  state.misses++;
+  updateAccuracy();
+
+  qUI.feedback.textContent = "Not yet ❌ Try again.";
+  qUI.feedback.style.color = "var(--bad)";
+  flashButtons(choice, false);
+
+  qUI.hintBox.style.display = "block";
+  qUI.hintText.textContent = q.hint?.why || "Think back to the content elaboration details.";
+  qUI.hintSmall.textContent = q.hint?.keyPoints?.length
+    ? ("Key points: " + q.hint.keyPoints.join(" • "))
+    : "";
+}
+
+function finish(){
+  stopTimer();
+  qUI.bar.style.width = "100%";
+
+  const endedAt = new Date();
+  const durationSec = Math.floor((endedAt - state.startedAt)/1000);
+  const accuracy = calcAccuracy();
+
+  if(state.misses > 0){
+    $("#doneTitle").textContent = "Not Passed ❌";
+    $("#doneMsg").textContent = "You finished, but this attempt had misses. Retake for a perfect run to earn the submit ticket.";
+    $("#btnCopy").style.display = "none";
+
+    $("#logOut").textContent =
+`NOT PASSED — Retake Required
+
+Student: ${meta.name.textContent}
+Started: ${stamp(state.startedAt)}
+Ended:   ${stamp(endedAt)}
+Duration (sec): ${durationSec}
+Accuracy: ${accuracy}%
+Misses: ${state.misses}
+
+RULE: To earn a submit ticket, you must complete the game with 0 misses (100% accuracy).`;
+    switchTo("done");
+    return;
+  }
+
+  $("#doneTitle").textContent = "Complete ✅";
+  $("#doneMsg").textContent = "Perfect run achieved (0 misses). Copy your submit ticket.";
+  $("#btnCopy").style.display = "inline-flex";
+
+  const ticket = {
+    status: "PASSED",
+    game: "American History — Block 8 (CS 27–28)",
+    student: meta.name.textContent,
+    started: stamp(state.startedAt),
+    ended: stamp(endedAt),
+    duration_seconds: durationSec,
+    total_questions: state.qOrder.length,
+    total_attempts: state.attempts,
+    misses: state.misses,
+    accuracy_percent: 100
+  };
+
+  $("#logOut").textContent = JSON.stringify(ticket, null, 2);
+  switchTo("done");
+}
+
+function switchTo(which){
+  Object.values(screens).forEach(el=>el.classList.add("hidden"));
+  screens[which].classList.remove("hidden");
+}
+
+function startTimer(){
+  stopTimer();
+  state.timerId = setInterval(()=>{
+    const s = Math.floor((new Date() - state.startedAt)/1000);
+    meta.time.textContent = fmtTime(s);
+  }, 250);
+}
+function stopTimer(){
+  if(state.timerId){ clearInterval(state.timerId); state.timerId=null; }
+}
+
+function resetAll(){
+  stopTimer();
+  meta.name.textContent="—";
+  meta.start.textContent="—";
+  meta.time.textContent="00:00";
+  meta.acc.textContent="100%";
+  $("#name").value="";
+  $("#btnCopy").textContent="Copy Ticket";
+  $("#btnCopy").style.display = "inline-flex";
+  switchTo("start");
+}
+
+function fmtTime(sec){
+  const m = String(Math.floor(sec/60)).padStart(2,"0");
+  const s = String(sec%60).padStart(2,"0");
+  return `${m}:${s}`;
+}
+function stamp(d){
+  return d.toLocaleString(undefined, {
+    year:"numeric", month:"2-digit", day:"2-digit",
+    hour:"2-digit", minute:"2-digit", second:"2-digit"
+  });
+}
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+function flashButtons(choice, correct){
+  [...qUI.choices.querySelectorAll("button")].forEach(b=>{
+    if(b.textContent === choice){
+      b.classList.add(correct ? "good" : "bad");
+      setTimeout(()=>b.classList.remove("good","bad"), 320);
+    }
+  });
+}
+</script>
+</body>
+</html>
