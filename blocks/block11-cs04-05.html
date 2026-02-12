@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>American History — Block 11 (CS 4–5) Game</title>
+<style>
+  :root{
+    --bg:#0b1220; --card:#111a2e; --ink:#e7eefc; --muted:#a8b4cf;
+    --accent:#7aa2ff; --good:#2bd576; --bad:#ff5c7a; --warn:#ffd166;
+    --border:rgba(255,255,255,.12); --shadow:0 18px 55px rgba(0,0,0,.35);
+    --r:18px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:radial-gradient(1000px 650px at 18% 12%, rgba(122,162,255,.18), transparent 60%), var(--bg);
+    color:var(--ink); min-height:100vh;
+    display:flex; align-items:center; justify-content:center; padding:18px;
+  }
+  .app{width:min(980px,100%); background:rgba(17,26,46,.9); border:1px solid var(--border);
+    border-radius:var(--r); box-shadow:var(--shadow); overflow:hidden}
+  header{padding:16px 18px; display:flex; gap:12px; align-items:flex-start; justify-content:space-between;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, rgba(255,255,255,.06), transparent)}
+  .title{display:flex; flex-direction:column; gap:4px}
+  .title h1{margin:0; font-size:16px; letter-spacing:.2px}
+  .title .sub{color:var(--muted); font-size:12px; line-height:1.3}
+  .meta{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center}
+  .pill{border:1px solid var(--border); border-radius:999px; padding:6px 10px; font-size:12px; color:var(--muted); background:rgba(0,0,0,.18)}
+  .pill b{color:var(--ink); font-weight:800}
+  main{padding:18px; display:grid; gap:14px}
+  .card{background:rgba(0,0,0,.22); border:1px solid var(--border); border-radius:var(--r); padding:16px}
+  .row{display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between}
+  label{font-size:12px; color:var(--muted)}
+  input[type="text"]{
+    width:min(420px,100%); padding:10px 12px; border-radius:12px;
+    border:1px solid var(--border); background:rgba(0,0,0,.25); color:var(--ink);
+    outline:none;
+  }
+  button{
+    cursor:pointer; border:none; border-radius:14px; padding:12px 12px;
+    font-weight:900; color:var(--ink); background:rgba(122,162,255,.18);
+    border:1px solid rgba(122,162,255,.35);
+    transition:transform .08s ease, filter .12s ease;
+  }
+  button:hover{filter:brightness(1.06)}
+  button:active{transform:scale(.99)}
+  button.secondary{background:rgba(255,255,255,.06); border:1px solid var(--border); color:var(--muted)}
+  button.good{background:rgba(43,213,118,.14); border:1px solid rgba(43,213,118,.35)}
+  button.bad{background:rgba(255,92,122,.14); border:1px solid rgba(255,92,122,.35)}
+  .qTop{display:flex; align-items:flex-start; justify-content:space-between; gap:10px}
+  .kicker{color:var(--muted); font-size:12px}
+  .qTitle{margin:0; font-size:14px; line-height:1.35}
+  .status{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  .bar{height:10px; background:rgba(255,255,255,.08); border-radius:999px; overflow:hidden; border:1px solid var(--border); width:220px}
+  .bar>div{height:100%; width:0%; background:rgba(43,213,118,.75)}
+  .grid{
+    display:grid; gap:10px; margin-top:10px;
+    grid-template-columns:repeat(2, minmax(0,1fr));
+  }
+  @media (max-width:640px){ .grid{grid-template-columns:1fr} }
+  .hint{
+    margin-top:10px; padding:10px 12px; border-radius:14px;
+    background:rgba(255,209,102,.10); border:1px solid rgba(255,209,102,.35);
+    display:none;
+  }
+  .hint .small{color:var(--muted); font-size:12px; margin-top:4px; line-height:1.35}
+  .toast{font-size:12px; color:var(--muted)}
+  .hidden{display:none !important}
+  pre{
+    white-space:pre-wrap; word-break:break-word;
+    background:rgba(0,0,0,.25); border:1px solid var(--border); padding:12px; border-radius:14px;
+    color:var(--ink); font-size:12px; line-height:1.35; margin:10px 0 0;
+  }
+</style>
+</head>
+<body>
+<div class="app" role="application" aria-label="American History Block 11 Game">
+  <header>
+    <div class="title">
+      <h1>American History — Block 11 Game (CS 4–5)</h1>
+      <div class="sub">Perfect run required for submit ticket • Hints only after a miss • Auto-advance on correct • Choices shuffle every question</div>
+    </div>
+    <div class="meta">
+      <div class="pill">Name: <b id="mName">—</b></div>
+      <div class="pill">Started: <b id="mStart">—</b></div>
+      <div class="pill">Time: <b id="mTime">00:00</b></div>
+      <div class="pill">Accuracy: <b id="mAcc">100%</b></div>
+    </div>
+  </header>
+
+  <main>
+    <section id="screenStart" class="card">
+      <div class="row">
+        <div>
+          <div class="kicker">Enter your name to begin</div>
+          <div style="margin-top:8px">
+            <label for="name">Student Name</label><br/>
+            <input id="name" type="text" autocomplete="name" placeholder="Type your name…" />
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center">
+          <button id="btnStart">Start</button>
+          <button id="btnDemo" class="secondary">Demo</button>
+        </div>
+      </div>
+      <div class="toast" style="margin-top:10px">Rule: you must finish with 0 misses (100%) to earn the submit ticket.</div>
+    </section>
+
+    <section id="screenGame" class="card hidden">
+      <div class="qTop">
+        <div>
+          <div class="kicker" id="qKicker">Question</div>
+          <p class="qTitle" id="qText">—</p>
+        </div>
+        <div class="status">
+          <div class="bar"><div id="barFill"></div></div>
+          <div class="toast"><span id="qCount">0</span>/<span id="qTotal">0</span></div>
+        </div>
+      </div>
+
+      <div class="grid" id="choices"></div>
+
+      <div class="hint" id="hintBox" role="note" aria-label="Hint">
+        <div><b>Hint (only after a miss):</b></div>
+        <div id="hintText" style="margin-top:6px"></div>
+        <div class="small" id="hintSmall"></div>
+      </div>
+
+      <div class="row" style="margin-top:14px">
+        <div class="toast" id="feedback">—</div>
+        <div style="display:flex; gap:10px">
+          <button id="btnReset" class="secondary">Reset</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screenDone" class="card hidden">
+      <div class="row">
+        <div>
+          <h2 id="doneTitle" style="margin:0 0 6px; font-size:16px;">Complete ✅</h2>
+          <div class="toast" id="doneMsg">Perfect run achieved. Copy your submit ticket.</div>
+        </div>
+        <div style="display:flex; gap:10px">
+          <button id="btnCopy" class="good">Copy Ticket</button>
+          <button id="btnPlayAgain" class="secondary">Play Again</button>
+        </div>
+      </div>
+      <pre id="logOut"></pre>
+    </section>
+  </main>
+</div>
+
+<script>
+/* =========
+   QUESTIONS — Block 11 (CS 4–5)
+   CS4: Declaration of Independence
+   CS5: Northwest Ordinance
+   ========= */
+const QUESTIONS = [
+  // ===== CS4 — Declaration of Independence (13) =====
+  { cs:"CS4", prompt:"Which idea from the Declaration of Independence best supports the claim that government power comes from the people?",
+    choices:["Consent of the governed","Mercantilism","Divine right of kings","Judicial review"],
+    answer:"Consent of the governed",
+    hint:{ why:"The Declaration argues legitimate governments get power from the people’s permission.", keyPoints:["Consent","Legitimacy","Popular sovereignty"] }
+  },
+  { cs:"CS4", prompt:"In the Declaration, what is the main purpose of government?",
+    choices:["To secure people’s rights","To increase a king’s authority","To control all trade","To abolish elections"],
+    answer:"To secure people’s rights",
+    hint:{ why:"The Declaration claims governments are instituted to protect (secure) rights.", keyPoints:["Rights protection","Social contract"] }
+  },
+  { cs:"CS4", prompt:"Which set lists examples of “unalienable rights” emphasized in the Declaration?",
+    choices:["Life, liberty, and the pursuit of happiness","Speech, press, and assembly","Trial by jury and habeas corpus","Tariffs, taxes, and trade"],
+    answer:"Life, liberty, and the pursuit of happiness",
+    hint:{ why:"Those three are named directly as unalienable rights in the Declaration.", keyPoints:["Life","Liberty","Pursuit of happiness"] }
+  },
+  { cs:"CS4", prompt:"According to the Declaration, when may people change or abolish a government?",
+    choices:["When it becomes destructive of their rights","Whenever a new law is passed","Only after a war ends","Only if Parliament approves"],
+    answer:"When it becomes destructive of their rights",
+    hint:{ why:"The Declaration says people may alter/abolish governments that threaten rights.", keyPoints:["Destructive of rights","Alter/abolish"] }
+  },
+  { cs:"CS4", prompt:"A list of specific complaints against a ruler in the Declaration is best described as:",
+    choices:["Grievances","Allotments","Embargoes","Vetoes"],
+    answer:"Grievances",
+    hint:{ why:"Grievances are the detailed complaints used to justify independence.", keyPoints:["Complaints","Justification"] }
+  },
+  { cs:"CS4", prompt:"Which statement best matches the Declaration’s argument about equality?",
+    choices:["People are created equal in rights, not necessarily in outcomes","Only landowners are equal under law","Equality depends on social class","Equality is granted by kings"],
+    answer:"People are created equal in rights, not necessarily in outcomes",
+    hint:{ why:"The Declaration’s equality claim is about equal rights and human dignity.", keyPoints:["Equal rights","Natural rights"] }
+  },
+  { cs:"CS4", prompt:"Which relationship is most accurate based on the Declaration’s reasoning?",
+    choices:["Rights exist first → governments are created to protect them","Governments exist first → rights are granted later","Rights depend on wealth → government protects the wealthy","Rights come from force → government uses force to create rights"],
+    answer:"Rights exist first → governments are created to protect them",
+    hint:{ why:"Natural rights come first; government is formed to secure them.", keyPoints:["Natural rights","Government created to protect"] }
+  },
+  { cs:"CS4", prompt:"If a government continues a “long train of abuses,” the Declaration suggests the people have a duty to:",
+    choices:["Throw off that government and provide new guards for future security","Remain loyal to avoid conflict","Wait for foreign monarchs to intervene","End all trade with other nations"],
+    answer:"Throw off that government and provide new guards for future security",
+    hint:{ why:"The Declaration frames resistance as justified when oppression becomes persistent.", keyPoints:["Long train of abuses","Justified resistance"] }
+  },
+  { cs:"CS4", prompt:"Which choice best describes the Declaration as a historical document?",
+    choices:["A justification for independence using Enlightenment ideas about rights","A treaty ending the Civil War","A plan for industrial regulation","A law creating federal courts"],
+    answer:"A justification for independence using Enlightenment ideas about rights",
+    hint:{ why:"It explains why independence is justified using natural rights and consent.", keyPoints:["Justification","Rights","Consent"] }
+  },
+  { cs:"CS4", prompt:"A student claims: “The Declaration supports revolution for any small problem.” Which is the best correction?",
+    choices:["It says people should be cautious and only act after repeated abuses threaten rights","It says people must revolt every election cycle","It says only the military can decide","It says rights can be suspended during peace"],
+    answer:"It says people should be cautious and only act after repeated abuses threaten rights",
+    hint:{ why:"The Declaration warns people don’t change governments for light/transient causes.", keyPoints:["Caution","Repeated abuses"] }
+  },
+  { cs:"CS4", prompt:"Which is the strongest example of the Declaration’s “consent of the governed” in action today?",
+    choices:["Voting in elections to choose representatives","A king appointing lawmakers","A corporation setting laws","A judge writing new taxes"],
+    answer:"Voting in elections to choose representatives",
+    hint:{ why:"Elections are a direct mechanism for giving or withholding consent in a republic.", keyPoints:["Elections","Representation","Consent"] }
+  },
+  { cs:"CS4", prompt:"Which claim best represents the Declaration’s “social contract” idea?",
+    choices:["People accept government authority in exchange for protection of rights","People surrender rights permanently to avoid conflict","Government controls speech to ensure order","Leaders rule because they are born to rule"],
+    answer:"People accept government authority in exchange for protection of rights",
+    hint:{ why:"Social contract = authority is legitimate only if it protects rights.", keyPoints:["Contract","Rights protection"] }
+  },
+  { cs:"CS4", prompt:"Which phrase best summarizes the Declaration’s core argument?",
+    choices:["Natural rights + consent → legitimate government","Trade + tariffs → prosperity","Isolationism → peace","Assimilation → unity"],
+    answer:"Natural rights + consent → legitimate government",
+    hint:{ why:"Those two ideas drive the Declaration’s logic about government legitimacy.", keyPoints:["Natural rights","Consent","Legitimacy"] }
+  },
+
+  // ===== CS5 — Northwest Ordinance (12) =====
+  { cs:"CS5", prompt:"Which is a main reason the Northwest Ordinance matters for U.S. history?",
+    choices:["It created a process for governing territories and becoming states","It ended the War of 1812","It established the Federal Reserve","It repealed the Bill of Rights"],
+    answer:"It created a process for governing territories and becoming states",
+    hint:{ why:"It laid out rules for territories and steps toward statehood.", keyPoints:["Territorial government","Statehood process"] }
+  },
+  { cs:"CS5", prompt:"Which principle in the Northwest Ordinance most directly supports the value of public education?",
+    choices:["Encouraging schools and education as necessary for good government","Requiring a standing army in every territory","Banning elections in territories","Creating a national church"],
+    answer:"Encouraging schools and education as necessary for good government",
+    hint:{ why:"It promotes education as essential to citizenship and governance.", keyPoints:["Education clause","Civic virtue"] }
+  },
+  { cs:"CS5", prompt:"Which protection is most consistent with the Northwest Ordinance’s civil liberties tradition?",
+    choices:["Religious freedom and legal protections for individuals","Only property owners have rights","Censorship of the press","Punishment without trial"],
+    answer:"Religious freedom and legal protections for individuals",
+    hint:{ why:"The Ordinance includes rights protections (religion, legal safeguards).", keyPoints:["Religious liberty","Due process traditions"] }
+  },
+  { cs:"CS5", prompt:"How did the Northwest Ordinance address slavery in the Northwest Territory?",
+    choices:["It prohibited slavery in the territory","It required slavery in every new state","It ignored slavery entirely","It legalized slavery only in cities"],
+    answer:"It prohibited slavery in the territory",
+    hint:{ why:"A key feature was banning slavery north of the Ohio River (in that territory).", keyPoints:["Prohibited slavery","Northwest Territory"] }
+  },
+  { cs:"CS5", prompt:"Which describes the Northwest Ordinance’s approach to statehood?",
+    choices:["Territories could become states and join on equal footing after meeting population/government steps","Territories remained permanent colonies","Only the president could create states by decree","States could join only if they allowed slavery"],
+    answer:"Territories could become states and join on equal footing after meeting population/government steps",
+    hint:{ why:"It set stages to self-government and equal statehood.", keyPoints:["Stages","Self-government","Equal footing"] }
+  },
+  { cs:"CS5", prompt:"A historian argues the Northwest Ordinance shaped later U.S. documents. Which evidence best supports this?",
+    choices:["It included rights protections and education that echo later constitutional ideas","It created the Interstate Highway System","It legalized segregation nationwide","It ended political parties"],
+    answer:"It included rights protections and education that echo later constitutional ideas",
+    hint:{ why:"Its rights + education principles connect to later American civic foundations.", keyPoints:["Rights language","Education","Foundational influence"] }
+  },
+  { cs:"CS5", prompt:"Which scenario best shows the Northwest Ordinance’s emphasis on rule of law?",
+    choices:["Territory leaders must follow written rules for governance and rights protections","A governor can punish opponents without legal limits","Courts are optional and rarely used","Votes are canceled during peace"},
+    answer:"Territory leaders must follow written rules for governance and rights protections",
+    hint:{ why:"The Ordinance sets a written framework: powers, limits, and rights.", keyPoints:["Written framework","Limits","Rights"] }
+  },
+  { cs:"CS5", prompt:"Which idea connects CS4 and CS5 most directly?",
+    choices:["Natural rights and the people’s role in creating legitimate government","The need for monarchy to stabilize society","The belief that rights are earned by wealth","The idea that education should be avoided"},
+    answer:"Natural rights and the people’s role in creating legitimate government",
+    hint:{ why:"Both documents emphasize rights and the people’s role in shaping government foundations.", keyPoints:["Natural rights","People’s role","Legitimacy"] }
+  },
+  { cs:"CS5", prompt:"If a territory followed the Northwest Ordinance, what political outcome was most likely?",
+    choices:["Representative self-government develops before statehood","A king is crowned as territorial ruler","The territory becomes a foreign colony","Elections are permanently banned"},
+    answer:"Representative self-government develops before statehood",
+    hint:{ why:"The Ordinance allowed representative institutions as territories grew.", keyPoints:["Representative government","Steps to statehood"] }
+  },
+  { cs:"CS5", prompt:"Which statement best reflects why “setting up educational institutions” is important in CS5?",
+    choices:["Education supports informed citizenship and stable self-government","Education replaces elections","Education eliminates the need for laws","Education is mainly for military training"},
+    answer:"Education supports informed citizenship and stable self-government",
+    hint:{ why:"It ties education to effective governance and civic responsibility.", keyPoints:["Informed citizens","Self-government"] }
+  },
+  { cs:"CS5", prompt:"Which is the best example of the Northwest Ordinance’s long-term impact?",
+    choices:["It created a model used as the U.S. expanded westward","It ended all conflicts with American Indians","It caused the Great Depression","It created NATO"},
+    answer:"It created a model used as the U.S. expanded westward",
+    hint:{ why:"The territorial/statehood model became a precedent as the U.S. grew.", keyPoints:["Precedent","Expansion"] }
+  },
+  { cs:"CS5", prompt:"A student says: “The Northwest Ordinance is only about land.” Which is the best correction?",
+    choices:["It also establishes rights protections, education, and a framework for government and statehood","It is mainly about factory rules","It only describes trade tariffs","It bans public participation"},
+    answer:"It also establishes rights protections, education, and a framework for government and statehood",
+    hint:{ why:"It’s governance + rights + education + statehood rules, not just land.", keyPoints:["Rights","Education","Government framework"] }
+  }
+];
+
+/* =========
+   ENGINE
+   ========= */
+const $ = (s)=>document.querySelector(s);
+const screens = { start: $("#screenStart"), game: $("#screenGame"), done: $("#screenDone") };
+const meta = { name: $("#mName"), start: $("#mStart"), time: $("#mTime"), acc: $("#mAcc") };
+const qUI = {
+  kicker: $("#qKicker"), text: $("#qText"), choices: $("#choices"),
+  count: $("#qCount"), total: $("#qTotal"), bar: $("#barFill"),
+  feedback: $("#feedback"),
+  hintBox: $("#hintBox"), hintText: $("#hintText"), hintSmall: $("#hintSmall")
+};
+
+let state = {
+  startedAt:null, timerId:null,
+  idx:0, misses:0, attempts:0,
+  qOrder:[]
+};
+
+$("#btnDemo").addEventListener("click", ()=>{ $("#name").value="Demo Student"; $("#name").focus(); });
+$("#btnStart").addEventListener("click", startGame);
+$("#btnReset").addEventListener("click", resetAll);
+$("#btnPlayAgain").addEventListener("click", resetAll);
+$("#btnCopy").addEventListener("click", async ()=>{
+  try{
+    await navigator.clipboard.writeText($("#logOut").innerText);
+    $("#btnCopy").textContent="Copied ✅";
+    setTimeout(()=>$("#btnCopy").textContent="Copy Ticket", 1100);
+  }catch(e){
+    alert("Copy failed. You can manually select and copy the ticket text.");
+  }
+});
+
+// ===== Accuracy (misses count even if corrected later)
+function calcAccuracy(){
+  if(state.attempts <= 0) return 100;
+  return Math.round(((state.attempts - state.misses) / state.attempts) * 100);
+}
+function updateAccuracy(){
+  meta.acc.textContent = `${calcAccuracy()}%`;
+}
+
+// ===== Choice shuffle (your required structure)
+function shuffledChoices(q){
+  const arr = [...q.choices];
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]] = [arr[j],arr[i]];
+  }
+  return arr;
+}
+
+function startGame(){
+  const n = ($("#name").value||"").trim();
+  if(!n){ alert("Please enter your name."); return; }
+
+  state.startedAt = new Date();
+  meta.name.textContent = n;
+  meta.start.textContent = stamp(state.startedAt);
+  meta.time.textContent = "00:00";
+
+  state.qOrder = shuffle([...QUESTIONS]); // shuffle question order on load
+  state.idx = 0;
+  state.misses = 0;
+  state.attempts = 0;
+
+  $("#qTotal").textContent = String(state.qOrder.length);
+  updateAccuracy();
+
+  switchTo("game");
+  startTimer();
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = state.qOrder[state.idx];
+  if(!q) return finish();
+
+  qUI.kicker.textContent = `${q.cs} • Question ${state.idx+1}`;
+  qUI.text.textContent = q.prompt;
+
+  qUI.count.textContent = String(state.idx+1);
+  qUI.total.textContent = String(state.qOrder.length);
+  qUI.bar.style.width = `${Math.round((state.idx/state.qOrder.length)*100)}%`;
+
+  qUI.feedback.textContent = "Choose the best answer.";
+  qUI.feedback.style.color = "var(--muted)";
+
+  qUI.hintBox.style.display = "none";
+  qUI.hintText.textContent = "";
+  qUI.hintSmall.textContent = "";
+
+  qUI.choices.innerHTML = "";
+  shuffledChoices(q).forEach(choice=>{
+    const btn = document.createElement("button");
+    btn.textContent = choice;
+    btn.addEventListener("click", ()=>submit(choice));
+    qUI.choices.appendChild(btn);
+  });
+}
+
+function submit(choice){
+  const q = state.qOrder[state.idx];
+  state.attempts++;
+  updateAccuracy();
+
+  if(choice === q.answer){
+    qUI.feedback.textContent = "Correct ✅";
+    qUI.feedback.style.color = "var(--good)";
+    flashButtons(choice, true);
+    setTimeout(()=>{
+      state.idx++;
+      renderQuestion();
+    }, 320);
+    return;
+  }
+
+  state.misses++;
+  updateAccuracy();
+
+  qUI.feedback.textContent = "Not yet ❌ Try again.";
+  qUI.feedback.style.color = "var(--bad)";
+  flashButtons(choice, false);
+
+  qUI.hintBox.style.display = "block";
+  qUI.hintText.textContent = q.hint?.why || "Think back to the document’s key ideas.";
+  qUI.hintSmall.textContent = q.hint?.keyPoints?.length
+    ? ("Key points: " + q.hint.keyPoints.join(" • "))
+    : "";
+}
+
+function finish(){
+  stopTimer();
+  qUI.bar.style.width = "100%";
+
+  const endedAt = new Date();
+  const durationSec = Math.floor((endedAt - state.startedAt)/1000);
+  const accuracy = calcAccuracy();
+
+  if(state.misses > 0){
+    $("#doneTitle").textContent = "Not Passed ❌";
+    $("#doneMsg").textContent = "You finished, but this attempt had misses. Retake for a perfect run to earn the submit ticket.";
+    $("#btnCopy").style.display = "none";
+
+    $("#logOut").textContent =
+`NOT PASSED — Retake Required
+
+Student: ${meta.name.textContent}
+Started: ${stamp(state.startedAt)}
+Ended:   ${stamp(endedAt)}
+Duration (sec): ${durationSec}
+Accuracy: ${accuracy}%
+Misses: ${state.misses}
+
+RULE: To earn a submit ticket, you must complete the game with 0 misses (100% accuracy).`;
+    switchTo("done");
+    return;
+  }
+
+  $("#doneTitle").textContent = "Complete ✅";
+  $("#doneMsg").textContent = "Perfect run achieved (0 misses). Copy your submit ticket.";
+  $("#btnCopy").style.display = "inline-flex";
+
+  const ticket = {
+    status: "PASSED",
+    game: "American History — Block 11 (CS 4–5)",
+    student: meta.name.textContent,
+    started: stamp(state.startedAt),
+    ended: stamp(endedAt),
+    duration_seconds: durationSec,
+    total_questions: state.qOrder.length,
+    total_attempts: state.attempts,
+    misses: state.misses,
+    accuracy_percent: 100
+  };
+
+  $("#logOut").textContent = JSON.stringify(ticket, null, 2);
+  switchTo("done");
+}
+
+function switchTo(which){
+  Object.values(screens).forEach(el=>el.classList.add("hidden"));
+  screens[which].classList.remove("hidden");
+}
+
+function startTimer(){
+  stopTimer();
+  state.timerId = setInterval(()=>{
+    const s = Math.floor((new Date() - state.startedAt)/1000);
+    meta.time.textContent = fmtTime(s);
+  }, 250);
+}
+function stopTimer(){
+  if(state.timerId){ clearInterval(state.timerId); state.timerId=null; }
+}
+
+function resetAll(){
+  stopTimer();
+  meta.name.textContent="—";
+  meta.start.textContent="—";
+  meta.time.textContent="00:00";
+  meta.acc.textContent="100%";
+  $("#name").value="";
+  $("#btnCopy").textContent="Copy Ticket";
+  $("#btnCopy").style.display = "inline-flex";
+  switchTo("start");
+}
+
+function fmtTime(sec){
+  const m = String(Math.floor(sec/60)).padStart(2,"0");
+  const s = String(sec%60).padStart(2,"0");
+  return `${m}:${s}`;
+}
+function stamp(d){
+  return d.toLocaleString(undefined, {
+    year:"numeric", month:"2-digit", day:"2-digit",
+    hour:"2-digit", minute:"2-digit", second:"2-digit"
+  });
+}
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+function flashButtons(choice, correct){
+  [...qUI.choices.querySelectorAll("button")].forEach(b=>{
+    if(b.textContent === choice){
+      b.classList.add(correct ? "good" : "bad");
+      setTimeout(()=>b.classList.remove("good","bad"), 320);
+    }
+  });
+}
+</script>
+</body>
+</html>
