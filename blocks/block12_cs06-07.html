@@ -6,392 +6,736 @@
 <title>American History — Block 12 (CS 6–7) Game</title>
 
 <style>
-:root{
-  --bg:#0b1220; --card:#111a2e; --ink:#e7eefc; --muted:#a8b4cf;
-  --accent:#7aa2ff; --good:#2bd576; --bad:#ff5c7a; --warn:#ffd166;
-  --border:rgba(255,255,255,.12); --shadow:0 18px 55px rgba(0,0,0,.35);
-  --r:18px;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  background:radial-gradient(1000px 650px at 18% 12%, rgba(122,162,255,.18), transparent 60%), var(--bg);
-  color:var(--ink);
-  min-height:100vh;
-  display:flex; align-items:center; justify-content:center;
-  padding:18px;
-}
-.app{
-  width:min(980px,100%);
-  background:rgba(17,26,46,.9);
-  border:1px solid var(--border);
-  border-radius:var(--r);
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
-header{
-  padding:16px 18px;
-  display:flex; justify-content:space-between;
-  border-bottom:1px solid var(--border);
-}
-.title h1{margin:0;font-size:16px}
-.title .sub{color:var(--muted);font-size:12px}
-.meta{display:flex;gap:10px;flex-wrap:wrap}
-.pill{
-  border:1px solid var(--border);
-  border-radius:999px;
-  padding:6px 10px;
-  font-size:12px;
-  color:var(--muted);
-}
-.pill b{color:var(--ink)}
-main{padding:18px;display:grid;gap:14px}
-.card{
-  background:rgba(0,0,0,.22);
-  border:1px solid var(--border);
-  border-radius:var(--r);
-  padding:16px;
-}
-.grid{
-  display:grid;
-  gap:10px;
-  margin-top:10px;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-}
-@media(max-width:640px){.grid{grid-template-columns:1fr}}
-button{
-  cursor:pointer;
-  border-radius:14px;
-  padding:12px;
-  font-weight:800;
-  border:1px solid rgba(122,162,255,.35);
-  background:rgba(122,162,255,.18);
-  color:var(--ink);
-}
-button.secondary{background:rgba(255,255,255,.06);border:1px solid var(--border)}
-button.good{background:rgba(43,213,118,.14);border:1px solid rgba(43,213,118,.35)}
-button.bad{background:rgba(255,92,122,.14);border:1px solid rgba(255,92,122,.35)}
-.hidden{display:none!important}
-.bar{height:10px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden}
-.bar>div{height:100%;width:0;background:rgba(43,213,118,.75)}
-.hint{
-  margin-top:10px;
-  padding:10px;
-  border-radius:14px;
-  background:rgba(255,209,102,.10);
-  border:1px solid rgba(255,209,102,.35);
-  display:none;
-}
-pre{
-  white-space:pre-wrap;
-  background:rgba(0,0,0,.25);
-  padding:12px;
-  border-radius:14px;
-}
+  :root{
+    --bg:#0b1220; --card:#111a2e; --ink:#e7eefc; --muted:#a8b4cf;
+    --accent:#7aa2ff; --good:#2bd576; --bad:#ff5c7a; --warn:#ffd166;
+    --border:rgba(255,255,255,.12); --shadow:0 18px 55px rgba(0,0,0,.35);
+    --r:18px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:radial-gradient(1000px 650px at 18% 12%, rgba(122,162,255,.18), transparent 60%), var(--bg);
+    color:var(--ink); min-height:100vh;
+    display:flex; align-items:center; justify-content:center; padding:18px;
+  }
+  .app{
+    width:min(980px,100%); background:rgba(17,26,46,.9);
+    border:1px solid var(--border); border-radius:var(--r);
+    box-shadow:var(--shadow); overflow:hidden;
+  }
+  header{
+    padding:16px 18px; display:flex; gap:12px; align-items:flex-start; justify-content:space-between;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, rgba(255,255,255,.06), transparent);
+  }
+  .title{display:flex; flex-direction:column; gap:4px}
+  .title h1{margin:0; font-size:16px}
+  .title .sub{color:var(--muted); font-size:12px; line-height:1.35}
+  .meta{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center}
+  .pill{
+    border:1px solid var(--border); border-radius:999px; padding:6px 10px;
+    font-size:12px; color:var(--muted); background:rgba(0,0,0,.18)
+  }
+  .pill b{color:var(--ink); font-weight:800}
+  main{padding:18px; display:grid; gap:14px}
+  .card{
+    background:rgba(0,0,0,.22); border:1px solid var(--border);
+    border-radius:var(--r); padding:16px;
+  }
+  .row{display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between}
+  label{font-size:12px; color:var(--muted)}
+  input[type="text"]{
+    width:min(420px,100%); padding:10px 12px; border-radius:12px;
+    border:1px solid var(--border); background:rgba(0,0,0,.25); color:var(--ink);
+    outline:none;
+  }
+  button{
+    cursor:pointer; border:none; border-radius:14px; padding:12px 12px;
+    font-weight:900; color:var(--ink); background:rgba(122,162,255,.18);
+    border:1px solid rgba(122,162,255,.35);
+    transition:transform .08s ease, filter .12s ease;
+  }
+  button:hover{filter:brightness(1.06)}
+  button:active{transform:scale(.99)}
+  button.secondary{background:rgba(255,255,255,.06); border:1px solid var(--border); color:var(--muted)}
+  button.good{background:rgba(43,213,118,.14); border:1px solid rgba(43,213,118,.35)}
+  button.bad{background:rgba(255,92,122,.14); border:1px solid rgba(255,92,122,.35)}
+  .qTop{display:flex; align-items:flex-start; justify-content:space-between; gap:10px}
+  .kicker{color:var(--muted); font-size:12px}
+  .qTitle{margin:0; font-size:14px; line-height:1.4}
+  .status{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  .bar{height:10px; background:rgba(255,255,255,.08); border-radius:999px; overflow:hidden; border:1px solid var(--border); width:220px}
+  .bar>div{height:100%; width:0%; background:rgba(43,213,118,.75)}
+  .grid{
+    display:grid; gap:10px; margin-top:10px;
+    grid-template-columns:repeat(2, minmax(0,1fr));
+  }
+  @media (max-width:640px){ .grid{grid-template-columns:1fr} }
+  .hint{
+    margin-top:10px; padding:10px 12px; border-radius:14px;
+    background:rgba(255,209,102,.10); border:1px solid rgba(255,209,102,.35);
+    display:none;
+  }
+  .hint .small{color:var(--muted); font-size:12px; margin-top:6px; line-height:1.35}
+  .toast{font-size:12px; color:var(--muted)}
+  .hidden{display:none!important}
+  pre{
+    white-space:pre-wrap; word-break:break-word;
+    background:rgba(0,0,0,.25); border:1px solid var(--border);
+    padding:12px; border-radius:14px;
+    color:var(--ink); font-size:12px; line-height:1.35; margin:10px 0 0;
+  }
 </style>
 </head>
+
 <body>
-<div class="app">
-<header>
-  <div class="title">
-    <h1>American History — Block 12 (CS 6–7)</h1>
-    <div class="sub">Constitution Foundations • Early Republic in Action • 100% Required</div>
-  </div>
-  <div class="meta">
-    <div class="pill">Name: <b id="mName">—</b></div>
-    <div class="pill">Started: <b id="mStart">—</b></div>
-    <div class="pill">Time: <b id="mTime">00:00</b></div>
-    <div class="pill">Accuracy: <b id="mAcc">100%</b></div>
-  </div>
-</header>
+<div class="app" role="application" aria-label="American History Block 12 Game">
+  <header>
+    <div class="title">
+      <h1>American History — Block 12 Game (CS 6–7)</h1>
+      <div class="sub">Founding Documents • Constitution foundations + Federalist/Anti-Federalist debate • Perfect run (100%) required for submit ticket</div>
+    </div>
+    <div class="meta">
+      <div class="pill">Name: <b id="mName">—</b></div>
+      <div class="pill">Started: <b id="mStart">—</b></div>
+      <div class="pill">Time: <b id="mTime">00:00</b></div>
+      <div class="pill">Accuracy: <b id="mAcc">100%</b></div>
+    </div>
+  </header>
 
-<main>
+  <main>
+    <section id="screenStart" class="card">
+      <div class="row">
+        <div>
+          <div class="kicker">Enter your name to begin</div>
+          <div style="margin-top:8px">
+            <label for="name">Student Name</label><br/>
+            <input id="name" type="text" autocomplete="name" placeholder="Type your name…" />
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center">
+          <button id="btnStart">Start</button>
+          <button id="btnDemo" class="secondary">Demo</button>
+        </div>
+      </div>
+      <div class="toast" style="margin-top:10px">Choices stay on-screen (2×2). Hint appears only after a miss.</div>
+    </section>
 
-<section id="start" class="card">
-  <input id="name" placeholder="Enter your name..." />
-  <button id="startBtn">Start</button>
-</section>
+    <section id="screenGame" class="card hidden">
+      <div class="qTop">
+        <div>
+          <div class="kicker" id="qKicker">Question</div>
+          <p class="qTitle" id="qText">—</p>
+        </div>
+        <div class="status">
+          <div class="bar"><div id="barFill"></div></div>
+          <div class="toast"><span id="qCount">0</span>/<span id="qTotal">0</span></div>
+        </div>
+      </div>
 
-<section id="game" class="card hidden">
-  <div id="kicker"></div>
-  <div id="question"></div>
-  <div class="bar"><div id="barFill"></div></div>
-  <div id="choices" class="grid"></div>
-  <div id="hint" class="hint"></div>
-  <div id="feedback"></div>
-</section>
+      <div class="grid" id="choices"></div>
 
-<section id="done" class="card hidden">
-  <h2 id="doneTitle"></h2>
-  <div id="doneMsg"></div>
-  <button id="copyBtn">Copy Ticket</button>
-  <button onclick="location.reload()">Play Again</button>
-  <pre id="ticket"></pre>
-</section>
+      <div class="hint" id="hintBox" role="note" aria-label="Hint">
+        <div><b>Hint (only after a miss):</b></div>
+        <div id="hintText" style="margin-top:6px"></div>
+        <div class="small" id="hintSmall"></div>
+      </div>
 
-</main>
+      <div class="row" style="margin-top:14px">
+        <div class="toast" id="feedback">—</div>
+        <div style="display:flex; gap:10px">
+          <button id="btnReset" class="secondary">Reset</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screenDone" class="card hidden">
+      <div class="row">
+        <div>
+          <h2 id="doneTitle" style="margin:0 0 6px; font-size:16px;">Complete ✅</h2>
+          <div class="toast" id="doneMsg">Perfect run achieved. Copy your submit ticket.</div>
+        </div>
+        <div style="display:flex; gap:10px">
+          <button id="btnCopy" class="good">Copy Ticket</button>
+          <button id="btnPlayAgain" class="secondary">Play Again</button>
+        </div>
+      </div>
+      <pre id="logOut"></pre>
+    </section>
+  </main>
 </div>
 
 <script>
-/* =============================
-   QUESTIONS — CS6 & CS7 (26)
-   ============================= */
-const QUESTIONS = shuffle([
+/* =========
+   QUESTIONS — Block 12 (CS 6–7) — 28 items (>=25)
+   CS6: Constitution foundations / limited government
+   CS7: Federalist vs Anti-Federalist debate -> Bill of Rights
+   ========= */
 
-/* -------- CS6 (Constitution) -------- */
-{cs:"CS6",prompt:"Which problem under the Articles of Confederation led directly to the Constitutional Convention?",
-choices:["Weak national government unable to tax effectively","Too much executive power","Strong national military","Judicial review abuses"],
-answer:"Weak national government unable to tax effectively",
-hint:"The Articles lacked taxation power, causing financial instability."},
+const QUESTIONS = [
+  // -------- CS6 (14) --------
+  {
+    cs:"CS6",
+    prompt:"Which feature best shows the Constitution strengthened the national government compared with a looser system?",
+    choices:[
+      "It created three separate branches to carry out national responsibilities",
+      "It removed elections so leaders could act quickly",
+      "It banned amendments to keep government stable",
+      "It ended all state governments"
+    ],
+    answer:"It created three separate branches to carry out national responsibilities",
+    hint:{why:"CS6 emphasizes a stronger structure, including three branches.", keyPoints:["3 branches","Stronger national structure"]}
+  },
+  {
+    cs:"CS6",
+    prompt:"Which principle best describes how power is shared between the national government and the states?",
+    choices:["Federalism","Judicial precedent","Mercantilism","Nativism"],
+    answer:"Federalism",
+    hint:{why:"Federalism delineates the distribution of powers between levels of government.", keyPoints:["National vs state powers","Shared authority"]}
+  },
+  {
+    cs:"CS6",
+    prompt:"A student claims the Constitution is “flexible.” Which feature best supports that claim?",
+    choices:["The ability to amend the Constitution","The absence of any written rules","Lifetime elections for Congress","Only one branch of government"],
+    answer:"The ability to amend the Constitution",
+    hint:{why:"CS6 specifically includes the ability to amend the Constitution.", keyPoints:["Amendments","Adapt over time"]}
+  },
+  {
+    cs:"CS6",
+    prompt:"Which statement best explains how the Constitution connects government to the people?",
+    choices:[
+      "It ensures people have a role in electing representatives",
+      "It bans voting to prevent conflict",
+      "It gives all power to appointed officials",
+      "It requires citizens to serve in office"
+    ],
+    answer:"It ensures people have a role in electing representatives",
+    hint:{why:"CS6 says people have a role in electing government representatives.", keyPoints:["Elections","Representation"]}
+  },
+  {
+    cs:"CS6",
+    prompt:"Which idea is most aligned with “consent of the people”?",
+    choices:[
+      "Government authority comes from the governed",
+      "Government authority comes from inherited status",
+      "Government authority comes from foreign approval",
+      "Government authority comes from military leadership"
+    ],
+    answer:"Government authority comes from the governed",
+    hint:{why:"Consent of the people = legitimacy from the governed.", keyPoints:["Popular sovereignty","Legitimacy"]}
+  },
+  {
+    cs:"CS6",
+    prompt:"Which pair is the best example of Congress being able to address national issues under the Constitution?",
+    choices:[
+      "Levy taxes and raise armies",
+      "Approve royal titles and control churches",
+      "End elections and censor the press",
+      "Ban state governments"
+    ],
+    answer:"Levy taxes and raise armies",
+    hint:{why:"CS6 lists powers like taxes and raising armies as ways to address issues facing the nation.", keyPoints:["Taxes","Armies","National needs"]}
+  },
+  {
+    cs:"CS6",
+    prompt:"Which option best fits the Constitution’s goal of limiting government to protect individual and civil liberties?",
+    choices:[
+      "Setting boundaries so government power does not become unlimited",
+      "Giving government unchecked surveillance powers",
+      "Allowing leaders to ignore laws in emergencies",
+      "Replacing courts with military tribunals"
+    ],
+    answer:"Setting boundaries so government power does not become unlimited",
+    hint:{why:"CS6 emphasizes limited government to protect liberties.", keyPoints:["Limited government","Protect liberties"]}
+  },
+  {
+    cs:"CS6",
+    prompt:"In a federal system, which action best shows the national government using constitutional power to address a nationwide issue?",
+    choices:[
+      "Passing national legislation that applies across states",
+      "A city council setting its own trash schedule",
+      "A state choosing a school mascot",
+      "A county running local elections only"
+    ],
+    answer:"Passing national legislation that applies across states",
+    hint:{why:"CS6 includes the ability to pass legislation at the national level to address issues.", keyPoints:["National legislation","Nationwide problems"]}
+  },
+  {
+    cs:"CS6",
+    prompt:"Which statement best explains why having three branches helps protect rights?",
+    choices:[
+      "Dividing power makes it harder for one group to dominate",
+      "It guarantees every law will be popular",
+      "It removes conflict by eliminating debate",
+      "It ensures states cannot govern themselves"
+    ],
+    answer:"Dividing power makes it harder for one group to dominate",
+    hint:{why:"Three branches distribute power to prevent abuse.", keyPoints:["Power divided","Prevents domination"]}
+  },
+  {
+    cs:"CS6",
+    prompt:"Cause → Effect: If the Constitution expands Congress’s ability to regulate commerce, the most likely effect is that:",
+    choices:[
+      "National trade rules can address disputes among states",
+      "States lose the ability to run elections",
+      "The Constitution can no longer be amended",
+      "Courts stop interpreting laws"
+    ],
+    answer:"National trade rules can address disputes among states",
+    hint:{why:"CS6 notes Congress can address issues via powers like regulating commerce.", keyPoints:["Commerce power","National solutions"]}
+  },
+  {
+    cs:"CS6",
+    prompt:"Which example best shows “limited government” in practice?",
+    choices:[
+      "A government must follow the Constitution and laws",
+      "A leader can punish critics without a trial",
+      "A government can search anyone at any time",
+      "A president can rewrite elections unilaterally"
+    ],
+    answer:"A government must follow the Constitution and laws",
+    hint:{why:"Limited government means government power is restricted by law.", keyPoints:["Rule of law","Limits on power"]}
+  },
+  {
+    cs:"CS6",
+    prompt:"Which option best describes the relationship between federalism and rights protection?",
+    choices:[
+      "Power divided between national and state governments can limit overreach",
+      "Federalism eliminates all conflicts over power",
+      "Federalism means only states can protect rights",
+      "Federalism means only the national government exists"
+    ],
+    answer:"Power divided between national and state governments can limit overreach",
+    hint:{why:"Federalism delineates powers; dividing power helps prevent concentration.", keyPoints:["Divide authority","Prevent overreach"]}
+  },
+  {
+    cs:"CS6",
+    prompt:"A historian argues the Constitution helped “define the relationship” between people and government. Which detail best supports this?",
+    choices:[
+      "It guarantees power comes from the consent of the people",
+      "It abolished representation in government",
+      "It required citizens to leave politics to elites",
+      "It banned civil liberties to maintain order"
+    ],
+    answer:"It guarantees power comes from the consent of the people",
+    hint:{why:"CS6 explicitly includes consent and the people’s role.", keyPoints:["Consent","People-government relationship"]}
+  },
+  {
+    cs:"CS6",
+    prompt:"Which statement is the best summary of CS6?",
+    choices:[
+      "The Constitution created a stronger structure and limited government to protect liberties",
+      "The Constitution removed elections and centralized all power",
+      "The Constitution ended federalism and eliminated states",
+      "The Constitution made rights optional"
+    ],
+    answer:"The Constitution created a stronger structure and limited government to protect liberties",
+    hint:{why:"This matches CS6: structure + limited government + rights protection.", keyPoints:["3 branches","Federalism","Limited government","Rights"]}
+  },
 
-{cs:"CS6",prompt:"Which principle divides power between national and state governments?",
-choices:["Federalism","Judicial activism","Isolationism","Mercantilism"],
-answer:"Federalism",
-hint:"Federalism means shared powers between levels of government."},
+  // -------- CS7 (14) --------
+  {
+    cs:"CS7",
+    prompt:"Which statement best explains what the Federalist Papers were designed to do?",
+    choices:[
+      "Convince people to support ratification of the U.S. Constitution",
+      "End slavery immediately in all states",
+      "Promote isolationism after World War I",
+      "Create the first political party platform"
+    ],
+    answer:"Convince people to support ratification of the U.S. Constitution",
+    hint:{why:"CS7: Federalists published essays to persuade support for ratification.", keyPoints:["Federalist Papers","Ratification support"]}
+  },
+  {
+    cs:"CS7",
+    prompt:"Which argument is most associated with the Federalists?",
+    choices:[
+      "National taxation is needed to fund a central government",
+      "A standing army is always tyranny and must be banned",
+      "States should be the only level of government",
+      "A bill of rights is unnecessary because rights don’t exist"
+    ],
+    answer:"National taxation is needed to fund a central government",
+    hint:{why:"Federalists advocated national taxation to fund the central government.", keyPoints:["National taxation","Fund central government"]}
+  },
+  {
+    cs:"CS7",
+    prompt:"Which position best matches a Federalist view of national defense?",
+    choices:[
+      "A standing army supports a strong national defense",
+      "No national defense is needed in any circumstance",
+      "Only state militias can exist, never a national force",
+      "The president should command private armies"
+    ],
+    answer:"A standing army supports a strong national defense",
+    hint:{why:"CS7: Federalists advocated a standing army.", keyPoints:["Standing army","National defense"]}
+  },
+  {
+    cs:"CS7",
+    prompt:"Which concern best matches the Anti-Federalists?",
+    choices:[
+      "National taxation could become oppressive",
+      "Congress should be able to tax without limits",
+      "A strong central government is always safe",
+      "A bill of rights is dangerous because it expands rights"
+    ],
+    answer:"National taxation could become oppressive",
+    hint:{why:"CS7 lists Anti-Federalist concerns about repressive taxation.", keyPoints:["Taxation could be repressive","Power shift concern"]}
+  },
+  {
+    cs:"CS7",
+    prompt:"Anti-Federalists feared a standing army could:",
+    choices:[
+      "Be used against citizens",
+      "Make elections more frequent",
+      "Increase individual rights automatically",
+      "Replace state governments with courts"
+    ],
+    answer:"Be used against citizens",
+    hint:{why:"CS7: Anti-Federalists worried a standing army could be used against citizens.", keyPoints:["Standing army concern","Liberty risk"]}
+  },
+  {
+    cs:"CS7",
+    prompt:"Which statement best explains the key disagreement that led to the Bill of Rights being added?",
+    choices:[
+      "Anti-Federalists argued the Constitution lacked protections for individual liberties",
+      "Federalists demanded states be removed from the union",
+      "Anti-Federalists wanted a king instead of a president",
+      "Federalists wanted to abolish courts"
+    ],
+    answer:"Anti-Federalists argued the Constitution lacked protections for individual liberties",
+    hint:{why:"CS7: lack of rights protections drove the push for the Bill of Rights.", keyPoints:["Individual liberties","Bill of Rights demand"]}
+  },
+  {
+    cs:"CS7",
+    prompt:"Which set contains only rights specifically mentioned in the debate’s outcome (Bill of Rights examples in the standards)?",
+    choices:[
+      "Speech, press, assembly, petition, religion",
+      "Right to vote at age 18, direct election of senators",
+      "Social Security benefits, minimum wage",
+      "Annexation, neutrality, isolationism"
+    ],
+    answer:"Speech, press, assembly, petition, religion",
+    hint:{why:"CS7 lists these First Amendment freedoms as examples of rights included.", keyPoints:["1st Amendment freedoms","Civil liberties"]}
+  },
+  {
+    cs:"CS7",
+    prompt:"Which protection is most directly tied to limiting government power in criminal investigations (as listed in the standards examples)?",
+    choices:[
+      "Protection against illegal search and seizure",
+      "Right to an education",
+      "Right to a job",
+      "Right to a national bank"
+    ],
+    answer:"Protection against illegal search and seizure",
+    hint:{why:"CS7 includes protections against illegal search and seizure.", keyPoints:["Search & seizure","Limits on power"]}
+  },
+  {
+    cs:"CS7",
+    prompt:"Which choice best matches the Anti-Federalist goal of maintaining balance between national and state power?",
+    choices:[
+      "Preventing the national government from overwhelming state governments",
+      "Eliminating state governments entirely",
+      "Allowing only local governments to exist",
+      "Banning elections for national officials"
+    ],
+    answer:"Preventing the national government from overwhelming state governments",
+    hint:{why:"CS7: Anti-Federalists were concerned about the shift of power away from states.", keyPoints:["State vs national balance","Power shift"]}
+  },
+  {
+    cs:"CS7",
+    prompt:"Cause → Effect: Anti-Federalist criticism about individual rights most directly led to:",
+    choices:[
+      "The introduction and ratification of the Bill of Rights",
+      "The creation of the Federal Reserve",
+      "The Monroe Doctrine",
+      "The repeal of the Constitution"
+    ],
+    answer:"The introduction and ratification of the Bill of Rights",
+    hint:{why:"CS7: Anti-Federalist arguments led to the Bill of Rights.", keyPoints:["Anti-Federalist pressure","Bill of Rights added"]}
+  },
+  {
+    cs:"CS7",
+    prompt:"A student says, “The Constitution already had checks and balances, so rights didn’t matter.” Which response best aligns with CS7?",
+    choices:[
+      "Anti-Federalists argued checks and balances were not enough without written rights protections",
+      "Federalists and Anti-Federalists agreed rights were irrelevant",
+      "The debate was mainly about industrialization",
+      "The debate was mainly about World War I"
+    ],
+    answer:"Anti-Federalists argued checks and balances were not enough without written rights protections",
+    hint:{why:"CS7 focuses on rights protections as a key issue in ratification debates.", keyPoints:["Checks & balances ≠ full rights protections","Written liberties"]}
+  },
+  {
+    cs:"CS7",
+    prompt:"Which statement best explains why the Bill of Rights also connects to “limits on government power”?",
+    choices:[
+      "It restricts what government can do to individuals (civil liberties)",
+      "It guarantees government can act without limits",
+      "It removes courts from reviewing government actions",
+      "It ends all debate about rights"
+    ],
+    answer:"It restricts what government can do to individuals (civil liberties)",
+    hint:{why:"CS7: Bill of Rights = protections for liberties + limits on power.", keyPoints:["Limits on government","Civil liberties"]}
+  },
+  {
+    cs:"CS7",
+    prompt:"Which option best summarizes CS7?",
+    choices:[
+      "Debates over protections and limits produced the Bill of Rights",
+      "The Constitution banned individual liberties",
+      "The debate ended federalism",
+      "The debate was only about foreign policy"
+    ],
+    answer:"Debates over protections and limits produced the Bill of Rights",
+    hint:{why:"This is the direct CS7 result: Bill of Rights.", keyPoints:["Federalist vs Anti-Federalist","Bill of Rights result"]}
+  },
+  {
+    cs:"CS7",
+    prompt:"A historian uses CS7 to evaluate a claim: “Ratification debates were only about economics.” Which evidence best refutes that claim?",
+    choices:[
+      "A major debate focused on individual rights protections and limiting government power",
+      "The debates only discussed assembly lines",
+      "The debates only discussed immigration quotas",
+      "The debates only discussed the Great Depression"
+    ],
+    answer:"A major debate focused on individual rights protections and limiting government power",
+    hint:{why:"CS7 identifies individual rights as a key issue in the debate.", keyPoints:["Rights protections central","Limits on power"]}
+  }
+];
 
-{cs:"CS6",prompt:"Which document begins with 'We the People' to emphasize popular sovereignty?",
-choices:["The U.S. Constitution","The Articles of Confederation","The Magna Carta","The Mayflower Compact"],
-answer:"The U.S. Constitution",
-hint:"The Preamble emphasizes power comes from the people."},
+/* =========
+   ENGINE
+   ========= */
+const $ = (s)=>document.querySelector(s);
+const screens = { start: $("#screenStart"), game: $("#screenGame"), done: $("#screenDone") };
+const meta = { name: $("#mName"), start: $("#mStart"), time: $("#mTime"), acc: $("#mAcc") };
+const qUI = {
+  kicker: $("#qKicker"), text: $("#qText"), choices: $("#choices"),
+  count: $("#qCount"), total: $("#qTotal"), bar: $("#barFill"),
+  feedback: $("#feedback"),
+  hintBox: $("#hintBox"), hintText: $("#hintText"), hintSmall: $("#hintSmall")
+};
 
-{cs:"CS6",prompt:"The Great Compromise resolved conflict between:",
-choices:["Large and small states over representation","North and South over slavery","Britain and France","Farmers and bankers"],
-answer:"Large and small states over representation",
-hint:"It created a bicameral legislature."},
+let state = {
+  startedAt:null, timerId:null,
+  idx:0, misses:0, attempts:0,
+  qOrder:[]
+};
 
-{cs:"CS6",prompt:"Separation of powers prevents:",
-choices:["One branch from controlling the entire government","States from having power","Citizens from voting","The Constitution from being amended"],
-answer:"One branch from controlling the entire government",
-hint:"Each branch has distinct roles."},
-
-{cs:"CS6",prompt:"Checks and balances allow one branch to:",
-choices:["Limit the power of another branch","Ignore elections","Control states directly","Abolish amendments"],
-answer:"Limit the power of another branch",
-hint:"Example: veto override, judicial review."},
-
-{cs:"CS6",prompt:"Which debate led to the addition of the Bill of Rights?",
-choices:["Federalists vs Anti-Federalists","North vs South","Britain vs France","Farmers vs merchants"],
-answer:"Federalists vs Anti-Federalists",
-hint:"Anti-Federalists demanded protection of liberties."},
-
-{cs:"CS6",prompt:"Cause → effect: Fear of centralized tyranny led to:",
-choices:["Separation of powers and federalism","Absolute monarchy","No written constitution","Elimination of elections"],
-answer:"Separation of powers and federalism",
-hint:"Power was divided to prevent abuse."},
-
-{cs:"CS6",prompt:"Which branch interprets laws?",
-choices:["Judicial","Legislative","Executive","State militias"],
-answer:"Judicial",
-hint:"Courts interpret laws and Constitution."},
-
-{cs:"CS6",prompt:"The Supremacy Clause establishes:",
-choices:["Federal law as the supreme law of the land","State law dominance","Military rule","Presidential veto power"],
-answer:"Federal law as the supreme law of the land",
-hint:"Federal law overrides conflicting state law."},
-
-{cs:"CS6",prompt:"Which compromise addressed counting enslaved persons for representation?",
-choices:["Three-Fifths Compromise","Great Compromise","Missouri Compromise","Compromise of 1850"],
-answer:"Three-Fifths Compromise",
-hint:"It counted enslaved persons as three-fifths."},
-
-{cs:"CS6",prompt:"Ratification of the Constitution required approval by:",
-choices:["Nine states","All thirteen states","Congress only","The Supreme Court"],
-answer:"Nine states",
-hint:"Article VII set the ratification requirement."},
-
-{cs:"CS6",prompt:"Which amendment process reflects flexibility in the Constitution?",
-choices:["Formal amendment process","Presidential decree","Judicial vote","State convention ban"],
-answer:"Formal amendment process",
-hint:"Article V outlines amendment procedures."},
-
-/* -------- CS7 (Early Republic) -------- */
-
-{cs:"CS7",prompt:"Which action established the principle of judicial review?",
-choices:["Marbury v. Madison","Louisiana Purchase","War of 1812","Missouri Compromise"],
-answer:"Marbury v. Madison",
-hint:"Chief Justice Marshall asserted court power to review laws."},
-
-{cs:"CS7",prompt:"The Louisiana Purchase demonstrated:",
-choices:["Use of implied powers","Strict constructionism only","Judicial supremacy","Isolationism"],
-answer:"Use of implied powers",
-hint:"Jefferson stretched constitutional interpretation."},
-
-{cs:"CS7",prompt:"Which event tested federal authority over states?",
-choices:["Whiskey Rebellion","Boston Tea Party","Stamp Act","Civil War"],
-answer:"Whiskey Rebellion",
-hint:"Washington enforced federal tax law."},
-
-{cs:"CS7",prompt:"McCulloch v. Maryland strengthened:",
-choices:["Federal power over states","State power over Congress","The Articles of Confederation","Slavery protections"],
-answer:"Federal power over states",
-hint:"It upheld implied powers and national supremacy."},
-
-{cs:"CS7",prompt:"Which case expanded federal control over interstate commerce?",
-choices:["Gibbons v. Ogden","Dred Scott","Plessy v. Ferguson","Brown v. Board"],
-answer:"Gibbons v. Ogden",
-hint:"It interpreted commerce broadly."},
-
-{cs:"CS7",prompt:"Cause → effect: Washington’s precedent of neutrality influenced:",
-choices:["Early foreign policy decisions","The Civil War","Industrialization","The Great Depression"],
-answer:"Early foreign policy decisions",
-hint:"Neutrality shaped early diplomatic approach."},
-
-{cs:"CS7",prompt:"Political parties first emerged due to disagreement over:",
-choices:["Size and power of national government","Civil War strategies","World War alliances","Industrial regulations"],
-answer:"Size and power of national government",
-hint:"Federalists vs Democratic-Republicans."},
-
-{cs:"CS7",prompt:"The Elastic Clause allows Congress to:",
-choices:["Make laws necessary and proper to carry out powers","Ignore state governments","Eliminate courts","Cancel amendments"],
-answer:"Make laws necessary and proper to carry out powers",
-hint:"Also called Necessary and Proper Clause."},
-
-{cs:"CS7",prompt:"Which action reinforced peaceful transfer of power?",
-choices:["Election of 1800","War of 1812","Shays’ Rebellion","XYZ Affair"],
-answer:"Election of 1800",
-hint:"Transfer from Federalists to Democratic-Republicans."},
-
-{cs:"CS7",prompt:"The Bank of the United States controversy reflected debate over:",
-choices:["Strict vs loose interpretation of Constitution","Voting rights","Immigration policy","Civil War strategies"],
-answer:"Strict vs loose interpretation of Constitution",
-hint:"Hamilton vs Jefferson."},
-
-{cs:"CS7",prompt:"Which early policy aimed to avoid foreign entanglements?",
-choices:["Neutrality Proclamation","Monroe Doctrine","Marshall Plan","NATO"],
-answer:"Neutrality Proclamation",
-hint:"Washington’s 1793 proclamation."},
-
-{cs:"CS7",prompt:"Which best summarizes CS7?",
-choices:["Early leaders shaped constitutional government through precedents and court decisions","The Constitution remained unchanged","States controlled all power","Congress ignored the Constitution"],
-answer:"Early leaders shaped constitutional government through precedents and court decisions",
-hint:"Precedent and interpretation defined early governance."},
-
-{cs:"CS7",prompt:"Which Supreme Court under John Marshall strengthened federal authority?",
-choices:["Marshall Court","Warren Court","Burger Court","Roberts Court"],
-answer:"Marshall Court",
-hint:"Marshall era expanded national power."}
-
-]);
-
-/* =============================
-   GAME ENGINE
-   ============================= */
-const $=s=>document.querySelector(s);
-const start=$("#start"),game=$("#game"),done=$("#done");
-const nameInput=$("#name"),startBtn=$("#startBtn");
-const mName=$("#mName"),mStart=$("#mStart"),mTime=$("#mTime"),mAcc=$("#mAcc");
-const qEl=$("#question"),choicesEl=$("#choices"),kicker=$("#kicker");
-const barFill=$("#barFill"),hintBox=$("#hint"),feedback=$("#feedback");
-const doneTitle=$("#doneTitle"),doneMsg=$("#doneMsg"),ticket=$("#ticket");
-const copyBtn=$("#copyBtn");
-
-let state={idx:0,misses:0,attempts:0,startedAt:null,qOrder:[],timer:null};
+$("#btnDemo").addEventListener("click", ()=>{ $("#name").value="Demo Student"; $("#name").focus(); });
+$("#btnStart").addEventListener("click", startGame);
+$("#btnReset").addEventListener("click", resetAll);
+$("#btnPlayAgain").addEventListener("click", resetAll);
+$("#btnCopy").addEventListener("click", async ()=>{
+  try{
+    await navigator.clipboard.writeText($("#logOut").innerText);
+    $("#btnCopy").textContent="Copied ✅";
+    setTimeout(()=>$("#btnCopy").textContent="Copy Ticket", 1100);
+  }catch(e){
+    alert("Copy failed. You can manually select and copy the ticket text.");
+  }
+});
 
 function shuffledChoices(q){
- const arr=[...q.choices];
- for(let i=arr.length-1;i>0;i--){
-  const j=Math.floor(Math.random()*(i+1));
-  [arr[i],arr[j]]=[arr[j],arr[i]];
- }
- return arr;
+  const arr = [...q.choices];
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]] = [arr[j],arr[i]];
+  }
+  return arr;
 }
 
 function calcAccuracy(){
- if(state.attempts===0) return 100;
- return Math.round(((state.attempts-state.misses)/state.attempts)*100);
+  if(state.attempts <= 0) return 100;
+  return Math.round(((state.attempts - state.misses) / state.attempts) * 100);
 }
-function updateAcc(){mAcc.textContent=calcAccuracy()+"%";}
+function updateAccuracy(){
+  meta.acc.textContent = `${calcAccuracy()}%`;
+}
 
-startBtn.onclick=()=>{
- if(!nameInput.value.trim()) return alert("Enter name");
- state.startedAt=new Date();
- mName.textContent=nameInput.value;
- mStart.textContent=state.startedAt.toLocaleString();
- state.idx=0;state.misses=0;state.attempts=0;
- state.qOrder=shuffle([...QUESTIONS]);
- start.classList.add("hidden");
- game.classList.remove("hidden");
- startTimer();
- render();
-};
+function startGame(){
+  const n = ($("#name").value||"").trim();
+  if(!n){ alert("Please enter your name."); return; }
 
-function render(){
- if(!state.qOrder[state.idx]) return finish();
- const q=state.qOrder[state.idx];
- kicker.textContent=`${q.cs} — Question ${state.idx+1}/${state.qOrder.length}`;
- qEl.textContent=q.prompt;
- barFill.style.width=((state.idx/state.qOrder.length)*100)+"%";
- hintBox.style.display="none";
- feedback.textContent="Choose best answer.";
- choicesEl.innerHTML="";
- shuffledChoices(q).forEach(c=>{
-  const b=document.createElement("button");
-  b.textContent=c;
-  b.onclick=()=>submit(c);
-  choicesEl.appendChild(b);
- });
+  state.startedAt = new Date();
+  meta.name.textContent = n;
+  meta.start.textContent = stamp(state.startedAt);
+  meta.time.textContent = "00:00";
+
+  state.qOrder = shuffle([...QUESTIONS]);
+  state.idx = 0;
+  state.misses = 0;
+  state.attempts = 0;
+
+  $("#qTotal").textContent = String(state.qOrder.length);
+  updateAccuracy();
+
+  switchTo("game");
+  startTimer();
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = state.qOrder[state.idx];
+  if(!q) return finish();
+
+  qUI.kicker.textContent = `${q.cs} • Question ${state.idx+1}`;
+  qUI.text.textContent = q.prompt;
+
+  qUI.count.textContent = String(state.idx+1);
+  qUI.total.textContent = String(state.qOrder.length);
+  qUI.bar.style.width = `${Math.round((state.idx/state.qOrder.length)*100)}%`;
+
+  qUI.feedback.textContent = "Choose the best answer.";
+  qUI.feedback.style.color = "var(--muted)";
+
+  qUI.hintBox.style.display = "none";
+  qUI.hintText.textContent = "";
+  qUI.hintSmall.textContent = "";
+
+  qUI.choices.innerHTML = "";
+  shuffledChoices(q).forEach(choice=>{
+    const btn = document.createElement("button");
+    btn.textContent = choice;
+    btn.addEventListener("click", ()=>submit(choice));
+    qUI.choices.appendChild(btn);
+  });
 }
 
 function submit(choice){
- const q=state.qOrder[state.idx];
- state.attempts++;
- if(choice===q.answer){
-  feedback.textContent="Correct ✅";
-  setTimeout(()=>{state.idx++;updateAcc();render();},300);
- }else{
+  const q = state.qOrder[state.idx];
+  state.attempts++;
+  updateAccuracy();
+
+  if(choice === q.answer){
+    qUI.feedback.textContent = "Correct ✅";
+    qUI.feedback.style.color = "var(--good)";
+    flashButtons(choice, true);
+    setTimeout(()=>{
+      state.idx++;
+      renderQuestion();
+    }, 320);
+    return;
+  }
+
   state.misses++;
-  updateAcc();
-  feedback.textContent="Not yet ❌";
-  hintBox.style.display="block";
-  hintBox.textContent="Hint: "+q.hint;
- }
+  updateAccuracy();
+
+  qUI.feedback.textContent = "Not yet ❌ Try again.";
+  qUI.feedback.style.color = "var(--bad)";
+  flashButtons(choice, false);
+
+  qUI.hintBox.style.display = "block";
+  qUI.hintText.textContent = q.hint?.why || "Think back to the standard’s wording and examples.";
+  qUI.hintSmall.textContent = q.hint?.keyPoints?.length
+    ? ("Key points: " + q.hint.keyPoints.join(" • "))
+    : "";
 }
 
 function finish(){
- clearInterval(state.timer);
- game.classList.add("hidden");
- done.classList.remove("hidden");
- const ended=new Date();
- const dur=Math.floor((ended-state.startedAt)/1000);
- if(state.misses>0){
-  doneTitle.textContent="Not Passed ❌";
-  doneMsg.textContent="Retake for 100%.";
-  copyBtn.style.display="none";
-  ticket.textContent=`Accuracy: ${calcAccuracy()}%\nMisses: ${state.misses}`;
- }else{
-  doneTitle.textContent="Complete ✅";
-  doneMsg.textContent="Perfect run achieved.";
-  ticket.textContent=JSON.stringify({
-   status:"PASSED",
-   game:"Block 12 — CS 6–7",
-   student:mName.textContent,
-   started:mStart.textContent,
-   ended:ended.toLocaleString(),
-   duration_seconds:dur,
-   questions:state.qOrder.length,
-   attempts:state.attempts,
-   misses:0,
-   accuracy:100
-  },null,2);
- }
+  stopTimer();
+  qUI.bar.style.width = "100%";
+
+  const endedAt = new Date();
+  const durationSec = Math.floor((endedAt - state.startedAt)/1000);
+  const accuracy = calcAccuracy();
+
+  if(state.misses > 0){
+    $("#doneTitle").textContent = "Not Passed ❌";
+    $("#doneMsg").textContent = "You finished, but this attempt had misses. Retake for a perfect run to earn the submit ticket.";
+    $("#btnCopy").style.display = "none";
+
+    $("#logOut").textContent =
+`NOT PASSED — Retake Required
+
+Student: ${meta.name.textContent}
+Started: ${stamp(state.startedAt)}
+Ended:   ${stamp(endedAt)}
+Duration (sec): ${durationSec}
+Accuracy: ${accuracy}%
+Misses: ${state.misses}
+
+RULE: To earn a submit ticket, you must complete the game with 0 misses (100% accuracy).`;
+    switchTo("done");
+    return;
+  }
+
+  $("#doneTitle").textContent = "Complete ✅";
+  $("#doneMsg").textContent = "Perfect run achieved (0 misses). Copy your submit ticket.";
+  $("#btnCopy").style.display = "inline-flex";
+
+  const ticket = {
+    status: "PASSED",
+    game: "American History — Block 12 (CS 6–7)",
+    student: meta.name.textContent,
+    started: stamp(state.startedAt),
+    ended: stamp(endedAt),
+    duration_seconds: durationSec,
+    total_questions: state.qOrder.length,
+    total_attempts: state.attempts,
+    misses: 0,
+    accuracy_percent: 100
+  };
+
+  $("#logOut").textContent = JSON.stringify(ticket, null, 2);
+  switchTo("done");
 }
 
-copyBtn.onclick=()=>navigator.clipboard.writeText(ticket.textContent);
+function switchTo(which){
+  Object.values(screens).forEach(el=>el.classList.add("hidden"));
+  screens[which].classList.remove("hidden");
+}
 
 function startTimer(){
- state.timer=setInterval(()=>{
-  const s=Math.floor((new Date()-state.startedAt)/1000);
-  mTime.textContent=`${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`;
- },250);
+  stopTimer();
+  state.timerId = setInterval(()=>{
+    const s = Math.floor((new Date() - state.startedAt)/1000);
+    meta.time.textContent = fmtTime(s);
+  }, 250);
+}
+function stopTimer(){
+  if(state.timerId){ clearInterval(state.timerId); state.timerId=null; }
 }
 
+function resetAll(){
+  stopTimer();
+  meta.name.textContent="—";
+  meta.start.textContent="—";
+  meta.time.textContent="00:00";
+  meta.acc.textContent="100%";
+  $("#name").value="";
+  $("#btnCopy").textContent="Copy Ticket";
+  $("#btnCopy").style.display = "inline-flex";
+  switchTo("start");
+}
+
+function fmtTime(sec){
+  const m = String(Math.floor(sec/60)).padStart(2,"0");
+  const s = String(sec%60).padStart(2,"0");
+  return `${m}:${s}`;
+}
+function stamp(d){
+  return d.toLocaleString(undefined, {
+    year:"numeric", month:"2-digit", day:"2-digit",
+    hour:"2-digit", minute:"2-digit", second:"2-digit"
+  });
+}
 function shuffle(arr){
- for(let i=arr.length-1;i>0;i--){
-  const j=Math.floor(Math.random()*(i+1));
-  [arr[i],arr[j]]=[arr[j],arr[i]];
- }
- return arr;
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+function flashButtons(choice, correct){
+  [...qUI.choices.querySelectorAll("button")].forEach(b=>{
+    if(b.textContent === choice){
+      b.classList.add(correct ? "good" : "bad");
+      setTimeout(()=>b.classList.remove("good","bad"), 320);
+    }
+  });
 }
 </script>
 </body>
