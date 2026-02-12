@@ -4,7 +4,6 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>American History — Block 13 (CS 1–3) Game</title>
-
 <style>
   :root{
     --bg:#0b1220; --card:#111a2e; --ink:#e7eefc; --muted:#a8b4cf;
@@ -14,116 +13,65 @@
   }
   *{box-sizing:border-box}
   body{
-    margin:0;
-    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
     background:radial-gradient(1000px 650px at 18% 12%, rgba(122,162,255,.18), transparent 60%), var(--bg);
-    color:var(--ink);
-    min-height:100vh;
-    display:flex; align-items:center; justify-content:center;
-    padding:18px;
+    color:var(--ink); min-height:100vh;
+    display:flex; align-items:center; justify-content:center; padding:18px;
   }
-  .app{
-    width:min(980px,100%);
-    background:rgba(17,26,46,.9);
-    border:1px solid var(--border);
-    border-radius:var(--r);
-    box-shadow:var(--shadow);
-    overflow:hidden;
-  }
-  header{
-    padding:16px 18px;
-    display:flex; gap:12px;
-    align-items:flex-start; justify-content:space-between;
+  .app{width:min(980px,100%); background:rgba(17,26,46,.92); border:1px solid var(--border);
+    border-radius:var(--r); box-shadow:var(--shadow); overflow:hidden}
+  header{padding:16px 18px; display:flex; gap:12px; align-items:flex-start; justify-content:space-between;
     border-bottom:1px solid var(--border);
-    background:linear-gradient(180deg, rgba(255,255,255,.06), transparent);
-  }
-  .title{display:flex;flex-direction:column;gap:4px}
-  .title h1{margin:0;font-size:16px}
-  .title .sub{color:var(--muted);font-size:12px}
-  .meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-  .pill{
-    border:1px solid var(--border);
-    border-radius:999px;
-    padding:6px 10px;
-    font-size:12px;
-    color:var(--muted);
-    background:rgba(0,0,0,.18);
-  }
-  .pill b{color:var(--ink);font-weight:800}
-  main{padding:18px;display:grid;gap:14px}
-  .card{
-    background:rgba(0,0,0,.22);
-    border:1px solid var(--border);
-    border-radius:var(--r);
-    padding:16px;
-  }
-  .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    background:linear-gradient(180deg, rgba(255,255,255,.06), transparent)}
+  .title{display:flex; flex-direction:column; gap:4px}
+  .title h1{margin:0; font-size:16px; letter-spacing:.2px}
+  .title .sub{color:var(--muted); font-size:12px; line-height:1.3}
+  .meta{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center}
+  .pill{border:1px solid var(--border); border-radius:999px; padding:6px 10px; font-size:12px; color:var(--muted); background:rgba(0,0,0,.18)}
+  .pill b{color:var(--ink); font-weight:800}
+  main{padding:18px; display:grid; gap:14px}
+  .card{background:rgba(0,0,0,.22); border:1px solid var(--border); border-radius:var(--r); padding:16px}
+  .row{display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between}
+  label{font-size:12px; color:var(--muted)}
   input[type="text"]{
-    width:min(420px,100%);
-    padding:10px 12px;
-    border-radius:12px;
-    border:1px solid var(--border);
-    background:rgba(0,0,0,.25);
-    color:var(--ink);
+    width:min(420px,100%); padding:10px 12px; border-radius:12px;
+    border:1px solid var(--border); background:rgba(0,0,0,.25); color:var(--ink);
     outline:none;
   }
   button{
-    cursor:pointer;
-    border:none;
-    border-radius:14px;
-    padding:12px 12px;
-    font-weight:900;
-    color:var(--ink);
-    background:rgba(122,162,255,.18);
+    cursor:pointer; border:none; border-radius:14px; padding:12px 12px;
+    font-weight:900; color:var(--ink); background:rgba(122,162,255,.18);
     border:1px solid rgba(122,162,255,.35);
     transition:transform .08s ease, filter .12s ease;
   }
   button:hover{filter:brightness(1.06)}
   button:active{transform:scale(.99)}
-  button.secondary{background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--muted)}
-  button.good{background:rgba(43,213,118,.14);border:1px solid rgba(43,213,118,.35)}
-  button.bad{background:rgba(255,92,122,.14);border:1px solid rgba(255,92,122,.35)}
-  .qTop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-  .kicker{color:var(--muted);font-size:12px}
-  .qTitle{margin:0;font-size:14px;line-height:1.35}
-  .status{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  .bar{
-    height:10px;
-    background:rgba(255,255,255,.08);
-    border-radius:999px;
-    overflow:hidden;
-    border:1px solid var(--border);
-    width:220px;
-  }
-  .bar>div{height:100%;width:0%;background:rgba(43,213,118,.75)}
+  button.secondary{background:rgba(255,255,255,.06); border:1px solid var(--border); color:var(--muted)}
+  button.good{background:rgba(43,213,118,.14); border:1px solid rgba(43,213,118,.35)}
+  button.bad{background:rgba(255,92,122,.14); border:1px solid rgba(255,92,122,.35)}
+  .qTop{display:flex; align-items:flex-start; justify-content:space-between; gap:10px}
+  .kicker{color:var(--muted); font-size:12px}
+  .qTitle{margin:0; font-size:14px; line-height:1.35}
+  .status{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  .bar{height:10px; background:rgba(255,255,255,.08); border-radius:999px; overflow:hidden; border:1px solid var(--border); width:220px}
+  .bar>div{height:100%; width:0%; background:rgba(43,213,118,.75)}
   .grid{
-    display:grid;
-    gap:10px;
-    margin-top:10px;
-    grid-template-columns:repeat(2,minmax(0,1fr));
+    display:grid; gap:10px; margin-top:10px;
+    grid-template-columns:repeat(2, minmax(0,1fr));
   }
-  @media (max-width:640px){.grid{grid-template-columns:1fr}}
+  @media (max-width:640px){ .grid{grid-template-columns:1fr} }
   .hint{
-    margin-top:10px;
-    padding:10px 12px;
-    border-radius:14px;
-    background:rgba(255,209,102,.10);
-    border:1px solid rgba(255,209,102,.35);
+    margin-top:10px; padding:10px 12px; border-radius:14px;
+    background:rgba(255,209,102,.10); border:1px solid rgba(255,209,102,.35);
     display:none;
   }
-  .toast{font-size:12px;color:var(--muted)}
-  .hidden{display:none!important}
+  .hint .small{color:var(--muted); font-size:12px; margin-top:4px; line-height:1.35}
+  .toast{font-size:12px; color:var(--muted)}
+  .hidden{display:none !important}
   pre{
-    white-space:pre-wrap;
-    word-break:break-word;
-    background:rgba(0,0,0,.25);
-    border:1px solid var(--border);
-    padding:12px;
-    border-radius:14px;
-    color:var(--ink);
-    font-size:12px;
-    line-height:1.35;
-    margin:10px 0 0;
+    white-space:pre-wrap; word-break:break-word;
+    background:rgba(0,0,0,.25); border:1px solid var(--border); padding:12px; border-radius:14px;
+    color:var(--ink); font-size:12px; line-height:1.35; margin:10px 0 0;
   }
 </style>
 </head>
@@ -132,7 +80,7 @@
   <header>
     <div class="title">
       <h1>American History — Block 13 Game (CS 1–3)</h1>
-      <div class="sub">Colonial Regions & Settlement • British Policies & Conflict • Revolutionary Causes • Perfect run required</div>
+      <div class="sub">Historical Thinking & Skills • Perfect run required • Hints only after a miss • Auto-advance on correct • Choices shuffled</div>
     </div>
     <div class="meta">
       <div class="pill">Name: <b id="mName">—</b></div>
@@ -157,7 +105,7 @@
           <button id="btnDemo" class="secondary">Demo</button>
         </div>
       </div>
-      <div class="toast" style="margin-top:10px">Rule: 0 misses (100%) required to earn the submit ticket.</div>
+      <div class="toast" style="margin-top:10px">No scrolling needed—2×2 choices stay on-screen.</div>
     </section>
 
     <section id="screenGame" class="card hidden">
@@ -177,7 +125,7 @@
       <div class="hint" id="hintBox" role="note" aria-label="Hint">
         <div><b>Hint (only after a miss):</b></div>
         <div id="hintText" style="margin-top:6px"></div>
-        <div class="toast" id="hintSmall" style="margin-top:6px"></div>
+        <div class="small" id="hintSmall"></div>
       </div>
 
       <div class="row" style="margin-top:14px">
@@ -205,344 +153,246 @@
 </div>
 
 <script>
-/* =========================================================
-   QUESTIONS — Block 13 (CS 1–3) — 27 items
-   CS1 (9)  Colonial regions & settlement patterns
-   CS2 (9)  British empire, conflict, French & Indian War impacts
-   CS3 (9)  Road to Revolution: taxes, protests, ideology
-   ========================================================= */
+/* =========
+   QUESTIONS — Block 13 (CS 1–3) — 25+ items, standards-anchored
+   ========= */
+
 const QUESTIONS = shuffle([
-
-  /* -------------------- CS1 (9) -------------------- */
+  // ----- CS1: Credibility of sources (primary/secondary) -----
   {
     cs:"CS1",
-    prompt:"Which factor most influenced the development of different colonial regions in British North America?",
-    choices:[
-      "Geography, climate, and available natural resources",
-      "A single national currency created by Parliament",
-      "A ban on farming in all colonies",
-      "Identical economies required by the king"
-    ],
-    answer:"Geography, climate, and available natural resources",
-    hint:{ why:"Regional differences grew from physical geography and resources.", keyPoints:["Climate","Resources","Regional economies"] }
+    prompt:"A diary entry from 1912 describes a factory as “the best place on earth.” What is the MOST important credibility check first?",
+    choices:["Author’s perspective and possible motive","How long the diary is","Whether it is typed or handwritten","Whether the diary uses formal language"],
+    answer:"Author’s perspective and possible motive",
+    hint:{why:"Start by asking who wrote it, what they wanted, and what viewpoint they had.", keyPoints:["Perspective","Motive","Context"] }
   },
   {
     cs:"CS1",
-    prompt:"Which economy best fits the Southern Colonies in the 1600s–1700s?",
-    choices:[
-      "Cash-crop plantation agriculture",
-      "Shipbuilding and fishing",
-      "Fur trade with French Canada",
-      "Gold mining in deserts"
-    ],
-    answer:"Cash-crop plantation agriculture",
-    hint:{ why:"Tobacco, rice, and later cotton dominated the South’s economy.", keyPoints:["Plantations","Cash crops"] }
+    prompt:"Two sources disagree about an event. Which step best helps evaluate credibility?",
+    choices:["Compare both to other credible sources","Assume the longer source is correct","Pick the source that supports your opinion","Ignore both sources"],
+    answer:"Compare both to other credible sources",
+    hint:{why:"Agreement (or conflict) with other credible evidence is a key check.", keyPoints:["Corroboration","Multiple sources"] }
   },
   {
     cs:"CS1",
-    prompt:"Which combination is most associated with the New England Colonies?",
-    choices:[
-      "Small farms, fishing, trade, and shipbuilding",
-      "Large plantations and staple crops",
-      "Wheat export plantations with enslaved labor",
-      "Gold and silver mining"
-    ],
-    answer:"Small farms, fishing, trade, and shipbuilding",
-    hint:{ why:"Rocky soil pushed New England toward trade, fishing, and industry.", keyPoints:["Trade","Fishing","Shipbuilding"] }
+    prompt:"A website article about WWII includes no author name or credentials. Which credibility concern is MOST direct?",
+    choices:["Qualifications and reputation of the author","Sequence of events","Long-term causation","Correlation vs causation"],
+    answer:"Qualifications and reputation of the author",
+    hint:{why:"If you can’t identify the author and credentials, credibility is harder to verify.", keyPoints:["Author credentials","Reputation"] }
   },
   {
     cs:"CS1",
-    prompt:"Which statement best explains why port cities grew in colonial America?",
-    choices:[
-      "They were centers of trade that connected colonies to Atlantic markets",
-      "They were built mainly for military training camps",
-      "They replaced farming entirely across the colonies",
-      "They were locations where Parliament met every year"
-    ],
-    answer:"They were centers of trade that connected colonies to Atlantic markets",
-    hint:{ why:"Ports linked colonial goods to international trade routes.", keyPoints:["Atlantic trade","Markets"] }
+    prompt:"A source uses stereotypes to describe a group. Which credibility issue is this?",
+    choices:["Bias of the author","Agreement with other sources","Accuracy and consistency","Circumstances of publication"],
+    answer:"Bias of the author",
+    hint:{why:"Stereotypes are a strong sign of bias and can distort interpretation.", keyPoints:["Bias","Stereotypes"] }
   },
   {
     cs:"CS1",
-    prompt:"Cause → effect: Fertile soil and longer growing seasons in the South led to:",
-    choices:[
-      "Large-scale plantation farming and demand for labor",
-      "An economy focused mostly on fishing",
-      "A decline in agriculture",
-      "No need for trade with Europe"
-    ],
-    answer:"Large-scale plantation farming and demand for labor",
-    hint:{ why:"Cash-crop agriculture encouraged plantations and labor systems.", keyPoints:["Plantations","Labor demand"] }
+    prompt:"A politician’s speech argues a policy was “universally supported,” but later claims it was “controversial.” What credibility check is best?",
+    choices:["Accuracy and consistency of arguments","Author’s handwriting","Length of the speech","Whether it is a primary source"],
+    answer:"Accuracy and consistency of arguments",
+    hint:{why:"Internal consistency matters—contradictions weaken credibility.", keyPoints:["Consistency","Contradictions"] }
   },
   {
     cs:"CS1",
-    prompt:"Which idea best describes why colonial economies were not identical?",
-    choices:[
-      "Different regions specialized based on environmental and geographic conditions",
-      "Parliament forced all colonies to produce the same goods",
-      "The colonies banned trade",
-      "All regions had identical climates and soils"
-    ],
-    answer:"Different regions specialized based on environmental and geographic conditions",
-    hint:{ why:"Specialization emerged because geography shaped opportunities.", keyPoints:["Specialization","Geography"] }
+    prompt:"A newspaper editorial from 1890 praises a company owned by the editor’s brother. Which credibility check applies MOST?",
+    choices:["Circumstances in which the author prepared the source","Agreement with other credible sources","Whether it is primary vs secondary","Correlation"],
+    answer:"Circumstances in which the author prepared the source",
+    hint:{why:"Conflicts of interest and context of creation affect credibility.", keyPoints:["Conflict of interest","Context"] }
   },
   {
     cs:"CS1",
-    prompt:"Which location would MOST likely develop a trade-based economy?",
-    choices:[
-      "A coastal colony with a natural harbor",
-      "An inland desert with no rivers",
-      "A mountain peak with no settlements",
-      "A frozen area with no access routes"
-    ],
-    answer:"A coastal colony with a natural harbor",
-    hint:{ why:"Harbors enable shipping, imports/exports, and port growth.", keyPoints:["Harbors","Trade"] }
+    prompt:"Which statement BEST distinguishes a primary source from a secondary source?",
+    choices:["Primary is created at the time; secondary interprets later","Primary is always unbiased; secondary is always biased","Primary is always longer; secondary is shorter","Primary is online; secondary is in books"],
+    answer:"Primary is created at the time; secondary interprets later",
+    hint:{why:"Primary = direct evidence from the time; secondary = later analysis/interpretation.", keyPoints:["Primary vs secondary","Time of creation"] }
   },
   {
     cs:"CS1",
-    prompt:"Which statement best explains how the Middle Colonies often differed from New England and the South?",
-    choices:[
-      "They developed both agriculture and trade, acting as a ‘breadbasket’ region",
-      "They had no farming and relied only on mining",
-      "They banned immigration completely",
-      "They used only subsistence hunting for survival"
-    ],
-    answer:"They developed both agriculture and trade, acting as a ‘breadbasket’ region",
-    hint:{ why:"The Middle Colonies produced grains and grew trade networks.", keyPoints:["Grains","Breadbasket","Trade"] }
+    prompt:"A textbook cites multiple historians and includes footnotes. Which credibility factor is MOST supported by this?",
+    choices:["Agreement with other credible sources","Stereotyping language","Author is an eyewitness","It must be primary evidence"],
+    answer:"Agreement with other credible sources",
+    hint:{why:"Citations and multiple references show corroboration and traceability.", keyPoints:["Citations","Corroboration"] }
   },
   {
     cs:"CS1",
-    prompt:"Which is the best summary of CS1?",
-    choices:[
-      "Colonial settlement and regional development were shaped by geography, resources, and economic opportunity",
-      "All colonies developed identical economies by law",
-      "Colonial regions had no trade connections",
-      "Geography played no role in colonial life"
-    ],
-    answer:"Colonial settlement and regional development were shaped by geography, resources, and economic opportunity",
-    hint:{ why:"CS1 focuses on how environment shaped regional economies and settlement patterns.", keyPoints:["Geography","Resources","Settlement"] }
+    prompt:"A photo is used to prove a protest was violent, but the caption is missing. What is the BEST credibility step?",
+    choices:["Investigate the photo’s origin and context","Assume the photo proves violence","Reject all photos as evidence","Only trust modern sources"],
+    answer:"Investigate the photo’s origin and context",
+    hint:{why:"You need who/when/where/why and whether it was staged or cropped.", keyPoints:["Origin","Context","Purpose"] }
   },
 
-  /* -------------------- CS2 (9) -------------------- */
+  // ----- CS2: Thesis + evidence (support/refute, multiple source types) -----
   {
     cs:"CS2",
-    prompt:"Which war most directly changed Britain’s relationship with its American colonies by increasing debt and leading to new taxes?",
+    prompt:"Which thesis is strongest (arguable + specific)?",
     choices:[
-      "French and Indian War (Seven Years’ War)",
-      "War of 1812",
-      "Civil War",
-      "Spanish-American War"
+      "Industrialization happened in America.",
+      "Industrialization changed everything.",
+      "Industrialization increased factory output but also intensified urban crowding and labor conflict.",
+      "History is important."
     ],
-    answer:"French and Indian War (Seven Years’ War)",
-    hint:{ why:"Britain’s debt after this war drove new colonial taxes and policies.", keyPoints:["Debt","Taxes","Imperial policy shift"] }
+    answer:"Industrialization increased factory output but also intensified urban crowding and labor conflict.",
+    hint:{why:"A strong thesis is specific and makes a claim you can prove with evidence.", keyPoints:["Specific claim","Arguable","Evidence-ready"] }
   },
   {
     cs:"CS2",
-    prompt:"What was a major effect of Britain’s victory in the French and Indian War?",
-    choices:[
-      "Britain gained territory but faced higher debt and new conflicts to manage",
-      "Britain lost all colonies immediately",
-      "France gained Canada and the Ohio Valley",
-      "The colonies became independent in 1763"
-    ],
-    answer:"Britain gained territory but faced higher debt and new conflicts to manage",
-    hint:{ why:"Victory expanded Britain’s empire but increased costs and tensions.", keyPoints:["Territory gained","Debt","Tensions"] }
+    prompt:"A student says: “The New Deal ended the Great Depression.” What is the BEST historian move?",
+    choices:["Test the claim using evidence from multiple sources","Accept it because it’s common knowledge","Replace it with a list of events","Ignore counterevidence"],
+    answer:"Test the claim using evidence from multiple sources",
+    hint:{why:"Historians support/refute assertions using evidence and comparison.", keyPoints:["Support/refute","Multiple sources"] }
   },
   {
     cs:"CS2",
-    prompt:"Which policy aimed to reduce conflict between colonists and American Indians by limiting westward settlement?",
-    choices:[
-      "Proclamation of 1763",
-      "Stamp Act",
-      "Intolerable Acts",
-      "Tea Act"
-    ],
-    answer:"Proclamation of 1763",
-    hint:{ why:"It limited settlement west of the Appalachians to reduce conflict and costs.", keyPoints:["Limit settlement","Appalachians"] }
+    prompt:"Which item is MOST clearly an example of evidence historians can use?",
+    choices:["An artifact from the period","A guess about what people felt","A modern meme","A rumor with no source"],
+    answer:"An artifact from the period",
+    hint:{why:"Artifacts are a recognized evidence type used to build explanations.", keyPoints:["Artifacts","Primary evidence"] }
   },
   {
     cs:"CS2",
-    prompt:"Cause → effect: Britain’s increased need for revenue after 1763 led to:",
-    choices:[
-      "Stricter enforcement of trade laws and new colonial taxes",
-      "An end to colonial trade",
-      "The creation of the U.S. Constitution",
-      "Immediate abolition of slavery"
-    ],
-    answer:"Stricter enforcement of trade laws and new colonial taxes",
-    hint:{ why:"Britain tightened control and sought revenue through taxes and enforcement.", keyPoints:["Revenue","Enforcement","Taxes"] }
+    prompt:"A thesis claims: “Women’s roles expanded during WWII.” Which evidence BEST supports it?",
+    choices:["Employment records showing increased women workers","A modern opinion post","A random unsourced quote","A timeline with no documents"],
+    answer:"Employment records showing increased women workers",
+    hint:{why:"Records/data from the time directly support the claim.", keyPoints:["Direct evidence","Relevance"] }
   },
   {
     cs:"CS2",
-    prompt:"Which describes mercantilism as practiced by European empires?",
-    choices:[
-      "Colonies existed to provide raw materials and markets for the mother country",
-      "Colonies were completely independent in trade",
-      "Trade was banned to prevent economic growth",
-      "The goal was equal wealth for all nations"
-    ],
-    answer:"Colonies existed to provide raw materials and markets for the mother country",
-    hint:{ why:"Mercantilism linked colonial resources to imperial profit and control.", keyPoints:["Raw materials","Markets","Imperial profit"] }
+    prompt:"Which action best shows a historian refining an explanation?",
+    choices:["Comparing conflicting eyewitness accounts and revising the claim","Keeping the same claim even if evidence disagrees","Using only one source to avoid confusion","Choosing evidence that matches feelings"],
+    answer:"Comparing conflicting eyewitness accounts and revising the claim",
+    hint:{why:"Historians revise interpretations when evidence requires it.", keyPoints:["Compare sources","Refine explanation"] }
   },
   {
     cs:"CS2",
-    prompt:"Which development most increased British efforts to control the colonies after 1763?",
-    choices:[
-      "The cost of defending new territory and managing frontier conflicts",
-      "A sudden end to British debt",
-      "A colonial request for more royal governors",
-      "A ban on Atlantic shipping"
-    ],
-    answer:"The cost of defending new territory and managing frontier conflicts",
-    hint:{ why:"New lands meant more defense and administration expenses.", keyPoints:["Defense costs","Frontier conflicts"] }
+    prompt:"A student writes a paragraph listing events but makes no claim. What is missing?",
+    choices:["A thesis that interprets significance","More adjectives","A longer timeline","A conclusion with feelings"],
+    answer:"A thesis that interprets significance",
+    hint:{why:"A thesis gives meaning and interpretation beyond a list.", keyPoints:["Interpretation","Significance"] }
   },
   {
     cs:"CS2",
-    prompt:"A student claims the French and Indian War had little impact on the colonies. Which correction is strongest?",
-    choices:[
-      "The war increased British debt and imperial control, which raised tensions through new policies and taxes",
-      "The war occurred entirely in Asia and did not involve the colonies",
-      "The war immediately created the Bill of Rights",
-      "The war ended slavery in British America"
-    ],
-    answer:"The war increased British debt and imperial control, which raised tensions through new policies and taxes",
-    hint:{ why:"Debt + new policies were key connections between the war and revolutionary tensions.", keyPoints:["Debt","Imperial control","Taxes"] }
+    prompt:"Which is the BEST reason historians cite sources?",
+    choices:["So others can verify and trace evidence","To make writing look longer","To avoid thinking critically","To guarantee agreement"],
+    answer:"So others can verify and trace evidence",
+    hint:{why:"Citations let readers check evidence and strengthen credibility.", keyPoints:["Verification","Traceability"] }
   },
   {
     cs:"CS2",
-    prompt:"Which relationship is most accurate for CS2?",
-    choices:[
-      "Imperial wars and policies shaped colonial life and increased conflict with Britain",
-      "Colonies had no connection to Britain’s global conflicts",
-      "Britain avoided all involvement in North America",
-      "The colonies controlled British Parliament"
-    ],
-    answer:"Imperial wars and policies shaped colonial life and increased conflict with Britain",
-    hint:{ why:"CS2 highlights the empire’s wars/policies and their effects on the colonies.", keyPoints:["Empire","War impacts","Tensions"] }
-  },
-  {
-    cs:"CS2",
-    prompt:"Which is the best summary of CS2?",
-    choices:[
-      "Britain’s empire, wars, and postwar policies increased control and helped create colonial tensions",
-      "Britain ended trade and withdrew from the colonies",
-      "The colonies immediately formed the U.S. Constitution in 1763",
-      "France controlled Parliament after 1763"
-    ],
-    answer:"Britain’s empire, wars, and postwar policies increased control and helped create colonial tensions",
-    hint:{ why:"CS2 focuses on empire and how policies shifted after war.", keyPoints:["Empire","War","Policy shift"] }
+    prompt:"A claim says: “The Great Migration changed northern culture.” Which evidence type BEST fits?",
+    choices:["Music/literature examples from the period","A single modern tweet","An unrelated map of Europe","A blank chart"],
+    answer:"Music/literature examples from the period",
+    hint:{why:"Cultural change is supported by period art, writing, music, and related records.", keyPoints:["Relevant evidence","Culture"] }
   },
 
-  /* -------------------- CS3 (9) -------------------- */
+  // ----- CS3: Cause/effect/sequence/correlation; multiple causation; long/short-term -----
   {
     cs:"CS3",
-    prompt:"Which slogan best summarizes colonial objections to Parliament’s taxes?",
-    choices:[
-      "No taxation without representation",
-      "Peace at any price",
-      "Manifest Destiny",
-      "Remember the Alamo"
-    ],
-    answer:"No taxation without representation",
-    hint:{ why:"Colonists argued they lacked representation in Parliament.", keyPoints:["Taxation","Representation"] }
+    prompt:"Which best describes the difference between cause and effect?",
+    choices:["Cause leads to an outcome; effect is the outcome","Effect always happens first; cause happens later","Cause is opinion; effect is fact","They mean the same thing"],
+    answer:"Cause leads to an outcome; effect is the outcome",
+    hint:{why:"Cause = why it happened; effect = what resulted.", keyPoints:["Cause → effect","Outcome"] }
   },
   {
     cs:"CS3",
-    prompt:"Which law required a tax stamp on paper goods and was widely protested?",
-    choices:[
-      "Stamp Act",
-      "Proclamation of 1763",
-      "Townshend Acts",
-      "Quebec Act"
-    ],
-    answer:"Stamp Act",
-    hint:{ why:"It taxed printed materials and sparked organized resistance.", keyPoints:["Tax stamps","Protests"] }
+    prompt:"A timeline shows Event A happened before Event B. What can you conclude for sure?",
+    choices:["Sequence, not necessarily causation","B caused A","A and B are unrelated","Correlation proves cause"],
+    answer:"Sequence, not necessarily causation",
+    hint:{why:"Order matters, but you still need evidence to prove cause.", keyPoints:["Sequence","Causation requires evidence"] }
   },
   {
     cs:"CS3",
-    prompt:"Which colonial action is an example of economic protest against British policy?",
-    choices:[
-      "Boycotting British goods",
-      "Crowning a king in Boston",
-      "Ending all town meetings",
-      "Refusing to publish newspapers"
-    ],
-    answer:"Boycotting British goods",
-    hint:{ why:"Boycotts pressured merchants and Parliament by reducing imports.", keyPoints:["Economic pressure","Boycott"] }
+    prompt:"City population rises at the same time factory jobs increase. This is BEST described as:",
+    choices:["Correlation that may suggest a relationship","Proof that factories caused all city growth","Proof that cities caused factories","A random coincidence with no possible link"],
+    answer:"Correlation that may suggest a relationship",
+    hint:{why:"Correlation = move together; it can suggest but doesn’t prove cause.", keyPoints:["Correlation ≠ causation","Investigate evidence"] }
   },
   {
     cs:"CS3",
-    prompt:"Cause → effect: The Boston Tea Party most directly led to:",
-    choices:[
-      "The Intolerable (Coercive) Acts",
-      "The Louisiana Purchase",
-      "The Emancipation Proclamation",
-      "The New Deal"
-    ],
-    answer:"The Intolerable (Coercive) Acts",
-    hint:{ why:"Britain punished Massachusetts with harsh measures after the Tea Party.", keyPoints:["Punishment","Coercive Acts"] }
+    prompt:"Which example shows multiple causation?",
+    choices:["The Great Depression resulted from several factors including credit use and speculation","A single storm caused a harvest to fail","A person moved for one reason only","One law caused every change"],
+    answer:"The Great Depression resulted from several factors including credit use and speculation",
+    hint:{why:"Multiple causation means more than one factor contributes to an event.", keyPoints:["Multiple factors","Complex causes"] }
   },
   {
     cs:"CS3",
-    prompt:"Which organization helped coordinate colonial resistance and communication?",
-    choices:[
-      "Committees of Correspondence",
-      "Federal Reserve",
-      "NATO",
-      "League of Nations"
-    ],
-    answer:"Committees of Correspondence",
-    hint:{ why:"They shared information across colonies and built unity.", keyPoints:["Communication","Coordination"] }
+    prompt:"Which is a long-term cause of a migration movement?",
+    choices:["Years of discriminatory laws and limited opportunities","A one-day snowstorm","A single newspaper headline","A short strike"],
+    answer:"Years of discriminatory laws and limited opportunities",
+    hint:{why:"Long-term causes build over time and set conditions.", keyPoints:["Long-term conditions","Structural factors"] }
   },
   {
     cs:"CS3",
-    prompt:"Which event is often described as the “shot heard ’round the world,” marking early fighting?",
-    choices:[
-      "Lexington and Concord",
-      "Treaty of Paris (1783)",
-      "Boston Tea Party",
-      "Stamp Act Congress"
-    ],
-    answer:"Lexington and Concord",
-    hint:{ why:"These battles were early armed conflict between colonists and British troops.", keyPoints:["Early fighting","Militia"] }
+    prompt:"Which is a short-term cause that could trigger migration?",
+    choices:["Immediate job openings in a new region","Centuries of cultural traditions","Long-standing climate patterns","A decades-long political ideology"],
+    answer:"Immediate job openings in a new region",
+    hint:{why:"Short-term causes are immediate triggers (like jobs, crises, events).", keyPoints:["Immediate trigger","Short-term factor"] }
   },
   {
     cs:"CS3",
-    prompt:"Which Enlightenment idea most influenced colonial arguments for resistance?",
-    choices:[
-      "Natural rights and the social contract",
-      "Divine right of kings",
-      "Mercantilism requires total obedience",
-      "Absolute monarchy is necessary"
-    ],
-    answer:"Natural rights and the social contract",
-    hint:{ why:"Locke’s ideas about rights and government by consent shaped revolutionary ideology.", keyPoints:["Natural rights","Consent","Social contract"] }
+    prompt:"A historian studies how one event led to another. This is MOST directly analysis of:",
+    choices:["Sequence and connection between events","Author reputation","Primary vs secondary","Bias only"],
+    answer:"Sequence and connection between events",
+    hint:{why:"Sequence asks how events connect across time.", keyPoints:["Sequence","Linkage"] }
   },
   {
     cs:"CS3",
-    prompt:"A student says, “The colonies protested only because they disliked all laws.” Which correction is strongest?",
+    prompt:"Which statement best shows cause-and-effect reasoning?",
     choices:[
-      "Many protests focused on taxation and rights—especially representation and limits on government power",
-      "Colonists opposed all self-government",
-      "Colonists wanted stronger British military rule",
-      "Colonists believed rights came from kings"
+      "Because factories offered jobs, more people moved to cities, increasing crowding.",
+      "Cities are crowded and factories exist.",
+      "Factories are interesting.",
+      "Crowding happened at some point."
     ],
-    answer:"Many protests focused on taxation and rights—especially representation and limits on government power",
-    hint:{ why:"Colonial resistance often centered on rights and representation.", keyPoints:["Rights","Representation","Limits"] }
+    answer:"Because factories offered jobs, more people moved to cities, increasing crowding.",
+    hint:{why:"It clearly states why (cause) and what happened (effect).", keyPoints:["Because…","Led to…"] }
   },
   {
     cs:"CS3",
-    prompt:"Which is the best summary of CS3?",
+    prompt:"Two events occur together: increased car ownership and new highways. A historian should FIRST:",
+    choices:["Check evidence to see whether one influenced the other","Assume highways caused cars","Assume cars caused highways","Ignore the connection"],
+    answer:"Check evidence to see whether one influenced the other",
+    hint:{why:"You test relationships with evidence, not assumption.", keyPoints:["Test with evidence","Avoid assumption"] }
+  },
+  {
+    cs:"CS3",
+    prompt:"Which scenario BEST reflects both long- and short-term causes?",
     choices:[
-      "British taxes and policies, colonial resistance, and Enlightenment ideas pushed the colonies toward revolution",
-      "Colonists avoided all protests and accepted new taxes",
-      "The revolution began because Britain ended all trade forever in 1607",
-      "Colonists fought mainly to expand slavery"
+      "Long-term discrimination + short-term job demand both encourage a move",
+      "Only one law explains everything",
+      "Only the weather matters",
+      "Order doesn’t matter in history"
     ],
-    answer:"British taxes and policies, colonial resistance, and Enlightenment ideas pushed the colonies toward revolution",
-    hint:{ why:"CS3 highlights causes of the Revolution: policies, protests, ideology.", keyPoints:["Taxes","Resistance","Ideas"] }
+    answer:"Long-term discrimination + short-term job demand both encourage a move",
+    hint:{why:"Many events have conditions (long-term) and triggers (short-term).", keyPoints:["Long-term + short-term","Multiple causation"] }
+  },
+  {
+    cs:"CS3",
+    prompt:"A historian argues: “Event X caused Event Y,” but provides only that X happened before Y. What is missing?",
+    choices:["Evidence linking the events beyond sequence","A longer timeline","A secondary source only","A stereotype about people involved"],
+    answer:"Evidence linking the events beyond sequence",
+    hint:{why:"Sequence alone doesn’t prove causation.", keyPoints:["Need linkage evidence","Mechanism"] }
+  },
+  {
+    cs:"CS3",
+    prompt:"Which statement best distinguishes correlation from causation?",
+    choices:[
+      "Correlation is a relationship; causation is proof one event produced another.",
+      "Correlation means proven cause.",
+      "Causation means events happened together.",
+      "They are identical."
+    ],
+    answer:"Correlation is a relationship; causation is proof one event produced another.",
+    hint:{why:"Correlation suggests a connection; causation confirms cause with evidence.", keyPoints:["Suggest vs prove","Evidence required"] }
+  },
+  {
+    cs:"CS3",
+    prompt:"A historian compares causes across decades and identifies patterns. This is MOST closely analysis of:",
+    choices:["Long- and short-term causal relationships","Author handwriting","Primary vs secondary only","Opinion polling"],
+    answer:"Long- and short-term causal relationships",
+    hint:{why:"That’s exactly long/short-term causation analysis.", keyPoints:["Long-term","Short-term","Patterns"] }
   }
-
 ]);
 
 /* =========
@@ -586,7 +436,7 @@ function updateAccuracy(){
   meta.acc.textContent = `${calcAccuracy()}%`;
 }
 
-// ✅ Your required fix: shuffle choices each render
+/* IMPORTANT: shuffle choices per question render (prevents correct always being first) */
 function shuffledChoices(q){
   const arr = [...q.choices];
   for(let i=arr.length-1;i>0;i--){
@@ -647,6 +497,7 @@ function renderQuestion(){
 
 function submit(choice){
   const q = state.qOrder[state.idx];
+
   state.attempts++;
   updateAccuracy();
 
@@ -669,7 +520,7 @@ function submit(choice){
   flashButtons(choice, false);
 
   qUI.hintBox.style.display = "block";
-  qUI.hintText.textContent = q.hint?.why || "Think back to the key ideas from class.";
+  qUI.hintText.textContent = q.hint?.why || "Think back to the historical thinking skill being tested.";
   qUI.hintSmall.textContent = q.hint?.keyPoints?.length
     ? ("Key points: " + q.hint.keyPoints.join(" • "))
     : "";
