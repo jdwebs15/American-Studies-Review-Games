@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>American History — Block 13 (CS 1–3) Game</title>
+
+<style>
+  :root{
+    --bg:#0b1220; --card:#111a2e; --ink:#e7eefc; --muted:#a8b4cf;
+    --accent:#7aa2ff; --good:#2bd576; --bad:#ff5c7a; --warn:#ffd166;
+    --border:rgba(255,255,255,.12); --shadow:0 18px 55px rgba(0,0,0,.35);
+    --r:18px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:radial-gradient(1000px 650px at 18% 12%, rgba(122,162,255,.18), transparent 60%), var(--bg);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding:18px;
+  }
+  .app{
+    width:min(980px,100%);
+    background:rgba(17,26,46,.9);
+    border:1px solid var(--border);
+    border-radius:var(--r);
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  header{
+    padding:16px 18px;
+    display:flex; gap:12px;
+    align-items:flex-start; justify-content:space-between;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, rgba(255,255,255,.06), transparent);
+  }
+  .title{display:flex;flex-direction:column;gap:4px}
+  .title h1{margin:0;font-size:16px}
+  .title .sub{color:var(--muted);font-size:12px}
+  .meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+  .pill{
+    border:1px solid var(--border);
+    border-radius:999px;
+    padding:6px 10px;
+    font-size:12px;
+    color:var(--muted);
+    background:rgba(0,0,0,.18);
+  }
+  .pill b{color:var(--ink);font-weight:800}
+  main{padding:18px;display:grid;gap:14px}
+  .card{
+    background:rgba(0,0,0,.22);
+    border:1px solid var(--border);
+    border-radius:var(--r);
+    padding:16px;
+  }
+  .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+  input[type="text"]{
+    width:min(420px,100%);
+    padding:10px 12px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:rgba(0,0,0,.25);
+    color:var(--ink);
+    outline:none;
+  }
+  button{
+    cursor:pointer;
+    border:none;
+    border-radius:14px;
+    padding:12px 12px;
+    font-weight:900;
+    color:var(--ink);
+    background:rgba(122,162,255,.18);
+    border:1px solid rgba(122,162,255,.35);
+    transition:transform .08s ease, filter .12s ease;
+  }
+  button:hover{filter:brightness(1.06)}
+  button:active{transform:scale(.99)}
+  button.secondary{background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--muted)}
+  button.good{background:rgba(43,213,118,.14);border:1px solid rgba(43,213,118,.35)}
+  button.bad{background:rgba(255,92,122,.14);border:1px solid rgba(255,92,122,.35)}
+  .qTop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+  .kicker{color:var(--muted);font-size:12px}
+  .qTitle{margin:0;font-size:14px;line-height:1.35}
+  .status{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .bar{
+    height:10px;
+    background:rgba(255,255,255,.08);
+    border-radius:999px;
+    overflow:hidden;
+    border:1px solid var(--border);
+    width:220px;
+  }
+  .bar>div{height:100%;width:0%;background:rgba(43,213,118,.75)}
+  .grid{
+    display:grid;
+    gap:10px;
+    margin-top:10px;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  @media (max-width:640px){.grid{grid-template-columns:1fr}}
+  .hint{
+    margin-top:10px;
+    padding:10px 12px;
+    border-radius:14px;
+    background:rgba(255,209,102,.10);
+    border:1px solid rgba(255,209,102,.35);
+    display:none;
+  }
+  .toast{font-size:12px;color:var(--muted)}
+  .hidden{display:none!important}
+  pre{
+    white-space:pre-wrap;
+    word-break:break-word;
+    background:rgba(0,0,0,.25);
+    border:1px solid var(--border);
+    padding:12px;
+    border-radius:14px;
+    color:var(--ink);
+    font-size:12px;
+    line-height:1.35;
+    margin:10px 0 0;
+  }
+</style>
+</head>
+<body>
+<div class="app" role="application" aria-label="American History Block 13 Game">
+  <header>
+    <div class="title">
+      <h1>American History — Block 13 Game (CS 1–3)</h1>
+      <div class="sub">Colonial Regions & Settlement • British Policies & Conflict • Revolutionary Causes • Perfect run required</div>
+    </div>
+    <div class="meta">
+      <div class="pill">Name: <b id="mName">—</b></div>
+      <div class="pill">Started: <b id="mStart">—</b></div>
+      <div class="pill">Time: <b id="mTime">00:00</b></div>
+      <div class="pill">Accuracy: <b id="mAcc">100%</b></div>
+    </div>
+  </header>
+
+  <main>
+    <section id="screenStart" class="card">
+      <div class="row">
+        <div>
+          <div class="kicker">Enter your name to begin</div>
+          <div style="margin-top:8px">
+            <label for="name">Student Name</label><br/>
+            <input id="name" type="text" autocomplete="name" placeholder="Type your name…" />
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center">
+          <button id="btnStart">Start</button>
+          <button id="btnDemo" class="secondary">Demo</button>
+        </div>
+      </div>
+      <div class="toast" style="margin-top:10px">Rule: 0 misses (100%) required to earn the submit ticket.</div>
+    </section>
+
+    <section id="screenGame" class="card hidden">
+      <div class="qTop">
+        <div>
+          <div class="kicker" id="qKicker">Question</div>
+          <p class="qTitle" id="qText">—</p>
+        </div>
+        <div class="status">
+          <div class="bar"><div id="barFill"></div></div>
+          <div class="toast"><span id="qCount">0</span>/<span id="qTotal">0</span></div>
+        </div>
+      </div>
+
+      <div class="grid" id="choices"></div>
+
+      <div class="hint" id="hintBox" role="note" aria-label="Hint">
+        <div><b>Hint (only after a miss):</b></div>
+        <div id="hintText" style="margin-top:6px"></div>
+        <div class="toast" id="hintSmall" style="margin-top:6px"></div>
+      </div>
+
+      <div class="row" style="margin-top:14px">
+        <div class="toast" id="feedback">—</div>
+        <div style="display:flex; gap:10px">
+          <button id="btnReset" class="secondary">Reset</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screenDone" class="card hidden">
+      <div class="row">
+        <div>
+          <h2 id="doneTitle" style="margin:0 0 6px; font-size:16px;">Complete ✅</h2>
+          <div class="toast" id="doneMsg">Perfect run achieved. Copy your submit ticket.</div>
+        </div>
+        <div style="display:flex; gap:10px">
+          <button id="btnCopy" class="good">Copy Ticket</button>
+          <button id="btnPlayAgain" class="secondary">Play Again</button>
+        </div>
+      </div>
+      <pre id="logOut"></pre>
+    </section>
+  </main>
+</div>
+
+<script>
+/* =========================================================
+   QUESTIONS — Block 13 (CS 1–3) — 27 items
+   CS1 (9)  Colonial regions & settlement patterns
+   CS2 (9)  British empire, conflict, French & Indian War impacts
+   CS3 (9)  Road to Revolution: taxes, protests, ideology
+   ========================================================= */
+const QUESTIONS = shuffle([
+
+  /* -------------------- CS1 (9) -------------------- */
+  {
+    cs:"CS1",
+    prompt:"Which factor most influenced the development of different colonial regions in British North America?",
+    choices:[
+      "Geography, climate, and available natural resources",
+      "A single national currency created by Parliament",
+      "A ban on farming in all colonies",
+      "Identical economies required by the king"
+    ],
+    answer:"Geography, climate, and available natural resources",
+    hint:{ why:"Regional differences grew from physical geography and resources.", keyPoints:["Climate","Resources","Regional economies"] }
+  },
+  {
+    cs:"CS1",
+    prompt:"Which economy best fits the Southern Colonies in the 1600s–1700s?",
+    choices:[
+      "Cash-crop plantation agriculture",
+      "Shipbuilding and fishing",
+      "Fur trade with French Canada",
+      "Gold mining in deserts"
+    ],
+    answer:"Cash-crop plantation agriculture",
+    hint:{ why:"Tobacco, rice, and later cotton dominated the South’s economy.", keyPoints:["Plantations","Cash crops"] }
+  },
+  {
+    cs:"CS1",
+    prompt:"Which combination is most associated with the New England Colonies?",
+    choices:[
+      "Small farms, fishing, trade, and shipbuilding",
+      "Large plantations and staple crops",
+      "Wheat export plantations with enslaved labor",
+      "Gold and silver mining"
+    ],
+    answer:"Small farms, fishing, trade, and shipbuilding",
+    hint:{ why:"Rocky soil pushed New England toward trade, fishing, and industry.", keyPoints:["Trade","Fishing","Shipbuilding"] }
+  },
+  {
+    cs:"CS1",
+    prompt:"Which statement best explains why port cities grew in colonial America?",
+    choices:[
+      "They were centers of trade that connected colonies to Atlantic markets",
+      "They were built mainly for military training camps",
+      "They replaced farming entirely across the colonies",
+      "They were locations where Parliament met every year"
+    ],
+    answer:"They were centers of trade that connected colonies to Atlantic markets",
+    hint:{ why:"Ports linked colonial goods to international trade routes.", keyPoints:["Atlantic trade","Markets"] }
+  },
+  {
+    cs:"CS1",
+    prompt:"Cause → effect: Fertile soil and longer growing seasons in the South led to:",
+    choices:[
+      "Large-scale plantation farming and demand for labor",
+      "An economy focused mostly on fishing",
+      "A decline in agriculture",
+      "No need for trade with Europe"
+    ],
+    answer:"Large-scale plantation farming and demand for labor",
+    hint:{ why:"Cash-crop agriculture encouraged plantations and labor systems.", keyPoints:["Plantations","Labor demand"] }
+  },
+  {
+    cs:"CS1",
+    prompt:"Which idea best describes why colonial economies were not identical?",
+    choices:[
+      "Different regions specialized based on environmental and geographic conditions",
+      "Parliament forced all colonies to produce the same goods",
+      "The colonies banned trade",
+      "All regions had identical climates and soils"
+    ],
+    answer:"Different regions specialized based on environmental and geographic conditions",
+    hint:{ why:"Specialization emerged because geography shaped opportunities.", keyPoints:["Specialization","Geography"] }
+  },
+  {
+    cs:"CS1",
+    prompt:"Which location would MOST likely develop a trade-based economy?",
+    choices:[
+      "A coastal colony with a natural harbor",
+      "An inland desert with no rivers",
+      "A mountain peak with no settlements",
+      "A frozen area with no access routes"
+    ],
+    answer:"A coastal colony with a natural harbor",
+    hint:{ why:"Harbors enable shipping, imports/exports, and port growth.", keyPoints:["Harbors","Trade"] }
+  },
+  {
+    cs:"CS1",
+    prompt:"Which statement best explains how the Middle Colonies often differed from New England and the South?",
+    choices:[
+      "They developed both agriculture and trade, acting as a ‘breadbasket’ region",
+      "They had no farming and relied only on mining",
+      "They banned immigration completely",
+      "They used only subsistence hunting for survival"
+    ],
+    answer:"They developed both agriculture and trade, acting as a ‘breadbasket’ region",
+    hint:{ why:"The Middle Colonies produced grains and grew trade networks.", keyPoints:["Grains","Breadbasket","Trade"] }
+  },
+  {
+    cs:"CS1",
+    prompt:"Which is the best summary of CS1?",
+    choices:[
+      "Colonial settlement and regional development were shaped by geography, resources, and economic opportunity",
+      "All colonies developed identical economies by law",
+      "Colonial regions had no trade connections",
+      "Geography played no role in colonial life"
+    ],
+    answer:"Colonial settlement and regional development were shaped by geography, resources, and economic opportunity",
+    hint:{ why:"CS1 focuses on how environment shaped regional economies and settlement patterns.", keyPoints:["Geography","Resources","Settlement"] }
+  },
+
+  /* -------------------- CS2 (9) -------------------- */
+  {
+    cs:"CS2",
+    prompt:"Which war most directly changed Britain’s relationship with its American colonies by increasing debt and leading to new taxes?",
+    choices:[
+      "French and Indian War (Seven Years’ War)",
+      "War of 1812",
+      "Civil War",
+      "Spanish-American War"
+    ],
+    answer:"French and Indian War (Seven Years’ War)",
+    hint:{ why:"Britain’s debt after this war drove new colonial taxes and policies.", keyPoints:["Debt","Taxes","Imperial policy shift"] }
+  },
+  {
+    cs:"CS2",
+    prompt:"What was a major effect of Britain’s victory in the French and Indian War?",
+    choices:[
+      "Britain gained territory but faced higher debt and new conflicts to manage",
+      "Britain lost all colonies immediately",
+      "France gained Canada and the Ohio Valley",
+      "The colonies became independent in 1763"
+    ],
+    answer:"Britain gained territory but faced higher debt and new conflicts to manage",
+    hint:{ why:"Victory expanded Britain’s empire but increased costs and tensions.", keyPoints:["Territory gained","Debt","Tensions"] }
+  },
+  {
+    cs:"CS2",
+    prompt:"Which policy aimed to reduce conflict between colonists and American Indians by limiting westward settlement?",
+    choices:[
+      "Proclamation of 1763",
+      "Stamp Act",
+      "Intolerable Acts",
+      "Tea Act"
+    ],
+    answer:"Proclamation of 1763",
+    hint:{ why:"It limited settlement west of the Appalachians to reduce conflict and costs.", keyPoints:["Limit settlement","Appalachians"] }
+  },
+  {
+    cs:"CS2",
+    prompt:"Cause → effect: Britain’s increased need for revenue after 1763 led to:",
+    choices:[
+      "Stricter enforcement of trade laws and new colonial taxes",
+      "An end to colonial trade",
+      "The creation of the U.S. Constitution",
+      "Immediate abolition of slavery"
+    ],
+    answer:"Stricter enforcement of trade laws and new colonial taxes",
+    hint:{ why:"Britain tightened control and sought revenue through taxes and enforcement.", keyPoints:["Revenue","Enforcement","Taxes"] }
+  },
+  {
+    cs:"CS2",
+    prompt:"Which describes mercantilism as practiced by European empires?",
+    choices:[
+      "Colonies existed to provide raw materials and markets for the mother country",
+      "Colonies were completely independent in trade",
+      "Trade was banned to prevent economic growth",
+      "The goal was equal wealth for all nations"
+    ],
+    answer:"Colonies existed to provide raw materials and markets for the mother country",
+    hint:{ why:"Mercantilism linked colonial resources to imperial profit and control.", keyPoints:["Raw materials","Markets","Imperial profit"] }
+  },
+  {
+    cs:"CS2",
+    prompt:"Which development most increased British efforts to control the colonies after 1763?",
+    choices:[
+      "The cost of defending new territory and managing frontier conflicts",
+      "A sudden end to British debt",
+      "A colonial request for more royal governors",
+      "A ban on Atlantic shipping"
+    ],
+    answer:"The cost of defending new territory and managing frontier conflicts",
+    hint:{ why:"New lands meant more defense and administration expenses.", keyPoints:["Defense costs","Frontier conflicts"] }
+  },
+  {
+    cs:"CS2",
+    prompt:"A student claims the French and Indian War had little impact on the colonies. Which correction is strongest?",
+    choices:[
+      "The war increased British debt and imperial control, which raised tensions through new policies and taxes",
+      "The war occurred entirely in Asia and did not involve the colonies",
+      "The war immediately created the Bill of Rights",
+      "The war ended slavery in British America"
+    ],
+    answer:"The war increased British debt and imperial control, which raised tensions through new policies and taxes",
+    hint:{ why:"Debt + new policies were key connections between the war and revolutionary tensions.", keyPoints:["Debt","Imperial control","Taxes"] }
+  },
+  {
+    cs:"CS2",
+    prompt:"Which relationship is most accurate for CS2?",
+    choices:[
+      "Imperial wars and policies shaped colonial life and increased conflict with Britain",
+      "Colonies had no connection to Britain’s global conflicts",
+      "Britain avoided all involvement in North America",
+      "The colonies controlled British Parliament"
+    ],
+    answer:"Imperial wars and policies shaped colonial life and increased conflict with Britain",
+    hint:{ why:"CS2 highlights the empire’s wars/policies and their effects on the colonies.", keyPoints:["Empire","War impacts","Tensions"] }
+  },
+  {
+    cs:"CS2",
+    prompt:"Which is the best summary of CS2?",
+    choices:[
+      "Britain’s empire, wars, and postwar policies increased control and helped create colonial tensions",
+      "Britain ended trade and withdrew from the colonies",
+      "The colonies immediately formed the U.S. Constitution in 1763",
+      "France controlled Parliament after 1763"
+    ],
+    answer:"Britain’s empire, wars, and postwar policies increased control and helped create colonial tensions",
+    hint:{ why:"CS2 focuses on empire and how policies shifted after war.", keyPoints:["Empire","War","Policy shift"] }
+  },
+
+  /* -------------------- CS3 (9) -------------------- */
+  {
+    cs:"CS3",
+    prompt:"Which slogan best summarizes colonial objections to Parliament’s taxes?",
+    choices:[
+      "No taxation without representation",
+      "Peace at any price",
+      "Manifest Destiny",
+      "Remember the Alamo"
+    ],
+    answer:"No taxation without representation",
+    hint:{ why:"Colonists argued they lacked representation in Parliament.", keyPoints:["Taxation","Representation"] }
+  },
+  {
+    cs:"CS3",
+    prompt:"Which law required a tax stamp on paper goods and was widely protested?",
+    choices:[
+      "Stamp Act",
+      "Proclamation of 1763",
+      "Townshend Acts",
+      "Quebec Act"
+    ],
+    answer:"Stamp Act",
+    hint:{ why:"It taxed printed materials and sparked organized resistance.", keyPoints:["Tax stamps","Protests"] }
+  },
+  {
+    cs:"CS3",
+    prompt:"Which colonial action is an example of economic protest against British policy?",
+    choices:[
+      "Boycotting British goods",
+      "Crowning a king in Boston",
+      "Ending all town meetings",
+      "Refusing to publish newspapers"
+    ],
+    answer:"Boycotting British goods",
+    hint:{ why:"Boycotts pressured merchants and Parliament by reducing imports.", keyPoints:["Economic pressure","Boycott"] }
+  },
+  {
+    cs:"CS3",
+    prompt:"Cause → effect: The Boston Tea Party most directly led to:",
+    choices:[
+      "The Intolerable (Coercive) Acts",
+      "The Louisiana Purchase",
+      "The Emancipation Proclamation",
+      "The New Deal"
+    ],
+    answer:"The Intolerable (Coercive) Acts",
+    hint:{ why:"Britain punished Massachusetts with harsh measures after the Tea Party.", keyPoints:["Punishment","Coercive Acts"] }
+  },
+  {
+    cs:"CS3",
+    prompt:"Which organization helped coordinate colonial resistance and communication?",
+    choices:[
+      "Committees of Correspondence",
+      "Federal Reserve",
+      "NATO",
+      "League of Nations"
+    ],
+    answer:"Committees of Correspondence",
+    hint:{ why:"They shared information across colonies and built unity.", keyPoints:["Communication","Coordination"] }
+  },
+  {
+    cs:"CS3",
+    prompt:"Which event is often described as the “shot heard ’round the world,” marking early fighting?",
+    choices:[
+      "Lexington and Concord",
+      "Treaty of Paris (1783)",
+      "Boston Tea Party",
+      "Stamp Act Congress"
+    ],
+    answer:"Lexington and Concord",
+    hint:{ why:"These battles were early armed conflict between colonists and British troops.", keyPoints:["Early fighting","Militia"] }
+  },
+  {
+    cs:"CS3",
+    prompt:"Which Enlightenment idea most influenced colonial arguments for resistance?",
+    choices:[
+      "Natural rights and the social contract",
+      "Divine right of kings",
+      "Mercantilism requires total obedience",
+      "Absolute monarchy is necessary"
+    ],
+    answer:"Natural rights and the social contract",
+    hint:{ why:"Locke’s ideas about rights and government by consent shaped revolutionary ideology.", keyPoints:["Natural rights","Consent","Social contract"] }
+  },
+  {
+    cs:"CS3",
+    prompt:"A student says, “The colonies protested only because they disliked all laws.” Which correction is strongest?",
+    choices:[
+      "Many protests focused on taxation and rights—especially representation and limits on government power",
+      "Colonists opposed all self-government",
+      "Colonists wanted stronger British military rule",
+      "Colonists believed rights came from kings"
+    ],
+    answer:"Many protests focused on taxation and rights—especially representation and limits on government power",
+    hint:{ why:"Colonial resistance often centered on rights and representation.", keyPoints:["Rights","Representation","Limits"] }
+  },
+  {
+    cs:"CS3",
+    prompt:"Which is the best summary of CS3?",
+    choices:[
+      "British taxes and policies, colonial resistance, and Enlightenment ideas pushed the colonies toward revolution",
+      "Colonists avoided all protests and accepted new taxes",
+      "The revolution began because Britain ended all trade forever in 1607",
+      "Colonists fought mainly to expand slavery"
+    ],
+    answer:"British taxes and policies, colonial resistance, and Enlightenment ideas pushed the colonies toward revolution",
+    hint:{ why:"CS3 highlights causes of the Revolution: policies, protests, ideology.", keyPoints:["Taxes","Resistance","Ideas"] }
+  }
+
+]);
+
+/* =========
+   ENGINE
+   ========= */
+const $ = (s)=>document.querySelector(s);
+const screens = { start: $("#screenStart"), game: $("#screenGame"), done: $("#screenDone") };
+const meta = { name: $("#mName"), start: $("#mStart"), time: $("#mTime"), acc: $("#mAcc") };
+const qUI = {
+  kicker: $("#qKicker"), text: $("#qText"), choices: $("#choices"),
+  count: $("#qCount"), total: $("#qTotal"), bar: $("#barFill"),
+  feedback: $("#feedback"),
+  hintBox: $("#hintBox"), hintText: $("#hintText"), hintSmall: $("#hintSmall")
+};
+
+let state = {
+  startedAt:null, timerId:null,
+  idx:0, misses:0, attempts:0,
+  qOrder:[]
+};
+
+$("#btnDemo").addEventListener("click", ()=>{ $("#name").value="Demo Student"; $("#name").focus(); });
+$("#btnStart").addEventListener("click", startGame);
+$("#btnReset").addEventListener("click", resetAll);
+$("#btnPlayAgain").addEventListener("click", resetAll);
+$("#btnCopy").addEventListener("click", async ()=>{
+  try{
+    await navigator.clipboard.writeText($("#logOut").innerText);
+    $("#btnCopy").textContent="Copied ✅";
+    setTimeout(()=>$("#btnCopy").textContent="Copy Ticket", 1100);
+  }catch(e){
+    alert("Copy failed. You can manually select and copy the ticket text.");
+  }
+});
+
+function calcAccuracy(){
+  if(state.attempts <= 0) return 100;
+  return Math.round(((state.attempts - state.misses) / state.attempts) * 100);
+}
+function updateAccuracy(){
+  meta.acc.textContent = `${calcAccuracy()}%`;
+}
+
+// ✅ Your required fix: shuffle choices each render
+function shuffledChoices(q){
+  const arr = [...q.choices];
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]] = [arr[j],arr[i]];
+  }
+  return arr;
+}
+
+function startGame(){
+  const n = ($("#name").value||"").trim();
+  if(!n){ alert("Please enter your name."); return; }
+
+  state.startedAt = new Date();
+  meta.name.textContent = n;
+  meta.start.textContent = stamp(state.startedAt);
+  meta.time.textContent = "00:00";
+
+  state.qOrder = shuffle([...QUESTIONS]);
+  state.idx = 0;
+  state.misses = 0;
+  state.attempts = 0;
+
+  $("#qTotal").textContent = String(state.qOrder.length);
+  updateAccuracy();
+
+  switchTo("game");
+  startTimer();
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = state.qOrder[state.idx];
+  if(!q) return finish();
+
+  qUI.kicker.textContent = `${q.cs} • Question ${state.idx+1}`;
+  qUI.text.textContent = q.prompt;
+
+  qUI.count.textContent = String(state.idx+1);
+  qUI.total.textContent = String(state.qOrder.length);
+  qUI.bar.style.width = `${Math.round((state.idx/state.qOrder.length)*100)}%`;
+
+  qUI.feedback.textContent = "Choose the best answer.";
+  qUI.feedback.style.color = "var(--muted)";
+
+  qUI.hintBox.style.display = "none";
+  qUI.hintText.textContent = "";
+  qUI.hintSmall.textContent = "";
+
+  qUI.choices.innerHTML = "";
+  shuffledChoices(q).forEach(choice=>{
+    const btn = document.createElement("button");
+    btn.textContent = choice;
+    btn.addEventListener("click", ()=>submit(choice));
+    qUI.choices.appendChild(btn);
+  });
+}
+
+function submit(choice){
+  const q = state.qOrder[state.idx];
+  state.attempts++;
+  updateAccuracy();
+
+  if(choice === q.answer){
+    qUI.feedback.textContent = "Correct ✅";
+    qUI.feedback.style.color = "var(--good)";
+    flashButtons(choice, true);
+    setTimeout(()=>{
+      state.idx++;
+      renderQuestion();
+    }, 320);
+    return;
+  }
+
+  state.misses++;
+  updateAccuracy();
+
+  qUI.feedback.textContent = "Not yet ❌ Try again.";
+  qUI.feedback.style.color = "var(--bad)";
+  flashButtons(choice, false);
+
+  qUI.hintBox.style.display = "block";
+  qUI.hintText.textContent = q.hint?.why || "Think back to the key ideas from class.";
+  qUI.hintSmall.textContent = q.hint?.keyPoints?.length
+    ? ("Key points: " + q.hint.keyPoints.join(" • "))
+    : "";
+}
+
+function finish(){
+  stopTimer();
+  qUI.bar.style.width = "100%";
+
+  const endedAt = new Date();
+  const durationSec = Math.floor((endedAt - state.startedAt)/1000);
+  const accuracy = calcAccuracy();
+
+  if(state.misses > 0){
+    $("#doneTitle").textContent = "Not Passed ❌";
+    $("#doneMsg").textContent = "You finished, but this attempt had misses. Retake for a perfect run to earn the submit ticket.";
+    $("#btnCopy").style.display = "none";
+
+    $("#logOut").textContent =
+`NOT PASSED — Retake Required
+
+Student: ${meta.name.textContent}
+Started: ${stamp(state.startedAt)}
+Ended:   ${stamp(endedAt)}
+Duration (sec): ${durationSec}
+Accuracy: ${accuracy}%
+Misses: ${state.misses}
+
+RULE: To earn a submit ticket, you must complete the game with 0 misses (100% accuracy).`;
+    switchTo("done");
+    return;
+  }
+
+  $("#doneTitle").textContent = "Complete ✅";
+  $("#doneMsg").textContent = "Perfect run achieved (0 misses). Copy your submit ticket.";
+  $("#btnCopy").style.display = "inline-flex";
+
+  const ticket = {
+    status: "PASSED",
+    game: "American History — Block 13 (CS 1–3)",
+    student: meta.name.textContent,
+    started: stamp(state.startedAt),
+    ended: stamp(endedAt),
+    duration_seconds: durationSec,
+    total_questions: state.qOrder.length,
+    total_attempts: state.attempts,
+    misses: state.misses,
+    accuracy_percent: 100
+  };
+
+  $("#logOut").textContent = JSON.stringify(ticket, null, 2);
+  switchTo("done");
+}
+
+function switchTo(which){
+  Object.values(screens).forEach(el=>el.classList.add("hidden"));
+  screens[which].classList.remove("hidden");
+}
+
+function startTimer(){
+  stopTimer();
+  state.timerId = setInterval(()=>{
+    const s = Math.floor((new Date() - state.startedAt)/1000);
+    meta.time.textContent = fmtTime(s);
+  }, 250);
+}
+function stopTimer(){
+  if(state.timerId){ clearInterval(state.timerId); state.timerId=null; }
+}
+
+function resetAll(){
+  stopTimer();
+  meta.name.textContent="—";
+  meta.start.textContent="—";
+  meta.time.textContent="00:00";
+  meta.acc.textContent="100%";
+  $("#name").value="";
+  $("#btnCopy").textContent="Copy Ticket";
+  $("#btnCopy").style.display = "inline-flex";
+  switchTo("start");
+}
+
+function fmtTime(sec){
+  const m = String(Math.floor(sec/60)).padStart(2,"0");
+  const s = String(sec%60).padStart(2,"0");
+  return `${m}:${s}`;
+}
+function stamp(d){
+  return d.toLocaleString(undefined, {
+    year:"numeric", month:"2-digit", day:"2-digit",
+    hour:"2-digit", minute:"2-digit", second:"2-digit"
+  });
+}
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+function flashButtons(choice, correct){
+  [...qUI.choices.querySelectorAll("button")].forEach(b=>{
+    if(b.textContent === choice){
+      b.classList.add(correct ? "good" : "bad");
+      setTimeout(()=>b.classList.remove("good","bad"), 320);
+    }
+  });
+}
+</script>
+</body>
+</html>
