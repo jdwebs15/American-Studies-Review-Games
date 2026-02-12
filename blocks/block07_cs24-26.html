@@ -1,0 +1,763 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>American History — Block 7 (CS 24–26) Game</title>
+<style>
+  :root{
+    --bg:#0b1220; --card:#111a2e; --ink:#e7eefc; --muted:#a8b4cf;
+    --accent:#7aa2ff; --good:#2bd576; --bad:#ff5c7a; --warn:#ffd166;
+    --border:rgba(255,255,255,.12); --shadow:0 18px 55px rgba(0,0,0,.35);
+    --r:18px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:radial-gradient(1000px 650px at 18% 12%, rgba(122,162,255,.18), transparent 60%), var(--bg);
+    color:var(--ink); min-height:100vh;
+    display:flex; align-items:center; justify-content:center; padding:18px;
+  }
+  .app{width:min(980px,100%); background:rgba(17,26,46,.9); border:1px solid var(--border);
+    border-radius:var(--r); box-shadow:var(--shadow); overflow:hidden}
+  header{padding:16px 18px; display:flex; gap:12px; align-items:flex-start; justify-content:space-between;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, rgba(255,255,255,.06), transparent)}
+  .title{display:flex; flex-direction:column; gap:4px}
+  .title h1{margin:0; font-size:16px; letter-spacing:.2px}
+  .title .sub{color:var(--muted); font-size:12px; line-height:1.3}
+  .meta{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center}
+  .pill{border:1px solid var(--border); border-radius:999px; padding:6px 10px; font-size:12px; color:var(--muted); background:rgba(0,0,0,.18)}
+  .pill b{color:var(--ink); font-weight:700}
+  main{padding:18px; display:grid; gap:14px}
+  .card{background:rgba(0,0,0,.22); border:1px solid var(--border); border-radius:var(--r); padding:16px}
+  .row{display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between}
+  label{font-size:12px; color:var(--muted)}
+  input[type="text"]{
+    width:min(420px,100%); padding:10px 12px; border-radius:12px;
+    border:1px solid var(--border); background:rgba(0,0,0,.25); color:var(--ink);
+    outline:none;
+  }
+  button{
+    cursor:pointer; border:none; border-radius:14px; padding:12px 12px;
+    font-weight:800; color:var(--ink); background:rgba(122,162,255,.18);
+    border:1px solid rgba(122,162,255,.35);
+    transition:transform .08s ease, filter .12s ease;
+  }
+  button:hover{filter:brightness(1.06)}
+  button:active{transform:scale(.99)}
+  button.secondary{background:rgba(255,255,255,.06); border:1px solid var(--border); color:var(--muted)}
+  button.good{background:rgba(43,213,118,.14); border:1px solid rgba(43,213,118,.35)}
+  button.bad{background:rgba(255,92,122,.14); border:1px solid rgba(255,92,122,.35)}
+  .qTop{display:flex; align-items:flex-start; justify-content:space-between; gap:10px}
+  .kicker{color:var(--muted); font-size:12px}
+  .qTitle{margin:0; font-size:14px; line-height:1.35}
+  .status{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  .bar{height:10px; background:rgba(255,255,255,.08); border-radius:999px; overflow:hidden; border:1px solid var(--border); width:220px}
+  .bar>div{height:100%; width:0%; background:rgba(43,213,118,.75)}
+  .grid{
+    display:grid; gap:10px; margin-top:10px;
+    grid-template-columns:repeat(2, minmax(0,1fr));
+  }
+  @media (max-width:640px){ .grid{grid-template-columns:1fr} }
+  .hint{
+    margin-top:10px; padding:10px 12px; border-radius:14px;
+    background:rgba(255,209,102,.10); border:1px solid rgba(255,209,102,.35);
+    display:none;
+  }
+  .hint .small{color:var(--muted); font-size:12px; margin-top:4px; line-height:1.35}
+  .toast{font-size:12px; color:var(--muted)}
+  .hidden{display:none !important}
+  pre{
+    white-space:pre-wrap; word-break:break-word;
+    background:rgba(0,0,0,.25); border:1px solid var(--border); padding:12px; border-radius:14px;
+    color:var(--ink); font-size:12px; line-height:1.35; margin:10px 0 0;
+  }
+</style>
+</head>
+<body>
+<div class="app" role="application" aria-label="American History Block 7 Game">
+  <header>
+    <div class="title">
+      <h1>American History — Block 7 Game (CS 24–26)</h1>
+      <div class="sub">Second Red Scare & McCarthyism • Cold War conflicts & diplomacy • Perfect run required for submit ticket</div>
+    </div>
+    <div class="meta">
+      <div class="pill">Name: <b id="mName">—</b></div>
+      <div class="pill">Started: <b id="mStart">—</b></div>
+      <div class="pill">Time: <b id="mTime">00:00</b></div>
+      <div class="pill">Accuracy: <b id="mAcc">100%</b></div>
+    </div>
+  </header>
+
+  <main>
+    <section id="screenStart" class="card">
+      <div class="row">
+        <div>
+          <div class="kicker">Enter your name to begin</div>
+          <div style="margin-top:8px">
+            <label for="name">Student Name</label><br/>
+            <input id="name" type="text" autocomplete="name" placeholder="Type your name…" />
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center">
+          <button id="btnStart">Start</button>
+          <button id="btnDemo" class="secondary">Demo</button>
+        </div>
+      </div>
+      <div class="toast" style="margin-top:10px">Rules: hints only after a miss • must finish with 0 misses to earn a submit ticket.</div>
+    </section>
+
+    <section id="screenGame" class="card hidden">
+      <div class="qTop">
+        <div>
+          <div class="kicker" id="qKicker">Question</div>
+          <p class="qTitle" id="qText">—</p>
+        </div>
+        <div class="status">
+          <div class="bar"><div id="barFill"></div></div>
+          <div class="toast"><span id="qCount">0</span>/<span id="qTotal">0</span></div>
+        </div>
+      </div>
+
+      <div class="grid" id="choices"></div>
+
+      <div class="hint" id="hintBox" role="note" aria-label="Hint">
+        <div><b>Hint (only after a miss):</b></div>
+        <div id="hintText" style="margin-top:6px"></div>
+        <div class="small" id="hintSmall"></div>
+      </div>
+
+      <div class="row" style="margin-top:14px">
+        <div class="toast" id="feedback">—</div>
+        <div style="display:flex; gap:10px">
+          <button id="btnReset" class="secondary">Reset</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screenDone" class="card hidden">
+      <div class="row">
+        <div>
+          <h2 id="doneTitle" style="margin:0 0 6px; font-size:16px;">Complete ✅</h2>
+          <div class="toast" id="doneMsg">Perfect run achieved. Copy your submit ticket.</div>
+        </div>
+        <div style="display:flex; gap:10px">
+          <button id="btnCopy" class="good">Copy Ticket</button>
+          <button id="btnPlayAgain" class="secondary">Play Again</button>
+        </div>
+      </div>
+      <pre id="logOut"></pre>
+    </section>
+  </main>
+</div>
+
+<script>
+/* =========================================================
+   QUESTIONS — Block 7 (CS 24–26) — 30 items (>=25 rule met)
+   ========================================================= */
+const QUESTIONS = shuffle([
+  /* ---------- CS24: Second Red Scare & McCarthyism (12) ---------- */
+  {
+    cs:"CS24",
+    prompt:"Which statement best explains why a Second Red Scare developed after World War II?",
+    choices:[
+      "The spread of communism abroad increased fear of communist influence at home",
+      "The U.S. returned to isolationism and ended all alliances",
+      "Industrialization ended and cities declined",
+      "The U.S. abolished elections during wartime"
+    ],
+    answer:"The spread of communism abroad increased fear of communist influence at home",
+    hint:{ why:"Cold War developments fueled fear and suspicion inside the U.S.", keyPoints:["Cold War fear","Communism abroad → fear at home"] }
+  },
+  {
+    cs:"CS24",
+    prompt:"McCarthyism is best defined as:",
+    choices:[
+      "Making accusations of disloyalty/communism without strong evidence",
+      "A plan to rebuild Europe after WWII",
+      "A treaty to limit nuclear weapons",
+      "A movement to expand voting rights"
+    ],
+    answer:"Making accusations of disloyalty/communism without strong evidence",
+    hint:{ why:"McCarthyism = reckless accusations, often without proof.", keyPoints:["Unproven accusations","Fear-driven politics"] }
+  },
+  {
+    cs:"CS24",
+    prompt:"Which is the best example of how the Second Red Scare challenged civil liberties?",
+    choices:[
+      "People lost jobs or were blacklisted based on suspected beliefs or associations",
+      "Congress expanded protections for free speech",
+      "The Supreme Court banned all investigations",
+      "The U.S. ended the draft permanently"
+    ],
+    answer:"People lost jobs or were blacklisted based on suspected beliefs or associations",
+    hint:{ why:"Fear led to investigations and punishments based on suspicion, not due process.", keyPoints:["Blacklists","Suspicion over evidence"] }
+  },
+  {
+    cs:"CS24",
+    prompt:"A major reason loyalty oaths became common in the early Cold War was to:",
+    choices:[
+      "identify and prevent suspected communist influence in government and workplaces",
+      "raise revenue for public works programs",
+      "expand immigration from Europe",
+      "require all citizens to join the military"
+    ],
+    answer:"identify and prevent suspected communist influence in government and workplaces",
+    hint:{ why:"Loyalty oaths reflected fear that communists could infiltrate institutions.", keyPoints:["Infiltration fear","Loyalty tests"] }
+  },
+  {
+    cs:"CS24",
+    prompt:"Which group was often targeted during Red Scare investigations because of its public influence?",
+    choices:[
+      "Media/entertainment industry figures",
+      "Homestead farmers",
+      "Abolitionists during Reconstruction",
+      "Progressive Era trustbusters"
+    ],
+    answer:"Media/entertainment industry figures",
+    hint:{ why:"Hollywood and media were investigated and blacklisted because they shaped public opinion.", keyPoints:["Hollywood","Blacklisting"] }
+  },
+  {
+    cs:"CS24",
+    prompt:"Cause → effect: Cold War tensions increased suspicion in the U.S., which most directly led to:",
+    choices:[
+      "investigations and accusations that restricted civil liberties",
+      "the end of political parties",
+      "the abolition of the Bill of Rights",
+      "the annexation of Cuba"
+    ],
+    answer:"investigations and accusations that restricted civil liberties",
+    hint:{ why:"Fear produced investigations and pressure that limited free expression and due process.", keyPoints:["Investigations","Civil liberties"] }
+  },
+  {
+    cs:"CS24",
+    prompt:"Which statement best explains why accusations alone could be damaging during McCarthyism?",
+    choices:[
+      "Public fear made suspicion enough to harm reputations and careers",
+      "Courts required proof beyond a reasonable doubt in all cases",
+      "Accusations were always verified by evidence",
+      "Most Americans ignored claims about communism"
+    ],
+    answer:"Public fear made suspicion enough to harm reputations and careers",
+    hint:{ why:"A climate of fear meant suspicion could lead to job loss, blacklisting, and social punishment.", keyPoints:["Fear climate","Reputation harm"] }
+  },
+  {
+    cs:"CS24",
+    prompt:"Which scenario best illustrates a civil liberties concern connected to the Second Red Scare?",
+    choices:[
+      "A teacher is fired after being questioned about political beliefs and associations",
+      "A city expands sewer systems to reduce disease",
+      "A state increases the minimum wage",
+      "A factory installs new safety guards"
+    ],
+    answer:"A teacher is fired after being questioned about political beliefs and associations",
+    hint:{ why:"Punishing people over beliefs/associations raises free speech and due process concerns.", keyPoints:["Beliefs/associations","Due process"] }
+  },
+  {
+    cs:"CS24",
+    prompt:"Why did many Americans support anti-communist investigations in the early Cold War?",
+    choices:[
+      "They believed communism threatened national security and democracy",
+      "They wanted to return to British rule",
+      "They opposed alliances like NATO",
+      "They wanted to end elections"
+    ],
+    answer:"They believed communism threatened national security and democracy",
+    hint:{ why:"Soviet actions abroad fed fears of internal subversion.", keyPoints:["National security fear","Democracy threatened"] }
+  },
+  {
+    cs:"CS24",
+    prompt:"Which best explains how the Second Red Scare affected unions and workplaces?",
+    choices:[
+      "Some workers and leaders were investigated or removed due to suspected communist ties",
+      "All unions were legalized for the first time",
+      "Work hours dropped to four hours per day",
+      "Factory jobs disappeared because of automation in the 1890s"
+    ],
+    answer:"Some workers and leaders were investigated or removed due to suspected communist ties",
+    hint:{ why:"Unions and workplaces were scrutinized for alleged communist influence.", keyPoints:["Workplace investigations","Union suspicion"] }
+  },
+  {
+    cs:"CS24",
+    prompt:"Which statement best summarizes McCarthyism’s impact on American society?",
+    choices:[
+      "It increased fear and pressure to conform, sometimes limiting free expression",
+      "It ended Cold War conflict immediately",
+      "It expanded civil liberties for all citizens",
+      "It created the Marshall Plan"
+    ],
+    answer:"It increased fear and pressure to conform, sometimes limiting free expression",
+    hint:{ why:"The era discouraged dissent and encouraged conformity under suspicion.", keyPoints:["Fear","Conformity pressure","Civil liberties challenged"] }
+  },
+  {
+    cs:"CS24",
+    prompt:"A student argues: “Security always matters more than liberty.” Which rebuttal best fits the Second Red Scare lesson?",
+    choices:[
+      "Unchecked fear can lead to rights violations when accusations replace evidence and due process",
+      "Liberty is never important in wartime",
+      "The Constitution allows unlimited punishment without trials",
+      "Civil liberties only apply to government officials"
+    ],
+    answer:"Unchecked fear can lead to rights violations when accusations replace evidence and due process",
+    hint:{ why:"CS24 emphasizes fear-driven actions can challenge civil liberties.", keyPoints:["Evidence","Due process","Rights"] }
+  },
+
+  /* ---------- CS25: Cold War conflicts/competition worldwide (9) ---------- */
+  {
+    cs:"CS25",
+    prompt:"Which best describes a Cold War “proxy war”?",
+    choices:[
+      "A conflict where superpowers support opposing sides without fighting each other directly",
+      "A war fought entirely with nuclear weapons",
+      "A conflict where nations agree to disarm",
+      "A war that ends all alliances"
+    ],
+    answer:"A conflict where superpowers support opposing sides without fighting each other directly",
+    hint:{ why:"Proxy wars let superpowers compete indirectly through local conflicts.", keyPoints:["Indirect conflict","Support to allies"] }
+  },
+  {
+    cs:"CS25",
+    prompt:"Which event best illustrates Cold War competition in Asia?",
+    choices:[
+      "The Korean War",
+      "The Boston Tea Party",
+      "The Louisiana Purchase",
+      "The Erie Canal construction"
+    ],
+    answer:"The Korean War",
+    hint:{ why:"Korea was a major Cold War conflict tied to containment and superpower rivalry.", keyPoints:["Asia conflict","Containment"] }
+  },
+  {
+    cs:"CS25",
+    prompt:"Which outcome of the Korean War best fits Cold War patterns?",
+    choices:[
+      "The peninsula remained divided into communist North and non-communist South",
+      "Korea became a U.S. state",
+      "The USSR joined NATO",
+      "Germany reunified in 1950"
+    ],
+    answer:"The peninsula remained divided into communist North and non-communist South",
+    hint:{ why:"Korea’s division persisted, reinforcing rivalry and containment.", keyPoints:["Division persists","Cold War rivalry"] }
+  },
+  {
+    cs:"CS25",
+    prompt:"Why did the U.S. increase involvement in Vietnam during the Cold War?",
+    choices:[
+      "Leaders feared communism would spread if South Vietnam fell",
+      "The U.S. wanted to rebuild Europe after WWII",
+      "Vietnam joined NATO and requested troops by treaty",
+      "The U.S. planned to annex Southeast Asia"
+    ],
+    answer:"Leaders feared communism would spread if South Vietnam fell",
+    hint:{ why:"Containment logic drove escalation: stop communist expansion.", keyPoints:["Domino fear","Containment"] }
+  },
+  {
+    cs:"CS25",
+    prompt:"Which Cold War idea best explains U.S. support for allies through aid and alliances?",
+    choices:[
+      "Containment",
+      "Laissez-faire",
+      "Popular sovereignty",
+      "Nullification"
+    ],
+    answer:"Containment",
+    hint:{ why:"Containment used aid and alliances to resist communist expansion.", keyPoints:["Aid","Alliances","Resist spread"] }
+  },
+  {
+    cs:"CS25",
+    prompt:"Which is the best cause-and-effect statement about the spread of communism after WWII?",
+    choices:[
+      "Communist expansion increased U.S. involvement in regions outside Europe",
+      "Communist expansion ended all U.S. alliances",
+      "Communist expansion caused the U.S. to abandon containment",
+      "Communist expansion eliminated superpower rivalry"
+    ],
+    answer:"Communist expansion increased U.S. involvement in regions outside Europe",
+    hint:{ why:"As communism spread, U.S. policy expanded to Asia and other regions.", keyPoints:["Globalization of Cold War","More involvement"] }
+  },
+  {
+    cs:"CS25",
+    prompt:"Which statement best connects decolonization to Cold War competition?",
+    choices:[
+      "Newly independent nations became arenas where the U.S. and USSR competed for influence",
+      "Decolonization ended all ideology-based conflict",
+      "Decolonization guaranteed every new nation joined NATO",
+      "Decolonization caused the U.S. to leave world politics"
+    ],
+    answer:"Newly independent nations became arenas where the U.S. and USSR competed for influence",
+    hint:{ why:"Superpowers sought allies among newly independent countries.", keyPoints:["Influence competition","New nations"] }
+  },
+  {
+    cs:"CS25",
+    prompt:"Which scenario best fits a “competition for influence” in the Cold War?",
+    choices:[
+      "Two superpowers providing aid to gain allies in a newly independent country",
+      "Two nations agreeing to eliminate all weapons permanently",
+      "A country switching from farming to industry",
+      "A reform movement passing consumer protection laws"
+    ],
+    answer:"Two superpowers providing aid to gain allies in a newly independent country",
+    hint:{ why:"Aid and support were used to gain influence without direct war.", keyPoints:["Aid","Allies","Influence"] }
+  },
+  {
+    cs:"CS25",
+    prompt:"Which best describes why the Cold War remained “cold” between the U.S. and USSR most of the time?",
+    choices:[
+      "Fear of nuclear war discouraged direct conflict",
+      "They agreed on all major issues",
+      "They fought only in Europe and nowhere else",
+      "They ended all alliances after WWII"
+    ],
+    answer:"Fear of nuclear war discouraged direct conflict",
+    hint:{ why:"Nuclear deterrence reduced the likelihood of direct superpower war.", keyPoints:["Deterrence","Nuclear fear"] }
+  },
+
+  /* ---------- CS26: Cold War diplomacy, arms race, détente, end of Cold War (9) ---------- */
+  {
+    cs:"CS26",
+    prompt:"Which term best describes efforts to reduce Cold War tensions through negotiation?",
+    choices:[
+      "Détente",
+      "Isolationism",
+      "Imperialism",
+      "Mercantilism"
+    ],
+    answer:"Détente",
+    hint:{ why:"Détente = easing tensions through diplomacy.", keyPoints:["Diplomacy","Easing tensions"] }
+  },
+  {
+    cs:"CS26",
+    prompt:"Which is the best example of an arms-control effort during the Cold War?",
+    choices:[
+      "Negotiations to limit certain nuclear weapons systems",
+      "The Homestead Act",
+      "The Pure Food and Drug Act",
+      "The Dawes Act"
+    ],
+    answer:"Negotiations to limit certain nuclear weapons systems",
+    hint:{ why:"Arms-control talks aimed to slow the arms race and lower risk.", keyPoints:["Arms control","Nuclear limits"] }
+  },
+  {
+    cs:"CS26",
+    prompt:"Why did the Cold War arms race shape domestic and foreign policy?",
+    choices:[
+      "Governments spent heavily on defense and planned strategy around deterrence",
+      "The U.S. ended military spending entirely",
+      "The USSR joined NATO and disarmed",
+      "Most nations stopped using technology"
+    ],
+    answer:"Governments spent heavily on defense and planned strategy around deterrence",
+    hint:{ why:"Arms competition influenced budgets, alliances, and crisis decision-making.", keyPoints:["Defense spending","Deterrence strategy"] }
+  },
+  {
+    cs:"CS26",
+    prompt:"Which cause-and-effect best fits Cold War deterrence?",
+    choices:[
+      "Nuclear weapons → fear of catastrophic war → leaders avoid direct superpower war",
+      "Nuclear weapons → no fear of war → leaders seek direct battles",
+      "Alliances dissolve → containment expands",
+      "Marshall Plan ends → WWII begins"
+    ],
+    answer:"Nuclear weapons → fear of catastrophic war → leaders avoid direct superpower war",
+    hint:{ why:"Deterrence relies on fear of unacceptable destruction.", keyPoints:["Deterrence","Avoid direct war"] }
+  },
+  {
+    cs:"CS26",
+    prompt:"Which statement best explains how the U.S. used economic pressure against the Soviet Union in the later Cold War?",
+    choices:[
+      "By increasing competition the USSR struggled to match economically",
+      "By cancelling all trade with Western Europe",
+      "By joining the Warsaw Pact",
+      "By ending the space program"
+    ],
+    answer:"By increasing competition the USSR struggled to match economically",
+    hint:{ why:"Sustained competition and pressure exposed Soviet economic weaknesses.", keyPoints:["Economic strain","Competition pressure"] }
+  },
+  {
+    cs:"CS26",
+    prompt:"Which development is most closely connected to the weakening of Soviet control in Eastern Europe?",
+    choices:[
+      "Communist governments faced protests and reforms that reduced Soviet influence",
+      "The U.S. returned to isolationism",
+      "The U.S. ended NATO in 1960",
+      "The Great Depression ended WWII"
+    ],
+    answer:"Communist governments faced protests and reforms that reduced Soviet influence",
+    hint:{ why:"Eastern Europe saw reforms and protests that challenged Soviet dominance.", keyPoints:["Protests","Reforms","Soviet influence declines"] }
+  },
+  {
+    cs:"CS26",
+    prompt:"Which outcome best represents the end of the Cold War era in Europe?",
+    choices:[
+      "Collapse of communist governments across Eastern Europe and the Soviet Union",
+      "Permanent division of Germany into four zones",
+      "Creation of the League of Nations",
+      "Expansion of colonial empires worldwide"
+    ],
+    answer:"Collapse of communist governments across Eastern Europe and the Soviet Union",
+    hint:{ why:"The Cold War ended as communist regimes in Eastern Europe fell and the USSR dissolved.", keyPoints:["Eastern Europe falls","USSR collapses"] }
+  },
+  {
+    cs:"CS26",
+    prompt:"A student claims, “The Cold War ended because one battle decided it.” Which correction is strongest?",
+    choices:[
+      "It ended through long-term economic strain, political reforms, and the collapse of communist governments",
+      "It ended when NATO was created",
+      "It ended when the Marshall Plan began",
+      "It ended the day WWII ended"
+    ],
+    answer:"It ended through long-term economic strain, political reforms, and the collapse of communist governments",
+    hint:{ why:"The ending was gradual and systemic, not a single decisive battle.", keyPoints:["Economic strain","Political change","Collapse"] }
+  },
+  {
+    cs:"CS26",
+    prompt:"Which statement BEST summarizes how the Cold War shaped U.S. policy overall?",
+    choices:[
+      "U.S. policy focused on containing communism, building alliances, and managing nuclear risk",
+      "U.S. policy focused on ending all alliances and avoiding diplomacy",
+      "U.S. policy shifted entirely to domestic issues only",
+      "U.S. policy eliminated defense spending for decades"
+    ],
+    answer:"U.S. policy focused on containing communism, building alliances, and managing nuclear risk",
+    hint:{ why:"Containment + alliances + nuclear strategy are core Cold War themes.", keyPoints:["Containment","Alliances","Nuclear risk"] }
+  }
+]);
+
+/* =========
+   ENGINE — includes your choice-shuffle fix
+   ========= */
+const $ = (s)=>document.querySelector(s);
+const screens = { start: $("#screenStart"), game: $("#screenGame"), done: $("#screenDone") };
+const meta = { name: $("#mName"), start: $("#mStart"), time: $("#mTime"), acc: $("#mAcc") };
+const qUI = {
+  kicker: $("#qKicker"), text: $("#qText"), choices: $("#choices"),
+  count: $("#qCount"), total: $("#qTotal"), bar: $("#barFill"),
+  feedback: $("#feedback"),
+  hintBox: $("#hintBox"), hintText: $("#hintText"), hintSmall: $("#hintSmall")
+};
+
+let state = {
+  startedAt:null, timerId:null,
+  idx:0, misses:0, attempts:0,
+  qOrder:[]
+};
+
+$("#btnDemo").addEventListener("click", ()=>{ $("#name").value="Demo Student"; $("#name").focus(); });
+$("#btnStart").addEventListener("click", startGame);
+$("#btnReset").addEventListener("click", resetAll);
+$("#btnPlayAgain").addEventListener("click", resetAll);
+$("#btnCopy").addEventListener("click", async ()=>{
+  try{
+    await navigator.clipboard.writeText($("#logOut").innerText);
+    $("#btnCopy").textContent="Copied ✅";
+    setTimeout(()=>$("#btnCopy").textContent="Copy Ticket", 1100);
+  }catch(e){
+    alert("Copy failed. You can manually select and copy the ticket text.");
+  }
+});
+
+function calcAccuracy(){
+  if(state.attempts <= 0) return 100;
+  return Math.round(((state.attempts - state.misses) / state.attempts) * 100);
+}
+function updateAccuracy(){
+  meta.acc.textContent = `${calcAccuracy()}%`;
+}
+
+/* ✅ Your fix: shuffle answer choices each render */
+function shuffledChoices(q){
+  const arr = [...q.choices];
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]] = [arr[j],arr[i]];
+  }
+  return arr;
+}
+
+function startGame(){
+  const n = ($("#name").value||"").trim();
+  if(!n){ alert("Please enter your name."); return; }
+
+  state.startedAt = new Date();
+  meta.name.textContent = n;
+  meta.start.textContent = stamp(state.startedAt);
+  meta.time.textContent = "00:00";
+
+  state.qOrder = shuffle([...QUESTIONS]);
+  state.idx = 0;
+  state.misses = 0;
+  state.attempts = 0;
+
+  $("#qTotal").textContent = String(state.qOrder.length);
+  updateAccuracy();
+
+  switchTo("game");
+  startTimer();
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = state.qOrder[state.idx];
+  if(!q) return finish();
+
+  qUI.kicker.textContent = `${q.cs} • Question ${state.idx+1}`;
+  qUI.text.textContent = q.prompt;
+
+  qUI.count.textContent = String(state.idx+1);
+  qUI.total.textContent = String(state.qOrder.length);
+  qUI.bar.style.width = `${Math.round((state.idx/state.qOrder.length)*100)}%`;
+
+  qUI.feedback.textContent = "Choose the best answer.";
+  qUI.feedback.style.color = "var(--muted)";
+
+  qUI.hintBox.style.display = "none";
+  qUI.hintText.textContent = "";
+  qUI.hintSmall.textContent = "";
+
+  qUI.choices.innerHTML = "";
+  shuffledChoices(q).forEach(choice=>{
+    const btn = document.createElement("button");
+    btn.textContent = choice;
+    btn.addEventListener("click", ()=>submit(choice));
+    qUI.choices.appendChild(btn);
+  });
+}
+
+function submit(choice){
+  const q = state.qOrder[state.idx];
+
+  state.attempts++;
+  updateAccuracy();
+
+  if(choice === q.answer){
+    qUI.feedback.textContent = "Correct ✅";
+    qUI.feedback.style.color = "var(--good)";
+    flashButtons(choice, true);
+    setTimeout(()=>{
+      state.idx++;
+      renderQuestion();
+    }, 320);
+    return;
+  }
+
+  state.misses++;
+  updateAccuracy();
+
+  qUI.feedback.textContent = "Not yet ❌ Try again.";
+  qUI.feedback.style.color = "var(--bad)";
+  flashButtons(choice, false);
+
+  qUI.hintBox.style.display = "block";
+  qUI.hintText.textContent = q.hint?.why || "Think back to the content elaboration details.";
+  qUI.hintSmall.textContent = q.hint?.keyPoints?.length
+    ? ("Key points: " + q.hint.keyPoints.join(" • "))
+    : "";
+}
+
+function finish(){
+  stopTimer();
+  qUI.bar.style.width = "100%";
+
+  const endedAt = new Date();
+  const durationSec = Math.floor((endedAt - state.startedAt)/1000);
+  const accuracy = calcAccuracy();
+
+  if(state.misses > 0){
+    $("#doneTitle").textContent = "Not Passed ❌";
+    $("#doneMsg").textContent = "You finished, but this attempt had misses. Retake for a perfect run to earn the submit ticket.";
+    $("#btnCopy").style.display = "none";
+
+    $("#logOut").textContent =
+`NOT PASSED — Retake Required
+
+Student: ${meta.name.textContent}
+Started: ${stamp(state.startedAt)}
+Ended:   ${stamp(endedAt)}
+Duration (sec): ${durationSec}
+Accuracy: ${accuracy}%
+Misses: ${state.misses}
+
+RULE: To earn a submit ticket, you must complete the game with 0 misses (100% accuracy).`;
+    switchTo("done");
+    return;
+  }
+
+  $("#doneTitle").textContent = "Complete ✅";
+  $("#doneMsg").textContent = "Perfect run achieved (0 misses). Copy your submit ticket.";
+  $("#btnCopy").style.display = "inline-flex";
+
+  const ticket = {
+    status: "PASSED",
+    game: "American History — Block 7 (CS 24–26)",
+    student: meta.name.textContent,
+    started: stamp(state.startedAt),
+    ended: stamp(endedAt),
+    duration_seconds: durationSec,
+    total_questions: state.qOrder.length,
+    total_attempts: state.attempts,
+    misses: state.misses,
+    accuracy_percent: 100
+  };
+
+  $("#logOut").textContent = JSON.stringify(ticket, null, 2);
+  switchTo("done");
+}
+
+function switchTo(which){
+  Object.values(screens).forEach(el=>el.classList.add("hidden"));
+  screens[which].classList.remove("hidden");
+}
+
+function startTimer(){
+  stopTimer();
+  state.timerId = setInterval(()=>{
+    const s = Math.floor((new Date() - state.startedAt)/1000);
+    meta.time.textContent = fmtTime(s);
+  }, 250);
+}
+function stopTimer(){
+  if(state.timerId){ clearInterval(state.timerId); state.timerId=null; }
+}
+
+function resetAll(){
+  stopTimer();
+  meta.name.textContent="—";
+  meta.start.textContent="—";
+  meta.time.textContent="00:00";
+  meta.acc.textContent="100%";
+  $("#name").value="";
+  $("#btnCopy").textContent="Copy Ticket";
+  $("#btnCopy").style.display = "inline-flex";
+  switchTo("start");
+}
+
+function fmtTime(sec){
+  const m = String(Math.floor(sec/60)).padStart(2,"0");
+  const s = String(sec%60).padStart(2,"0");
+  return `${m}:${s}`;
+}
+function stamp(d){
+  return d.toLocaleString(undefined, {
+    year:"numeric", month:"2-digit", day:"2-digit",
+    hour:"2-digit", minute:"2-digit", second:"2-digit"
+  });
+}
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+function flashButtons(choice, correct){
+  [...qUI.choices.querySelectorAll("button")].forEach(b=>{
+    if(b.textContent === choice){
+      b.classList.add(correct ? "good" : "bad");
+      setTimeout(()=>b.classList.remove("good","bad"), 320);
+    }
+  });
+}
+</script>
+</body>
+</html>
