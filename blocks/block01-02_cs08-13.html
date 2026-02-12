@@ -521,6 +521,16 @@ function startGame(){
   renderQuestion();
 }
 
+ function shuffledChoices(q){
+  const arr = [...q.choices];
+  // Fisher–Yates shuffle
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]] = [arr[j],arr[i]];
+  }
+  return arr;
+}
+ 
 function renderQuestion(){
   const q = state.qOrder[state.idx];
   if(!q) return finish();
@@ -540,7 +550,7 @@ function renderQuestion(){
   qUI.hintSmall.textContent = "";
 
   qUI.choices.innerHTML = "";
-  q.choices.forEach(choice=>{
+  shuffledChoices(q).forEach(choice=>{
     const btn = document.createElement("button");
     btn.textContent = choice;
     btn.addEventListener("click", ()=>submit(choice));
