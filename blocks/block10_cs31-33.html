@@ -105,7 +105,9 @@
           <button id="btnDemo" class="secondary">Demo</button>
         </div>
       </div>
-      <div class="toast" style="margin-top:10px">Rules: hints only after a miss • accuracy reflects misses • must finish with 0 misses to earn ticket.</div>
+      <div class="toast" style="margin-top:10px">
+        Rules: hints only after a miss • <b>miss counts once per question</b> • choices reshuffle after miss • must finish with 0 missed questions to earn ticket.
+      </div>
     </section>
 
     <section id="screenGame" class="card hidden">
@@ -531,7 +533,7 @@ const QUESTIONS = shuffle([
 ]);
 
 /* =========
-   ENGINE — includes your choice-shuffle fix
+   ENGINE — FIRST-TRY ACCURACY STANDARD (Block 7 style)
    ========= */
 const $ = (s)=>document.querySelector(s);
 const screens = { start: $("#screenStart"), game: $("#screenGame"), done: $("#screenDone") };
@@ -545,7 +547,11 @@ const qUI = {
 
 let state = {
   startedAt:null, timerId:null,
-  idx:0, misses:0, attempts:0,
+  idx:0,
+  questionsCompleted:0,
+  correctFirst:0,
+  misses:0,                 // counts ONCE per question
+  missedThisQuestion:false,
   qOrder:[]
 };
 
@@ -564,14 +570,13 @@ $("#btnCopy").addEventListener("click", async ()=>{
 });
 
 function calcAccuracy(){
-  if(state.attempts <= 0) return 100;
-  return Math.round(((state.attempts - state.misses) / state.attempts) * 100);
+  if(state.questionsCompleted <= 0) return 100;
+  return Math.round((state.correctFirst / state.questionsCompleted) * 100);
 }
 function updateAccuracy(){
   meta.acc.textContent = `${calcAccuracy()}%`;
 }
 
-/* ✅ shuffle answer choices each render */
 function shuffledChoices(q){
   const arr = [...q.choices];
   for(let i=arr.length-1;i>0;i--){
@@ -592,8 +597,10 @@ function startGame(){
 
   state.qOrder = shuffle([...QUESTIONS]);
   state.idx = 0;
+  state.questionsCompleted = 0;
+  state.correctFirst = 0;
   state.misses = 0;
-  state.attempts = 0;
+  state.missedThisQuestion = false;
 
   $("#qTotal").textContent = String(state.qOrder.length);
   updateAccuracy();
@@ -606,6 +613,8 @@ function startGame(){
 function renderQuestion(){
   const q = state.qOrder[state.idx];
   if(!q) return finish();
+
+  state.missedThisQuestion = false;
 
   qUI.kicker.textContent = `${q.cs} • Question ${state.idx+1}`;
   qUI.text.textContent = q.prompt;
@@ -621,6 +630,10 @@ function renderQuestion(){
   qUI.hintText.textContent = "";
   qUI.hintSmall.textContent = "";
 
+  drawChoices(q);
+}
+
+function drawChoices(q){
   qUI.choices.innerHTML = "";
   shuffledChoices(q).forEach(choice=>{
     const btn = document.createElement("button");
@@ -633,13 +646,15 @@ function renderQuestion(){
 function submit(choice){
   const q = state.qOrder[state.idx];
 
-  state.attempts++;
-  updateAccuracy();
-
   if(choice === q.answer){
+    state.questionsCompleted++;
+    if(!state.missedThisQuestion) state.correctFirst++;
+    updateAccuracy();
+
     qUI.feedback.textContent = "Correct ✅";
     qUI.feedback.style.color = "var(--good)";
     flashButtons(choice, true);
+
     setTimeout(()=>{
       state.idx++;
       renderQuestion();
@@ -647,8 +662,11 @@ function submit(choice){
     return;
   }
 
-  state.misses++;
-  updateAccuracy();
+  if(!state.missedThisQuestion){
+    state.misses++;
+    state.missedThisQuestion = true;
+    updateAccuracy();
+  }
 
   qUI.feedback.textContent = "Not yet ❌ Try again.";
   qUI.feedback.style.color = "var(--bad)";
@@ -659,6 +677,9 @@ function submit(choice){
   qUI.hintSmall.textContent = q.hint?.keyPoints?.length
     ? ("Key points: " + q.hint.keyPoints.join(" • "))
     : "";
+
+  // ✅ reshuffle choices after a miss (and after any wrong click)
+  drawChoices(q);
 }
 
 function finish(){
@@ -671,7 +692,7 @@ function finish(){
 
   if(state.misses > 0){
     $("#doneTitle").textContent = "Not Passed ❌";
-    $("#doneMsg").textContent = "You finished, but this attempt had misses. Retake for a perfect run to earn the submit ticket.";
+    $("#doneMsg").textContent = "You finished, but this attempt had missed questions. Retake for a perfect run to earn the submit ticket.";
     $("#btnCopy").style.display = "none";
 
     $("#logOut").textContent =
@@ -681,16 +702,16 @@ Student: ${meta.name.textContent}
 Started: ${stamp(state.startedAt)}
 Ended:   ${stamp(endedAt)}
 Duration (sec): ${durationSec}
-Accuracy: ${accuracy}%
-Misses: ${state.misses}
+First-try Accuracy: ${accuracy}%
+Missed Questions: ${state.misses}
 
-RULE: To earn a submit ticket, you must complete the game with 0 misses (100% accuracy).`;
+RULE: To earn a submit ticket, you must complete the game with 0 missed questions (100% first-try accuracy).`;
     switchTo("done");
     return;
   }
 
   $("#doneTitle").textContent = "Complete ✅";
-  $("#doneMsg").textContent = "Perfect run achieved (0 misses). Copy your submit ticket.";
+  $("#doneMsg").textContent = "Perfect run achieved (0 missed questions). Copy your submit ticket.";
   $("#btnCopy").style.display = "inline-flex";
 
   const ticket = {
@@ -701,9 +722,9 @@ RULE: To earn a submit ticket, you must complete the game with 0 misses (100% ac
     ended: stamp(endedAt),
     duration_seconds: durationSec,
     total_questions: state.qOrder.length,
-    total_attempts: state.attempts,
-    misses: state.misses,
-    accuracy_percent: 100
+    questions_completed: state.questionsCompleted,
+    missed_questions: state.misses,
+    first_try_accuracy_percent: 100
   };
 
   $("#logOut").textContent = JSON.stringify(ticket, null, 2);
