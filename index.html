@@ -1,253 +1,788 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>American Studies Review Games</title>
-<style>
-  :root{
-    --bg:#0b1220; --card:#111a2e; --text:#e7eefc; --muted:#a8b4cf;
-    --accent:#7aa2ff; --good:#2bd576; --warn:#ffd166;
-    --border:rgba(255,255,255,.12); --shadow:0 18px 55px rgba(0,0,0,.35);
-    --r:18px;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-    background:
-      radial-gradient(1000px 650px at 18% 12%, rgba(122,162,255,.18), transparent 60%),
-      radial-gradient(900px 500px at 80% 20%, rgba(43,213,118,.10), transparent 60%),
-      var(--bg);
-    color:var(--text); min-height:100vh;
-  }
-  a{color:inherit; text-decoration:none}
-  .wrap{max-width:1100px; margin:0 auto; padding:22px 18px 30px}
-  header{
-    display:flex; flex-wrap:wrap; gap:14px; align-items:flex-end; justify-content:space-between;
-    padding:18px; border:1px solid var(--border); border-radius:var(--r);
-    background:rgba(17,26,46,.85); box-shadow:var(--shadow);
-  }
-  h1{margin:0; font-size:20px; letter-spacing:.2px}
-  .sub{margin-top:6px; color:var(--muted); font-size:13px; line-height:1.35}
-  .tagrow{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
-  .pill{
-    border:1px solid var(--border); border-radius:999px;
-    padding:7px 10px; font-size:12px; color:var(--muted);
-    background:rgba(0,0,0,.18);
-  }
-  .pill b{color:var(--text); font-weight:700}
-  .grid{
-    margin-top:16px;
-    display:grid; gap:12px;
-    grid-template-columns:repeat(3, minmax(0,1fr));
-  }
-  @media (max-width:920px){ .grid{grid-template-columns:repeat(2, minmax(0,1fr));} }
-  @media (max-width:620px){ .grid{grid-template-columns:1fr;} }
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>American Studies Review — Mastery Hub</title>
 
-  .card{
-    border:1px solid var(--border);
-    border-radius:var(--r);
-    background:rgba(17,26,46,.75);
-    box-shadow:var(--shadow);
-    overflow:hidden;
-  }
-  .card .top{
-    padding:14px 14px 10px;
-    border-bottom:1px solid var(--border);
-    background:linear-gradient(180deg, rgba(255,255,255,.05), transparent);
-  }
-  .card h2{margin:0; font-size:14px}
-  .card .desc{margin-top:6px; color:var(--muted); font-size:12px; line-height:1.35}
-  .card .actions{
-    padding:12px 14px 14px;
-    display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;
-  }
-  .btn{
-    display:inline-flex; align-items:center; justify-content:center;
-    padding:11px 12px; border-radius:14px;
-    font-weight:800; font-size:13px;
-    background:rgba(122,162,255,.18);
-    border:1px solid rgba(122,162,255,.35);
-    transition:transform .08s ease, filter .12s ease;
-    min-width:140px;
-  }
-  .btn:hover{filter:brightness(1.06)}
-  .btn:active{transform:scale(.99)}
-  .mini{color:var(--muted); font-size:12px}
-  .rules{
-    margin-top:14px;
-    border:1px solid rgba(255,209,102,.35);
-    background:rgba(255,209,102,.08);
-    border-radius:var(--r);
-    padding:12px 14px;
-    color:var(--text);
-  }
-  .rules b{color:var(--warn)}
-  .rules ul{margin:8px 0 0; padding-left:18px; color:var(--muted); font-size:12px; line-height:1.5}
-  footer{margin-top:16px; color:var(--muted); font-size:12px; text-align:center}
-  .smalllink{color:var(--accent); text-decoration:underline; text-underline-offset:2px}
+<style>
+:root{
+  --bg:#0b1220;
+  --panel:#111a2f;
+  --text:#e7eefc;
+  --muted:#a8b4cf;
+  --line:rgba(255,255,255,.12);
+  --shadow:0 18px 55px rgba(0,0,0,.40);
+  --radius:18px;
+
+  --good:#2bd576;
+  --warn:#ffd166;
+  --accent:#7aa2ff;
+
+  --chip:rgba(122,162,255,.14);
+  --chipLine:rgba(122,162,255,.28);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:
+    radial-gradient(1000px 650px at 18% 12%, rgba(122,162,255,.18), transparent 60%),
+    radial-gradient(900px 500px at 80% 20%, rgba(43,213,118,.10), transparent 60%),
+    linear-gradient(180deg, #0b1220, #070b14);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+
+a{color:inherit;text-decoration:none}
+
+.app{
+  width:min(1100px,100%);
+  border:1px solid var(--line);
+  border-radius:22px;
+  overflow:hidden;
+  background:rgba(0,0,0,.22);
+  box-shadow:var(--shadow);
+}
+
+header{
+  padding:18px 18px 14px;
+  border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+}
+
+.kicker{
+  font-size:11px;
+  letter-spacing:.14em;
+  color:rgba(231,238,252,.7);
+  text-transform:uppercase;
+}
+h1{
+  margin:6px 0 6px;
+  font-size:22px;
+}
+.sub{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.35;
+  margin:0;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.05);
+  font-size:12px;
+  color:rgba(231,238,252,.92);
+}
+.pill .dot{
+  width:8px;height:8px;border-radius:999px;background:var(--good);
+  box-shadow:0 0 0 3px rgba(43,213,118,.14);
+}
+
+main{padding:18px}
+
+.rules{
+  border:1px solid rgba(255,209,102,.35);
+  background:rgba(255,209,102,.08);
+  border-radius:18px;
+  padding:12px 14px;
+  margin-bottom:14px;
+}
+.rules b{color:var(--warn)}
+.rules ul{
+  margin:8px 0 0;
+  padding-left:18px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
+
+.card{
+  display:block;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+  padding:14px;
+  transition:transform .12s ease, border-color .12s ease, box-shadow .12s ease;
+}
+.card:hover{
+  transform:translateY(-2px);
+  border-color:rgba(122,162,255,.45);
+  box-shadow:0 16px 40px rgba(0,0,0,.35);
+}
+
+.row{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+.title{
+  font-weight:850;
+  font-size:15px;
+  margin:0;
+}
+.badge{
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.06em;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(43,213,118,.35);
+  background:rgba(43,213,118,.12);
+  color:rgba(231,238,252,.95);
+  white-space:nowrap;
+}
+
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+.chip{
+  display:inline-flex;
+  align-items:center;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--chipLine);
+  background:var(--chip);
+  color:rgba(231,238,252,.92);
+  font-size:12px;
+}
+
+.desc{
+  margin:10px 0 0;
+  color:var(--muted);
+  font-size:12.8px;
+  line-height:1.35;
+}
+
+.meta{
+  margin-top:10px;
+  color:rgba(168,180,207,.85);
+  font-size:12px;
+  font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New";
+}
+
+.note{
+  margin-top:14px;
+  border-top:1px solid var(--line);
+  padding-top:14px;
+  color:var(--muted);
+  font-size:12.5px;
+}
+code{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New";}
 </style>
 </head>
+
 <body>
-<div class="wrap">
+<div class="app">
   <header>
-    <div>
-      <h1>American Studies Review Games</h1>
-      <div class="sub">
-        Choose your block. Each game requires <b>100% accuracy</b> to finish and gives hints only after a miss.
-      </div>
-    </div>
-    <div class="tagrow">
-      <div class="pill">Repo: <b>American-Studies-Review-Games</b></div>
-      <div class="pill">Mode: <b>Self-check</b></div>
-      <div class="pill">Shuffle: <b>On</b></div>
-    </div>
+    <div class="kicker">American Studies • Mastery Series</div>
+    <h1>American Studies Review Games</h1>
+    <p class="sub">
+      Choose your block. Each game requires <b>100% accuracy</b> to finish and gives hints only after a miss.
+      <span class="pill"><span class="dot"></span> Mastery (100%)</span>
+      <span class="pill">Shuffle: <b>On</b></span>
+      <span class="pill">Mode: <b>Self-check</b></span>
+    </p>
   </header>
 
-  <div class="rules">
-    <b>How these games work</b>
-    <ul>
-      <li>Enter your name → questions are <b>shuffled each time</b>.</li>
-      <li>You advance only when correct → completion = <b>100%</b>.</li>
-      <li><b>Hints appear only after a wrong answer</b>.</li>
-      <li>At the end, copy the completion log if your teacher asks.</li>
-    </ul>
-  </div>
-
-  <section class="grid" aria-label="Game blocks">
-    <!-- Block 1–2 -->
-    <article class="card">
-      <div class="top">
-        <h2>Block 1–2 — CS 8–13</h2>
-        <div class="desc">Industrialization, labor, immigration/urbanization, Westward conflict, Jim Crow, Progressivism</div>
-      </div>
-      <div class="actions">
-        <a class="btn" href="blocks/block01-02_cs08-13.html">Play</a>
-        <div class="mini">File: block01-02_cs08-13.html</div>
-      </div>
-    </article>
-
-   <!-- Block 3–4 -->
-<article class="card">
-  <div class="top">
-    <h2>Block 3–4 — CS 14–18</h2>
-    <div class="desc">U.S. world power, post-WWI peace/isolationism, postwar unrest, 1920s change, Harlem Renaissance/suffrage/Prohibition</div>
-  </div>
-  <div class="actions">
-    <a class="btn" href="blocks/block03-04_cs14-18.html">Play</a>
-    <div class="mini">File: block03-04_cs14-18.html</div>
-  </div>
-</article>
-
-<!-- Block 5 -->
-<article class="card">
-  <div class="top">
-    <h2>Block 5 — CS 19–21</h2>
-    <div class="desc">Great Depression: causes, federal response (New Deal), lasting impacts</div>
-  </div>
-  <div class="actions">
-    <a class="btn" href="blocks/block05_cs19-21.html">Play</a>
-    <div class="mini">File: block05_cs19-21.html</div>
-  </div>
-</article>
-
-    <!-- Block 6 -->
-<article class="card">
-  <div class="top">
-    <h2>Block 6 — CS 22–23</h2>
-    <div class="desc">Nuclear Age and Containment</div>
-  </div>
-  <div class="actions">
-    <a class="btn" href="blocks/block06_cs22-23.html">Play</a>
-    <div class="mini">File: block06_cs22-23.html</div>
-  </div>
-</article>
-
-<!-- Block 7 -->
-<article class="card">
-  <div class="top">
-    <h2>Block 7 — CS 24–26</h2>
-    <div class="desc">Second Red Scare & McCarthyism • Cold War conflicts & diplomacy</div>
-  </div>
-  <div class="actions">
-    <a class="btn" href="blocks/block07_cs24-26.html">Play</a>
-    <div class="mini">File: block07_cs24-26.html</div>
-  </div>
-</article>
-    
-<!-- Block 8 -->
-<article class="card">
-  <div class="top">
-    <h2>Block 8 — CS 27–28</h2>
-    <div class="desc">Postwar Prosperity & Social Change • Movements for Equality & Civil Rights</div>
-  </div>
-  <div class="actions">
-    <a class="btn" href="blocks/block08_cs27-28.html">Play</a>
-    <div class="mini">File: block08_cs27-28.html</div>
-  </div>
-</article>
-
-   <!-- Block 9 -->
-<article class="card">
-  <div class="top">
-    <h2>Block 9 — CS 29–30</h2>
-    <div class="desc">Science & Technology Changes • Suburbs, Sun Belt, & Immigration (1965)</div>
-  </div>
-  <div class="actions">
-    <a class="btn" href="blocks/block09_cs29-30.html">Play</a>
-    <div class="mini">File: block09_cs29-30.html</div>
-  </div>
-</article>
- 
-<!-- Block 10 -->
-<article class="card">
-  <div class="top">
-    <h2>Block 10 — CS 31–33</h2>
-    <div class="desc">Post–Cold War Foreign Policy • Globalization & Economic Change • Contemporary Social & Technological Shifts</div>
-  </div>
-  <div class="actions">
-    <a class="btn" href="blocks/block10_cs31-33.html">Play</a>
-    <div class="mini">File: block10_cs31-33.html</div>
-  </div>
-</article>
-
-    <!-- BLOCK 11 -->
-<!-- Block 11 — CS 4–5 -->
-<article class="card">
-  <div class="top">
-    <h2>Block 11 — CS 4–5</h2>
-    <div class="desc">
-      Founding Documents • Enlightenment ideas • Declaration of Independence •
-      Articles of Confederation • Constitutional foundations.
+  <main>
+    <div class="rules">
+      <b>How these games work</b>
+      <ul>
+        <li>Enter your name → questions are <b>shuffled each time</b>.</li>
+        <li>You advance only when correct → completion = <b>100%</b>.</li>
+        <li><b>Hints appear only after a wrong answer</b>.</li>
+        <li>At the end, copy the completion log if your teacher asks.</li>
+      </ul>
     </div>
-  </div>
 
-  <div class="actions">
-    <a class="btn" href="./blocks/block11-cs4-5-founding.html">Play</a>
-    <div class="mini">File: block11-cs4-5-founding.html</div>
-  </div>
-</article>
+    <div class="grid" aria-label="Game blocks">
 
-    <!-- Block 12 -->
-<article class="card">
-  <div class="top">
-    <h2>Block 12 — CS 6–7</h2>
-    <div class="desc">Constitution Foundations • Early Republic & Supreme Court Decisions</div>
-  </div>
-  <div class="actions">
-    <a class="btn" href="blocks/block12_cs06-07.html">Play</a>
-    <div class="mini">File: block12_cs06-07.html</div>
-  </div>
-</article>
+      <a class="card" href="blocks/block01-02_cs08-13.html">
+        <div class="row">
+          <div class="title">Block 1–2 — CS 8–13</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">Industrialization</span>
+          <span class="chip">Labor</span>
+          <span class="chip">Immigration/Urbanization</span>
+          <span class="chip">Progressivism</span>
+        </div>
+        <p class="desc">Industrialization, labor, immigration/urbanization, Westward conflict, Jim Crow, Progressivism</p>
+        <div class="meta">File: blocks/block01-02_cs08-13.html</div>
+      </a>
 
-<!-- Block 13 -->
-<article class="card">
-  <div class="top">
-    <h2>Block 13 — CS 1–3</h2>
-    <div class="desc">Colonial Regions • British Policies & Conflict • Road to Revolution</div>
-  </div>
-  <div class="actions">
-    <a class="btn" href="blocks/block13_cs01-03.html">Play</a>
-    <div class="mini">File: block13_cs01-03.html</div>
-  </div>
-</article>
+      <a class="card" href="blocks/block03-04_cs14-18.html">
+        <div class="row">
+          <div class="title">Block 3–4 — CS 14–18</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">U.S. world power</span>
+          <span class="chip">Isolationism</span>
+          <span class="chip">1920s change</span>
+          <span class="chip">Harlem Renaissance</span>
+        </div>
+        <p class="desc">U.S. world power, post-WWI peace/isolationism, postwar unrest, 1920s change, Harlem Renaissance/suffrage/Prohibition</p>
+        <div class="meta">File: blocks/block03-04_cs14-18.html</div>
+      </a>
+
+      <a class="card" href="blocks/block05_cs19-21.html">
+        <div class="row">
+          <div class="title">Block 5 — CS 19–21</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">Great Depression</span>
+          <span class="chip">New Deal</span>
+          <span class="chip">Federal response</span>
+        </div>
+        <p class="desc">Great Depression: causes, federal response (New Deal), lasting impacts</p>
+        <div class="meta">File: blocks/block05_cs19-21.html</div>
+      </a>
+
+      <a class="card" href="blocks/block06_cs22-23.html">
+        <div class="row">
+          <div class="title">Block 6 — CS 22–23</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">Nuclear Age</span>
+          <span class="chip">Containment</span>
+          <span class="chip">Cold War foundations</span>
+        </div>
+        <p class="desc">Nuclear Age and Containment</p>
+        <div class="meta">File: blocks/block06_cs22-23.html</div>
+      </a>
+
+      <a class="card" href="blocks/block07_cs24-26.html">
+        <div class="row">
+          <div class="title">Block 7 — CS 24–26</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">Second Red Scare</span>
+          <span class="chip">McCarthyism</span>
+          <span class="chip">Cold War conflicts</span>
+        </div>
+        <p class="desc">Second Red Scare & McCarthyism • Cold War conflicts & diplomacy</p>
+        <div class="meta">File: blocks/block07_cs24-26.html</div>
+      </a>
+
+      <a class="card" href="blocks/block08_cs27-28.html">
+        <div class="row">
+          <div class="title">Block 8 — CS 27–28</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">Postwar prosperity</span>
+          <span class="chip">Civil Rights</span>
+          <span class="chip">Social change</span>
+        </div>
+        <p class="desc">Postwar Prosperity & Social Change • Movements for Equality & Civil Rights</p>
+        <div class="meta">File: blocks/block08_cs27-28.html</div>
+      </a>
+
+      <a class="card" href="blocks/block09_cs29-30.html">
+        <div class="row">
+          <div class="title">Block 9 — CS 29–30</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">Science/Tech</span>
+          <span class="chip">Suburbs</span>
+          <span class="chip">Sun Belt</span>
+          <span class="chip">Immigration 1965</span>
+        </div>
+        <p class="desc">Science & Technology Changes • Suburbs, Sun Belt, & Immigration (1965)</p>
+        <div class="meta">File: blocks/block09_cs29-30.html</div>
+      </a>
+
+      <a class="card" href="blocks/block10_cs31-33.html">
+        <div class="row">
+          <div class="title">Block 10 — CS 31–33</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">Post–Cold War</span>
+          <span class="chip">Globalization</span>
+          <span class="chip">Contemporary shifts</span>
+        </div>
+        <p class="desc">Post–Cold War Foreign Policy • Globalization & Economic Change • Contemporary Social & Technological Shifts</p>
+        <div class="meta">File: blocks/block10_cs31-33.html</div>
+      </a>
+
+      <a class="card" href="blocks/block11-cs4-5-founding.html">
+        <div class="row">
+          <div class="title">Block 11 — CS 4–5</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">Founding Documents</span>
+          <span class="chip">Declaration</span>
+          <span class="chip">Articles</span>
+          <span class="chip">Constitution</span>
+        </div>
+        <p class="desc">Founding Documents • Enlightenment ideas • Declaration of Independence • Articles of Confederation • Constitutional foundations.</p>
+        <div class="meta">File: blocks/block11-cs4-5-founding.html</div>
+      </a>
+
+      <a class="card" href="blocks/block12_cs06-07.html">
+        <div class="row">
+          <div class="title">Block 12 — CS 6–7</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">Early Republic</span>
+          <span class="chip">Constitution foundations</span>
+          <span class="chip">SCOTUS</span>
+        </div>
+        <p class="desc">Constitution Foundations • Early Republic & Supreme Court Decisions</p>
+        <div class="meta">File: blocks/block12_cs06-07.html</div>
+      </a>
+
+      <a class="card" href="blocks/block13_cs01-03.html">
+        <div class="row">
+          <div class="title">Block 13 — CS 1–3</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">Colonial regions</span>
+          <span class="chip">British policies</span>
+          <span class="chip">Road to Revolution</span>
+        </div>
+        <p class="desc">Colonial Regions • British Policies & Conflict • Road to Revolution</p>
+        <div class="meta">File: blocks/block13_cs01-03.html</div>
+      </a>
+
+    </div>
+
+    <div class="note">
+      Tip: If a link shows <b>404</b>, the filename in this menu must match the repo file name exactly.<br/>
+      Also confirm the <code>blocks/</code> folder name matches case exactly (GitHub Pages is case-sensitive).
+    </div>
+
+  </main>
+</div>
+</body>
+</html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>American Studies Review — Mastery Hub</title>
+
+<style>
+:root{
+  --bg:#0b1220;
+  --panel:#111a2f;
+  --text:#e7eefc;
+  --muted:#a8b4cf;
+  --line:rgba(255,255,255,.12);
+  --shadow:0 18px 55px rgba(0,0,0,.40);
+  --radius:18px;
+
+  --good:#2bd576;
+  --warn:#ffd166;
+  --accent:#7aa2ff;
+
+  --chip:rgba(122,162,255,.14);
+  --chipLine:rgba(122,162,255,.28);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:
+    radial-gradient(1000px 650px at 18% 12%, rgba(122,162,255,.18), transparent 60%),
+    radial-gradient(900px 500px at 80% 20%, rgba(43,213,118,.10), transparent 60%),
+    linear-gradient(180deg, #0b1220, #070b14);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+
+a{color:inherit;text-decoration:none}
+
+.app{
+  width:min(1100px,100%);
+  border:1px solid var(--line);
+  border-radius:22px;
+  overflow:hidden;
+  background:rgba(0,0,0,.22);
+  box-shadow:var(--shadow);
+}
+
+header{
+  padding:18px 18px 14px;
+  border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+}
+
+.kicker{
+  font-size:11px;
+  letter-spacing:.14em;
+  color:rgba(231,238,252,.7);
+  text-transform:uppercase;
+}
+h1{
+  margin:6px 0 6px;
+  font-size:22px;
+}
+.sub{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.35;
+  margin:0;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.05);
+  font-size:12px;
+  color:rgba(231,238,252,.92);
+}
+.pill .dot{
+  width:8px;height:8px;border-radius:999px;background:var(--good);
+  box-shadow:0 0 0 3px rgba(43,213,118,.14);
+}
+
+main{padding:18px}
+
+.rules{
+  border:1px solid rgba(255,209,102,.35);
+  background:rgba(255,209,102,.08);
+  border-radius:18px;
+  padding:12px 14px;
+  margin-bottom:14px;
+}
+.rules b{color:var(--warn)}
+.rules ul{
+  margin:8px 0 0;
+  padding-left:18px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
+
+.card{
+  display:block;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+  padding:14px;
+  transition:transform .12s ease, border-color .12s ease, box-shadow .12s ease;
+}
+.card:hover{
+  transform:translateY(-2px);
+  border-color:rgba(122,162,255,.45);
+  box-shadow:0 16px 40px rgba(0,0,0,.35);
+}
+
+.row{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+.title{
+  font-weight:850;
+  font-size:15px;
+  margin:0;
+}
+.badge{
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.06em;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(43,213,118,.35);
+  background:rgba(43,213,118,.12);
+  color:rgba(231,238,252,.95);
+  white-space:nowrap;
+}
+
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+.chip{
+  display:inline-flex;
+  align-items:center;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--chipLine);
+  background:var(--chip);
+  color:rgba(231,238,252,.92);
+  font-size:12px;
+}
+
+.desc{
+  margin:10px 0 0;
+  color:var(--muted);
+  font-size:12.8px;
+  line-height:1.35;
+}
+
+.meta{
+  margin-top:10px;
+  color:rgba(168,180,207,.85);
+  font-size:12px;
+  font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New";
+}
+
+.note{
+  margin-top:14px;
+  border-top:1px solid var(--line);
+  padding-top:14px;
+  color:var(--muted);
+  font-size:12.5px;
+}
+code{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New";}
+</style>
+</head>
+
+<body>
+<div class="app">
+  <header>
+    <div class="kicker">American Studies • Mastery Series</div>
+    <h1>American Studies Review Games</h1>
+    <p class="sub">
+      Choose your block. Each game requires <b>100% accuracy</b> to finish and gives hints only after a miss.
+      <span class="pill"><span class="dot"></span> Mastery (100%)</span>
+      <span class="pill">Shuffle: <b>On</b></span>
+      <span class="pill">Mode: <b>Self-check</b></span>
+    </p>
+  </header>
+
+  <main>
+    <div class="rules">
+      <b>How these games work</b>
+      <ul>
+        <li>Enter your name → questions are <b>shuffled each time</b>.</li>
+        <li>You advance only when correct → completion = <b>100%</b>.</li>
+        <li><b>Hints appear only after a wrong answer</b>.</li>
+        <li>At the end, copy the completion log if your teacher asks.</li>
+      </ul>
+    </div>
+
+    <div class="grid" aria-label="Game blocks">
+
+      <a class="card" href="blocks/block01-02_cs08-13.html">
+        <div class="row">
+          <div class="title">Block 1–2 — CS 8–13</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">Industrialization</span>
+          <span class="chip">Labor</span>
+          <span class="chip">Immigration/Urbanization</span>
+          <span class="chip">Progressivism</span>
+        </div>
+        <p class="desc">Industrialization, labor, immigration/urbanization, Westward conflict, Jim Crow, Progressivism</p>
+        <div class="meta">File: blocks/block01-02_cs08-13.html</div>
+      </a>
+
+      <a class="card" href="blocks/block03-04_cs14-18.html">
+        <div class="row">
+          <div class="title">Block 3–4 — CS 14–18</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">U.S. world power</span>
+          <span class="chip">Isolationism</span>
+          <span class="chip">1920s change</span>
+          <span class="chip">Harlem Renaissance</span>
+        </div>
+        <p class="desc">U.S. world power, post-WWI peace/isolationism, postwar unrest, 1920s change, Harlem Renaissance/suffrage/Prohibition</p>
+        <div class="meta">File: blocks/block03-04_cs14-18.html</div>
+      </a>
+
+      <a class="card" href="blocks/block05_cs19-21.html">
+        <div class="row">
+          <div class="title">Block 5 — CS 19–21</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">Great Depression</span>
+          <span class="chip">New Deal</span>
+          <span class="chip">Federal response</span>
+        </div>
+        <p class="desc">Great Depression: causes, federal response (New Deal), lasting impacts</p>
+        <div class="meta">File: blocks/block05_cs19-21.html</div>
+      </a>
+
+      <a class="card" href="blocks/block06_cs22-23.html">
+        <div class="row">
+          <div class="title">Block 6 — CS 22–23</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">Nuclear Age</span>
+          <span class="chip">Containment</span>
+          <span class="chip">Cold War foundations</span>
+        </div>
+        <p class="desc">Nuclear Age and Containment</p>
+        <div class="meta">File: blocks/block06_cs22-23.html</div>
+      </a>
+
+      <a class="card" href="blocks/block07_cs24-26.html">
+        <div class="row">
+          <div class="title">Block 7 — CS 24–26</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">Second Red Scare</span>
+          <span class="chip">McCarthyism</span>
+          <span class="chip">Cold War conflicts</span>
+        </div>
+        <p class="desc">Second Red Scare & McCarthyism • Cold War conflicts & diplomacy</p>
+        <div class="meta">File: blocks/block07_cs24-26.html</div>
+      </a>
+
+      <a class="card" href="blocks/block08_cs27-28.html">
+        <div class="row">
+          <div class="title">Block 8 — CS 27–28</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">Postwar prosperity</span>
+          <span class="chip">Civil Rights</span>
+          <span class="chip">Social change</span>
+        </div>
+        <p class="desc">Postwar Prosperity & Social Change • Movements for Equality & Civil Rights</p>
+        <div class="meta">File: blocks/block08_cs27-28.html</div>
+      </a>
+
+      <a class="card" href="blocks/block09_cs29-30.html">
+        <div class="row">
+          <div class="title">Block 9 — CS 29–30</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">Science/Tech</span>
+          <span class="chip">Suburbs</span>
+          <span class="chip">Sun Belt</span>
+          <span class="chip">Immigration 1965</span>
+        </div>
+        <p class="desc">Science & Technology Changes • Suburbs, Sun Belt, & Immigration (1965)</p>
+        <div class="meta">File: blocks/block09_cs29-30.html</div>
+      </a>
+
+      <a class="card" href="blocks/block10_cs31-33.html">
+        <div class="row">
+          <div class="title">Block 10 — CS 31–33</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">Post–Cold War</span>
+          <span class="chip">Globalization</span>
+          <span class="chip">Contemporary shifts</span>
+        </div>
+        <p class="desc">Post–Cold War Foreign Policy • Globalization & Economic Change • Contemporary Social & Technological Shifts</p>
+        <div class="meta">File: blocks/block10_cs31-33.html</div>
+      </a>
+
+      <a class="card" href="blocks/block11-cs4-5-founding.html">
+        <div class="row">
+          <div class="title">Block 11 — CS 4–5</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">Founding Documents</span>
+          <span class="chip">Declaration</span>
+          <span class="chip">Articles</span>
+          <span class="chip">Constitution</span>
+        </div>
+        <p class="desc">Founding Documents • Enlightenment ideas • Declaration of Independence • Articles of Confederation • Constitutional foundations.</p>
+        <div class="meta">File: blocks/block11-cs4-5-founding.html</div>
+      </a>
+
+      <a class="card" href="blocks/block12_cs06-07.html">
+        <div class="row">
+          <div class="title">Block 12 — CS 6–7</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">Early Republic</span>
+          <span class="chip">Constitution foundations</span>
+          <span class="chip">SCOTUS</span>
+        </div>
+        <p class="desc">Constitution Foundations • Early Republic & Supreme Court Decisions</p>
+        <div class="meta">File: blocks/block12_cs06-07.html</div>
+      </a>
+
+      <a class="card" href="blocks/block13_cs01-03.html">
+        <div class="row">
+          <div class="title">Block 13 — CS 1–3</div>
+          <div class="badge">LIVE</div>
+        </div>
+        <div class="chips">
+          <span class="chip">Colonial regions</span>
+          <span class="chip">British policies</span>
+          <span class="chip">Road to Revolution</span>
+        </div>
+        <p class="desc">Colonial Regions • British Policies & Conflict • Road to Revolution</p>
+        <div class="meta">File: blocks/block13_cs01-03.html</div>
+      </a>
+
+    </div>
+
+    <div class="note">
+      Tip: If a link shows <b>404</b>, the filename in this menu must match the repo file name exactly.<br/>
+      Also confirm the <code>blocks/</code> folder name matches case exactly (GitHub Pages is case-sensitive).
+    </div>
+
+  </main>
+</div>
+</body>
+</html>
