@@ -105,7 +105,9 @@
           <button id="btnDemo" class="secondary">Demo</button>
         </div>
       </div>
-      <div class="toast" style="margin-top:10px">Rules: hints only after a miss • accuracy reflects misses • must finish with 0 misses to earn ticket.</div>
+      <div class="toast" style="margin-top:10px">
+        Rules: <b>miss counts once per question</b> • <b>accuracy = first-try accuracy</b> • choices reshuffle after a miss • must finish with 0 misses to earn ticket.
+      </div>
     </section>
 
     <section id="screenGame" class="card hidden">
@@ -174,8 +176,6 @@ const QUESTIONS = shuffle([
     answer:"helping veterans attend college and buy homes",
     hint:{ why:"The GI Bill expanded education and homeownership, boosting growth.", keyPoints:["Education","Home loans","Middle class growth"] }
   },
-
-  /* ✅ REPLACEMENT (keeps CS27, avoids Block 9 suburb focus) */
   {
     cs:"CS27",
     prompt:"Which development best reflects rising standards of living during the postwar economic boom?",
@@ -188,8 +188,6 @@ const QUESTIONS = shuffle([
     answer:"More families could afford homes, cars, and household appliances",
     hint:{ why:"Higher wages and mass production increased access to consumer goods and improved living standards.", keyPoints:["Rising standard of living","Consumer goods"] }
   },
-
-  /* ✅ REPLACEMENT (keeps CS27, avoids Interstate/suburb commuting focus) */
   {
     cs:"CS27",
     prompt:"Which change most directly helped expand a consumer-based economy after WWII?",
@@ -202,7 +200,6 @@ const QUESTIONS = shuffle([
     answer:"Mass production and advertising promoted purchasing new goods",
     hint:{ why:"Businesses used mass production and advertising to encourage consumption of new products.", keyPoints:["Mass production","Advertising","Consumer culture"] }
   },
-
   {
     cs:"CS27",
     prompt:"Which is a major demographic change linked to the postwar era?",
@@ -231,8 +228,6 @@ const QUESTIONS = shuffle([
     answer:"More households bought labor-saving appliances",
     hint:{ why:"Appliances and consumer goods became more common in homes.", keyPoints:["Appliances","Standard of living"] }
   },
-
-  /* ✅ REPLACEMENT (keeps CS27, avoids Sun Belt/suburb migration focus) */
   {
     cs:"CS27",
     prompt:"Which statement best explains how the GI Bill contributed to long-term prosperity?",
@@ -245,7 +240,6 @@ const QUESTIONS = shuffle([
     answer:"It expanded education and job opportunities, strengthening the middle class",
     hint:{ why:"GI Bill benefits helped many veterans gain education and stable careers, supporting middle-class growth.", keyPoints:["Education access","Job opportunity","Middle class"] }
   },
-
   {
     cs:"CS27",
     prompt:"Which factor most directly helped expand the American middle class after WWII?",
@@ -253,8 +247,6 @@ const QUESTIONS = shuffle([
     answer:"Higher education access, stable jobs, and homeownership growth",
     hint:{ why:"Education + jobs + homes expanded middle-class stability.", keyPoints:["GI Bill","Jobs","Homes"] }
   },
-
-  /* ✅ REPLACEMENT (keeps CS27, avoids suburbanization/urban decline) */
   {
     cs:"CS27",
     prompt:"Which concern is most closely linked to the growth of consumerism in the postwar era?",
@@ -267,7 +259,6 @@ const QUESTIONS = shuffle([
     answer:"Increased emphasis on material goods and conformity in popular culture",
     hint:{ why:"Boom-era prosperity increased consumption and shaped cultural expectations about lifestyle and success.", keyPoints:["Materialism","Conformity","Consumer culture"] }
   },
-
   {
     cs:"CS27",
     prompt:"A historian says, “Postwar prosperity reshaped how Americans spent time and money.” Which evidence best supports this claim?",
@@ -406,7 +397,11 @@ const QUESTIONS = shuffle([
 ]);
 
 /* =========
-   ENGINE — includes your choice-shuffle fix
+   ENGINE — standardized to Block 7:
+   ✅ miss counts once per question (first-try logic)
+   ✅ accuracy = first-try accuracy
+   ✅ choices reshuffle after a miss
+   ✅ name + start/date + timer + hint-after-miss + auto-advance + perfect-run ticket
    ========= */
 const $ = (s)=>document.querySelector(s);
 const screens = { start: $("#screenStart"), game: $("#screenGame"), done: $("#screenDone") };
@@ -420,7 +415,11 @@ const qUI = {
 
 let state = {
   startedAt:null, timerId:null,
-  idx:0, misses:0, attempts:0,
+  idx:0,
+  firstTryAttempts:0,   // counts 1 per question when student first clicks an answer
+  misses:0,             // counts at most 1 per question (if first click was wrong)
+  hasAttemptedThisQ:false,
+  missedThisQ:false,
   qOrder:[]
 };
 
@@ -439,14 +438,13 @@ $("#btnCopy").addEventListener("click", async ()=>{
 });
 
 function calcAccuracy(){
-  if(state.attempts <= 0) return 100;
-  return Math.round(((state.attempts - state.misses) / state.attempts) * 100);
+  if(state.firstTryAttempts <= 0) return 100;
+  return Math.round(((state.firstTryAttempts - state.misses) / state.firstTryAttempts) * 100);
 }
 function updateAccuracy(){
   meta.acc.textContent = `${calcAccuracy()}%`;
 }
 
-/* ✅ Shuffle answer choices each render */
 function shuffledChoices(q){
   const arr = [...q.choices];
   for(let i=arr.length-1;i>0;i--){
@@ -454,6 +452,16 @@ function shuffledChoices(q){
     [arr[i],arr[j]] = [arr[j],arr[i]];
   }
   return arr;
+}
+
+function renderChoices(q){
+  qUI.choices.innerHTML = "";
+  shuffledChoices(q).forEach(choice=>{
+    const btn = document.createElement("button");
+    btn.textContent = choice;
+    btn.addEventListener("click", ()=>submit(choice));
+    qUI.choices.appendChild(btn);
+  });
 }
 
 function startGame(){
@@ -467,8 +475,10 @@ function startGame(){
 
   state.qOrder = shuffle([...QUESTIONS]);
   state.idx = 0;
+  state.firstTryAttempts = 0;
   state.misses = 0;
-  state.attempts = 0;
+  state.hasAttemptedThisQ = false;
+  state.missedThisQ = false;
 
   $("#qTotal").textContent = String(state.qOrder.length);
   updateAccuracy();
@@ -481,6 +491,9 @@ function startGame(){
 function renderQuestion(){
   const q = state.qOrder[state.idx];
   if(!q) return finish();
+
+  state.hasAttemptedThisQ = false;
+  state.missedThisQ = false;
 
   qUI.kicker.textContent = `${q.cs} • Question ${state.idx+1}`;
   qUI.text.textContent = q.prompt;
@@ -496,25 +509,24 @@ function renderQuestion(){
   qUI.hintText.textContent = "";
   qUI.hintSmall.textContent = "";
 
-  qUI.choices.innerHTML = "";
-  shuffledChoices(q).forEach(choice=>{
-    const btn = document.createElement("button");
-    btn.textContent = choice;
-    btn.addEventListener("click", ()=>submit(choice));
-    qUI.choices.appendChild(btn);
-  });
+  renderChoices(q);
 }
 
 function submit(choice){
   const q = state.qOrder[state.idx];
 
-  state.attempts++;
-  updateAccuracy();
+  // First-try accounting (counts once per question)
+  if(!state.hasAttemptedThisQ){
+    state.firstTryAttempts++;
+    state.hasAttemptedThisQ = true;
+    updateAccuracy();
+  }
 
   if(choice === q.answer){
     qUI.feedback.textContent = "Correct ✅";
     qUI.feedback.style.color = "var(--good)";
     flashButtons(choice, true);
+
     setTimeout(()=>{
       state.idx++;
       renderQuestion();
@@ -522,8 +534,12 @@ function submit(choice){
     return;
   }
 
-  state.misses++;
-  updateAccuracy();
+  // Miss counts once per question (only if the first try was wrong)
+  if(!state.missedThisQ){
+    state.misses++;
+    state.missedThisQ = true;
+    updateAccuracy();
+  }
 
   qUI.feedback.textContent = "Not yet ❌ Try again.";
   qUI.feedback.style.color = "var(--bad)";
@@ -534,6 +550,9 @@ function submit(choice){
   qUI.hintSmall.textContent = q.hint?.keyPoints?.length
     ? ("Key points: " + q.hint.keyPoints.join(" • "))
     : "";
+
+  // ✅ reshuffle choices after a miss
+  setTimeout(()=>renderChoices(q), 140);
 }
 
 function finish(){
@@ -556,10 +575,10 @@ Student: ${meta.name.textContent}
 Started: ${stamp(state.startedAt)}
 Ended:   ${stamp(endedAt)}
 Duration (sec): ${durationSec}
-Accuracy: ${accuracy}%
-Misses: ${state.misses}
+First-try Accuracy: ${accuracy}%
+First-try Misses: ${state.misses}
 
-RULE: To earn a submit ticket, you must complete the game with 0 misses (100% accuracy).`;
+RULE: To earn a submit ticket, you must complete the game with 0 misses (100% first-try accuracy).`;
     switchTo("done");
     return;
   }
@@ -576,9 +595,9 @@ RULE: To earn a submit ticket, you must complete the game with 0 misses (100% ac
     ended: stamp(endedAt),
     duration_seconds: durationSec,
     total_questions: state.qOrder.length,
-    total_attempts: state.attempts,
-    misses: state.misses,
-    accuracy_percent: 100
+    first_try_attempts: state.firstTryAttempts,
+    first_try_misses: state.misses,
+    first_try_accuracy_percent: 100
   };
 
   $("#logOut").textContent = JSON.stringify(ticket, null, 2);
