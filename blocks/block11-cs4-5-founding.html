@@ -80,7 +80,7 @@
   <header>
     <div class="title">
       <h1>American History — Block 11 Game (CS 4–5)</h1>
-      <div class="sub">Perfect run required for submit ticket • Hints only after a miss • Auto-advance on correct • Choices shuffle every question</div>
+      <div class="sub">Perfect run required for submit ticket • Hints only after a miss • Auto-advance on correct • Choices reshuffle after a miss</div>
     </div>
     <div class="meta">
       <div class="pill">Name: <b id="mName">—</b></div>
@@ -105,7 +105,9 @@
           <button id="btnDemo" class="secondary">Demo</button>
         </div>
       </div>
-      <div class="toast" style="margin-top:10px">Rule: you must finish with 0 misses (100%) to earn the submit ticket.</div>
+      <div class="toast" style="margin-top:10px">
+        Rules: hint only after a miss • <b>miss counts once per question</b> • choices reshuffle after miss • must finish with 0 missed questions to earn ticket.
+      </div>
     </section>
 
     <section id="screenGame" class="card hidden">
@@ -258,39 +260,39 @@ const QUESTIONS = [
     hint:{ why:"Its rights + education principles connect to later American civic foundations.", keyPoints:["Rights language","Education","Foundational influence"] }
   },
   { cs:"CS5", prompt:"Which scenario best shows the Northwest Ordinance’s emphasis on rule of law?",
-    choices:["Territory leaders must follow written rules for governance and rights protections","A governor can punish opponents without legal limits","Courts are optional and rarely used","Votes are canceled during peace"},
+    choices:["Territory leaders must follow written rules for governance and rights protections","A governor can punish opponents without legal limits","Courts are optional and rarely used","Votes are canceled during peace"],
     answer:"Territory leaders must follow written rules for governance and rights protections",
     hint:{ why:"The Ordinance sets a written framework: powers, limits, and rights.", keyPoints:["Written framework","Limits","Rights"] }
   },
   { cs:"CS5", prompt:"Which idea connects CS4 and CS5 most directly?",
-    choices:["Natural rights and the people’s role in creating legitimate government","The need for monarchy to stabilize society","The belief that rights are earned by wealth","The idea that education should be avoided"},
+    choices:["Natural rights and the people’s role in creating legitimate government","The need for monarchy to stabilize society","The belief that rights are earned by wealth","The idea that education should be avoided"],
     answer:"Natural rights and the people’s role in creating legitimate government",
     hint:{ why:"Both documents emphasize rights and the people’s role in shaping government foundations.", keyPoints:["Natural rights","People’s role","Legitimacy"] }
   },
   { cs:"CS5", prompt:"If a territory followed the Northwest Ordinance, what political outcome was most likely?",
-    choices:["Representative self-government develops before statehood","A king is crowned as territorial ruler","The territory becomes a foreign colony","Elections are permanently banned"},
+    choices:["Representative self-government develops before statehood","A king is crowned as territorial ruler","The territory becomes a foreign colony","Elections are permanently banned"],
     answer:"Representative self-government develops before statehood",
     hint:{ why:"The Ordinance allowed representative institutions as territories grew.", keyPoints:["Representative government","Steps to statehood"] }
   },
   { cs:"CS5", prompt:"Which statement best reflects why “setting up educational institutions” is important in CS5?",
-    choices:["Education supports informed citizenship and stable self-government","Education replaces elections","Education eliminates the need for laws","Education is mainly for military training"},
+    choices:["Education supports informed citizenship and stable self-government","Education replaces elections","Education eliminates the need for laws","Education is mainly for military training"],
     answer:"Education supports informed citizenship and stable self-government",
     hint:{ why:"It ties education to effective governance and civic responsibility.", keyPoints:["Informed citizens","Self-government"] }
   },
   { cs:"CS5", prompt:"Which is the best example of the Northwest Ordinance’s long-term impact?",
-    choices:["It created a model used as the U.S. expanded westward","It ended all conflicts with American Indians","It caused the Great Depression","It created NATO"},
+    choices:["It created a model used as the U.S. expanded westward","It ended all conflicts with American Indians","It caused the Great Depression","It created NATO"],
     answer:"It created a model used as the U.S. expanded westward",
     hint:{ why:"The territorial/statehood model became a precedent as the U.S. grew.", keyPoints:["Precedent","Expansion"] }
   },
   { cs:"CS5", prompt:"A student says: “The Northwest Ordinance is only about land.” Which is the best correction?",
-    choices:["It also establishes rights protections, education, and a framework for government and statehood","It is mainly about factory rules","It only describes trade tariffs","It bans public participation"},
+    choices:["It also establishes rights protections, education, and a framework for government and statehood","It is mainly about factory rules","It only describes trade tariffs","It bans public participation"],
     answer:"It also establishes rights protections, education, and a framework for government and statehood",
     hint:{ why:"It’s governance + rights + education + statehood rules, not just land.", keyPoints:["Rights","Education","Government framework"] }
   }
 ];
 
 /* =========
-   ENGINE
+   ENGINE — FIRST-TRY ACCURACY STANDARD (Block 7 style)
    ========= */
 const $ = (s)=>document.querySelector(s);
 const screens = { start: $("#screenStart"), game: $("#screenGame"), done: $("#screenDone") };
@@ -304,7 +306,11 @@ const qUI = {
 
 let state = {
   startedAt:null, timerId:null,
-  idx:0, misses:0, attempts:0,
+  idx:0,
+  questionsCompleted:0,
+  correctFirst:0,
+  misses:0,                 // counts ONCE per question
+  missedThisQuestion:false,
   qOrder:[]
 };
 
@@ -322,16 +328,14 @@ $("#btnCopy").addEventListener("click", async ()=>{
   }
 });
 
-// ===== Accuracy (misses count even if corrected later)
 function calcAccuracy(){
-  if(state.attempts <= 0) return 100;
-  return Math.round(((state.attempts - state.misses) / state.attempts) * 100);
+  if(state.questionsCompleted <= 0) return 100;
+  return Math.round((state.correctFirst / state.questionsCompleted) * 100);
 }
 function updateAccuracy(){
   meta.acc.textContent = `${calcAccuracy()}%`;
 }
 
-// ===== Choice shuffle (your required structure)
 function shuffledChoices(q){
   const arr = [...q.choices];
   for(let i=arr.length-1;i>0;i--){
@@ -350,10 +354,12 @@ function startGame(){
   meta.start.textContent = stamp(state.startedAt);
   meta.time.textContent = "00:00";
 
-  state.qOrder = shuffle([...QUESTIONS]); // shuffle question order on load
+  state.qOrder = shuffle([...QUESTIONS]);
   state.idx = 0;
+  state.questionsCompleted = 0;
+  state.correctFirst = 0;
   state.misses = 0;
-  state.attempts = 0;
+  state.missedThisQuestion = false;
 
   $("#qTotal").textContent = String(state.qOrder.length);
   updateAccuracy();
@@ -366,6 +372,8 @@ function startGame(){
 function renderQuestion(){
   const q = state.qOrder[state.idx];
   if(!q) return finish();
+
+  state.missedThisQuestion = false;
 
   qUI.kicker.textContent = `${q.cs} • Question ${state.idx+1}`;
   qUI.text.textContent = q.prompt;
@@ -381,6 +389,10 @@ function renderQuestion(){
   qUI.hintText.textContent = "";
   qUI.hintSmall.textContent = "";
 
+  drawChoices(q);
+}
+
+function drawChoices(q){
   qUI.choices.innerHTML = "";
   shuffledChoices(q).forEach(choice=>{
     const btn = document.createElement("button");
@@ -392,13 +404,16 @@ function renderQuestion(){
 
 function submit(choice){
   const q = state.qOrder[state.idx];
-  state.attempts++;
-  updateAccuracy();
 
   if(choice === q.answer){
+    state.questionsCompleted++;
+    if(!state.missedThisQuestion) state.correctFirst++;
+    updateAccuracy();
+
     qUI.feedback.textContent = "Correct ✅";
     qUI.feedback.style.color = "var(--good)";
     flashButtons(choice, true);
+
     setTimeout(()=>{
       state.idx++;
       renderQuestion();
@@ -406,8 +421,11 @@ function submit(choice){
     return;
   }
 
-  state.misses++;
-  updateAccuracy();
+  if(!state.missedThisQuestion){
+    state.misses++;
+    state.missedThisQuestion = true;
+    updateAccuracy();
+  }
 
   qUI.feedback.textContent = "Not yet ❌ Try again.";
   qUI.feedback.style.color = "var(--bad)";
@@ -418,6 +436,9 @@ function submit(choice){
   qUI.hintSmall.textContent = q.hint?.keyPoints?.length
     ? ("Key points: " + q.hint.keyPoints.join(" • "))
     : "";
+
+  // ✅ reshuffle choices after a miss (and after any wrong click)
+  drawChoices(q);
 }
 
 function finish(){
@@ -430,7 +451,7 @@ function finish(){
 
   if(state.misses > 0){
     $("#doneTitle").textContent = "Not Passed ❌";
-    $("#doneMsg").textContent = "You finished, but this attempt had misses. Retake for a perfect run to earn the submit ticket.";
+    $("#doneMsg").textContent = "You finished, but this attempt had missed questions. Retake for a perfect run to earn the submit ticket.";
     $("#btnCopy").style.display = "none";
 
     $("#logOut").textContent =
@@ -440,16 +461,16 @@ Student: ${meta.name.textContent}
 Started: ${stamp(state.startedAt)}
 Ended:   ${stamp(endedAt)}
 Duration (sec): ${durationSec}
-Accuracy: ${accuracy}%
-Misses: ${state.misses}
+First-try Accuracy: ${accuracy}%
+Missed Questions: ${state.misses}
 
-RULE: To earn a submit ticket, you must complete the game with 0 misses (100% accuracy).`;
+RULE: To earn a submit ticket, you must complete the game with 0 missed questions (100% first-try accuracy).`;
     switchTo("done");
     return;
   }
 
   $("#doneTitle").textContent = "Complete ✅";
-  $("#doneMsg").textContent = "Perfect run achieved (0 misses). Copy your submit ticket.";
+  $("#doneMsg").textContent = "Perfect run achieved (0 missed questions). Copy your submit ticket.";
   $("#btnCopy").style.display = "inline-flex";
 
   const ticket = {
@@ -460,9 +481,9 @@ RULE: To earn a submit ticket, you must complete the game with 0 misses (100% ac
     ended: stamp(endedAt),
     duration_seconds: durationSec,
     total_questions: state.qOrder.length,
-    total_attempts: state.attempts,
-    misses: state.misses,
-    accuracy_percent: 100
+    questions_completed: state.questionsCompleted,
+    missed_questions: state.misses,
+    first_try_accuracy_percent: 100
   };
 
   $("#logOut").textContent = JSON.stringify(ticket, null, 2);
