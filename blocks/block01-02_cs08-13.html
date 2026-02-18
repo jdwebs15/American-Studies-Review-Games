@@ -157,9 +157,6 @@
    QUESTIONS — Block 1–2 (CS 8–13)
    ========= */
 const QUESTIONS = shuffle([
-  /* =========================
-     CS 8 — Industrialization transforms economy/society
-     ========================= */
   {
     cs:"CS8",
     prompt:"Which change best shows how industrialization shifted the U.S. economy in the late 1800s?",
@@ -211,9 +208,6 @@ const QUESTIONS = shuffle([
     hint:{ why:"Industrial expansion increased demand for workers in cities.", keyPoints:["Labor demand","Factory jobs"] }
   },
 
-  /* =========================
-     CS 9 — Labor organizations and conflict
-     ========================= */
   {
     cs:"CS9",
     prompt:"Which pairing is most accurate about labor unions during industrialization?",
@@ -265,9 +259,6 @@ const QUESTIONS = shuffle([
     hint:{ why:"Dangerous work and poor conditions pushed workers to organize.", keyPoints:["Safety hazards","Union growth"] }
   },
 
-  /* =========================
-     CS 10 — Immigration, internal migration, and urbanization
-     ========================= */
   {
     cs:"CS10",
     prompt:"Which statement best explains one major effect of mass immigration around 1900?",
@@ -319,9 +310,6 @@ const QUESTIONS = shuffle([
     hint:{ why:"Overcrowding + poor sewage/water systems increased disease spread.", keyPoints:["Sanitation","Overcrowding","Disease"] }
   },
 
-  /* =========================
-     CS 11 — Westward expansion, conflict, reservation/assimilation
-     ========================= */
   {
     cs:"CS11",
     prompt:"Which U.S. policy/action is most directly tied to reinforcing the reservation system and assimilation pressure?",
@@ -373,9 +361,6 @@ const QUESTIONS = shuffle([
     hint:{ why:"Expansion increased competition and treaty violations.", keyPoints:["Settlement","Treaty violations","Resource competition"] }
   },
 
-  /* =========================
-     CS 12 — Post-Reconstruction, Jim Crow, institutionalized racism
-     ========================= */
   {
     cs:"CS12",
     prompt:"Which combination best reflects how racism was institutionalized after Reconstruction?",
@@ -432,9 +417,6 @@ const QUESTIONS = shuffle([
     hint:{ why:"With less federal enforcement, many Southern states restricted rights and enforced segregation.", keyPoints:["End of Reconstruction","State control","Segregation"] }
   },
 
-  /* =========================
-     CS 13 — Progressive Era reforms
-     ========================= */
   {
     cs:"CS13",
     prompt:"Which reform is most clearly Progressive and aimed at consumer protection?",
@@ -456,7 +438,6 @@ const QUESTIONS = shuffle([
   }
 ]);
 
-
 /* =========
    ENGINE
    ========= */
@@ -472,8 +453,12 @@ const qUI = {
 
 let state = {
   startedAt:null, timerId:null,
-  idx:0, misses:0, attempts:0,
-  qOrder:[], perQMissed:new Set()
+  idx:0,                 // current question index
+  misses:0,              // number of questions missed at least once
+  attempts:0,            // total clicks (kept for ticket/reporting)
+  correctFirstTry:0,     // key metric
+  qOrder:[],
+  perQMissed:new Set()   // question indexes that were missed at least once
 };
 
 $("#btnDemo").addEventListener("click", ()=>{ $("#name").value="Demo Student"; $("#name").focus(); });
@@ -490,12 +475,14 @@ $("#btnCopy").addEventListener("click", async ()=>{
   }
 });
 
-function calcAccuracy(){
-  if(state.attempts <= 0) return 100;
-  return Math.round(((state.attempts - state.misses) / state.attempts) * 100);
+function calcAccuracy(completedCount){
+  // First-try accuracy = (questions correct on first try) / (questions completed)
+  const completed = (typeof completedCount === "number") ? completedCount : state.idx;
+  if(completed <= 0) return 100;
+  return Math.round((state.correctFirstTry / completed) * 100);
 }
-function updateAccuracy(){
-  meta.acc.textContent = `${calcAccuracy()}%`;
+function updateAccuracy(completedOverride){
+  meta.acc.textContent = `${calcAccuracy(completedOverride)}%`;
 }
 
 function startGame(){
@@ -511,26 +498,36 @@ function startGame(){
   state.idx = 0;
   state.misses = 0;
   state.attempts = 0;
+  state.correctFirstTry = 0;
   state.perQMissed = new Set();
 
   $("#qTotal").textContent = String(state.qOrder.length);
-  updateAccuracy();
+  updateAccuracy(0);
 
   switchTo("game");
   startTimer();
   renderQuestion();
 }
 
- function shuffledChoices(q){
+function shuffledChoices(q){
   const arr = [...q.choices];
-  // Fisher–Yates shuffle
   for(let i=arr.length-1;i>0;i--){
     const j = Math.floor(Math.random()*(i+1));
     [arr[i],arr[j]] = [arr[j],arr[i]];
   }
   return arr;
 }
- 
+
+function renderChoices(q){
+  qUI.choices.innerHTML = "";
+  shuffledChoices(q).forEach(choice=>{
+    const btn = document.createElement("button");
+    btn.textContent = choice;
+    btn.addEventListener("click", ()=>submit(choice));
+    qUI.choices.appendChild(btn);
+  });
+}
+
 function renderQuestion(){
   const q = state.qOrder[state.idx];
   if(!q) return finish();
@@ -549,24 +546,29 @@ function renderQuestion(){
   qUI.hintText.textContent = "";
   qUI.hintSmall.textContent = "";
 
-  qUI.choices.innerHTML = "";
-  shuffledChoices(q).forEach(choice=>{
-    const btn = document.createElement("button");
-    btn.textContent = choice;
-    btn.addEventListener("click", ()=>submit(choice));
-    qUI.choices.appendChild(btn);
-  });
+  renderChoices(q);
+  updateAccuracy(state.idx);
 }
 
 function submit(choice){
   const q = state.qOrder[state.idx];
   state.attempts++;
-  updateAccuracy();
 
   if(choice === q.answer){
+    const wasMissed = state.perQMissed.has(state.idx);
+
+    // if NOT missed before, it was correct on first try
+    if(!wasMissed){
+      state.correctFirstTry++;
+    }
+
+    // update accuracy as if this question is now completed
+    updateAccuracy(state.idx + 1);
+
     qUI.feedback.textContent = "Correct ✅";
     qUI.feedback.style.color = "var(--good)";
     flashButtons(choice, true);
+
     setTimeout(()=>{
       state.idx++;
       renderQuestion();
@@ -574,9 +576,12 @@ function submit(choice){
     return;
   }
 
-  state.misses++;
-  updateAccuracy();
-  state.perQMissed.add(state.idx);
+  // WRONG
+  // Count a miss only once per question (miss = not-first-try)
+  if(!state.perQMissed.has(state.idx)){
+    state.perQMissed.add(state.idx);
+    state.misses++;
+  }
 
   qUI.feedback.textContent = "Not yet ❌ Try again.";
   qUI.feedback.style.color = "var(--bad)";
@@ -587,6 +592,12 @@ function submit(choice){
   qUI.hintSmall.textContent = q.hint?.keyPoints?.length
     ? ("Key points: " + q.hint.keyPoints.join(" • "))
     : "";
+
+  // Re-shuffle choices after a miss to avoid a “locked position” pattern
+  renderChoices(q);
+
+  // accuracy display remains based on completed questions (state.idx)
+  updateAccuracy(state.idx);
 }
 
 function finish(){
@@ -595,7 +606,8 @@ function finish(){
 
   const endedAt = new Date();
   const durationSec = Math.floor((endedAt - state.startedAt)/1000);
-  const accuracy = calcAccuracy();
+
+  const finalAcc = Math.round((state.correctFirstTry / state.qOrder.length) * 100);
 
   if(state.misses > 0){
     $("#doneTitle").textContent = "Not Passed ❌";
@@ -609,10 +621,10 @@ Student: ${meta.name.textContent}
 Started: ${stamp(state.startedAt)}
 Ended:   ${stamp(endedAt)}
 Duration (sec): ${durationSec}
-Accuracy: ${accuracy}%
-Misses: ${state.misses}
+First-try Accuracy: ${finalAcc}%
+Questions missed (not first try): ${state.misses}
 
-RULE: To earn a submit ticket, you must complete the game with 0 misses (100% accuracy).`;
+RULE: To earn a submit ticket, you must complete the game with 0 misses (100% first-try accuracy).`;
     switchTo("done");
     return;
   }
@@ -629,8 +641,9 @@ RULE: To earn a submit ticket, you must complete the game with 0 misses (100% ac
     ended: stamp(endedAt),
     duration_seconds: durationSec,
     total_questions: state.qOrder.length,
-    total_attempts: state.attempts,
-    misses: state.misses,
+    total_click_attempts: state.attempts,
+    questions_missed: state.misses,
+    first_try_correct: state.correctFirstTry,
     accuracy_percent: 100
   };
 
