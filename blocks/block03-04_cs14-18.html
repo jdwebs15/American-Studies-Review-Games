@@ -373,8 +373,12 @@ const qUI = {
 
 let state = {
   startedAt:null, timerId:null,
-  idx:0, misses:0, attempts:0,
-  qOrder:[], perQMissed:new Set()
+  idx:0,
+  misses:0,              // questions missed at least once
+  attempts:0,            // total clicks
+  correctFirstTry:0,     // key metric
+  qOrder:[],
+  perQMissed:new Set()
 };
 
 $("#btnDemo").addEventListener("click", ()=>{ $("#name").value="Demo Student"; $("#name").focus(); });
@@ -391,12 +395,13 @@ $("#btnCopy").addEventListener("click", async ()=>{
   }
 });
 
-function calcAccuracy(){
-  if(state.attempts <= 0) return 100;
-  return Math.round(((state.attempts - state.misses) / state.attempts) * 100);
+function calcAccuracy(completedCount){
+  const completed = (typeof completedCount === "number") ? completedCount : state.idx;
+  if(completed <= 0) return 100;
+  return Math.round((state.correctFirstTry / completed) * 100);
 }
-function updateAccuracy(){
-  meta.acc.textContent = `${calcAccuracy()}%`;
+function updateAccuracy(completedOverride){
+  meta.acc.textContent = `${calcAccuracy(completedOverride)}%`;
 }
 
 function startGame(){
@@ -412,24 +417,34 @@ function startGame(){
   state.idx = 0;
   state.misses = 0;
   state.attempts = 0;
+  state.correctFirstTry = 0;
   state.perQMissed = new Set();
 
   $("#qTotal").textContent = String(state.qOrder.length);
-  updateAccuracy();
+  updateAccuracy(0);
 
   switchTo("game");
   startTimer();
   renderQuestion();
 }
-  
+
 function shuffledChoices(q){
   const arr = [...q.choices];
-  // Fisher–Yates shuffle
   for(let i=arr.length-1;i>0;i--){
     const j = Math.floor(Math.random()*(i+1));
     [arr[i],arr[j]] = [arr[j],arr[i]];
   }
   return arr;
+}
+
+function renderChoices(q){
+  qUI.choices.innerHTML = "";
+  shuffledChoices(q).forEach(choice=>{
+    const btn = document.createElement("button");
+    btn.textContent = choice;
+    btn.addEventListener("click", ()=>submit(choice));
+    qUI.choices.appendChild(btn);
+  });
 }
 
 function renderQuestion(){
@@ -450,24 +465,26 @@ function renderQuestion(){
   qUI.hintText.textContent = "";
   qUI.hintSmall.textContent = "";
 
-  qUI.choices.innerHTML = "";
- shuffledChoices(q).forEach(choice=>{
-    const btn = document.createElement("button");
-    btn.textContent = choice;
-    btn.addEventListener("click", ()=>submit(choice));
-    qUI.choices.appendChild(btn);
-  });
+  renderChoices(q);
+  updateAccuracy(state.idx);
 }
 
 function submit(choice){
   const q = state.qOrder[state.idx];
   state.attempts++;
-  updateAccuracy();
 
   if(choice === q.answer){
+    const wasMissed = state.perQMissed.has(state.idx);
+    if(!wasMissed){
+      state.correctFirstTry++;
+    }
+
+    updateAccuracy(state.idx + 1);
+
     qUI.feedback.textContent = "Correct ✅";
     qUI.feedback.style.color = "var(--good)";
     flashButtons(choice, true);
+
     setTimeout(()=>{
       state.idx++;
       renderQuestion();
@@ -475,9 +492,11 @@ function submit(choice){
     return;
   }
 
-  state.misses++;
-  updateAccuracy();
-  state.perQMissed.add(state.idx);
+  // WRONG: count only once per question
+  if(!state.perQMissed.has(state.idx)){
+    state.perQMissed.add(state.idx);
+    state.misses++;
+  }
 
   qUI.feedback.textContent = "Not yet ❌ Try again.";
   qUI.feedback.style.color = "var(--bad)";
@@ -488,6 +507,11 @@ function submit(choice){
   qUI.hintSmall.textContent = q.hint?.keyPoints?.length
     ? ("Key points: " + q.hint.keyPoints.join(" • "))
     : "";
+
+  // re-shuffle after a miss to prevent "locked position" patterns
+  renderChoices(q);
+
+  updateAccuracy(state.idx);
 }
 
 function finish(){
@@ -496,7 +520,7 @@ function finish(){
 
   const endedAt = new Date();
   const durationSec = Math.floor((endedAt - state.startedAt)/1000);
-  const accuracy = calcAccuracy();
+  const finalAcc = Math.round((state.correctFirstTry / state.qOrder.length) * 100);
 
   if(state.misses > 0){
     $("#doneTitle").textContent = "Not Passed ❌";
@@ -510,10 +534,10 @@ Student: ${meta.name.textContent}
 Started: ${stamp(state.startedAt)}
 Ended:   ${stamp(endedAt)}
 Duration (sec): ${durationSec}
-Accuracy: ${accuracy}%
-Misses: ${state.misses}
+First-try Accuracy: ${finalAcc}%
+Questions missed (not first try): ${state.misses}
 
-RULE: To earn a submit ticket, you must complete the game with 0 misses (100% accuracy).`;
+RULE: To earn a submit ticket, you must complete the game with 0 misses (100% first-try accuracy).`;
     switchTo("done");
     return;
   }
@@ -530,8 +554,9 @@ RULE: To earn a submit ticket, you must complete the game with 0 misses (100% ac
     ended: stamp(endedAt),
     duration_seconds: durationSec,
     total_questions: state.qOrder.length,
-    total_attempts: state.attempts,
-    misses: state.misses,
+    total_click_attempts: state.attempts,
+    questions_missed: state.misses,
+    first_try_correct: state.correctFirstTry,
     accuracy_percent: 100
   };
 
