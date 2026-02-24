@@ -159,243 +159,293 @@
    QUESTIONS — Block 13 (CS 1–3)
    ========= */
 const QUESTIONS = [
-  // ----- CS1: Credibility of sources (primary/secondary) -----
-  {
-    cs:"CS1",
-    prompt:"A diary entry from 1912 describes a factory as “the best place on earth.” What is the MOST important credibility check first?",
-    choices:["Author’s perspective and possible motive","How long the diary is","Whether it is typed or handwritten","Whether the diary uses formal language"],
-    answer:"Author’s perspective and possible motive",
-    hint:{why:"Start by asking who wrote it, what they wanted, and what viewpoint they had.", keyPoints:["Perspective","Motive","Context"] }
-  },
-  {
-    cs:"CS1",
-    prompt:"Two sources disagree about an event. Which step best helps evaluate credibility?",
-    choices:["Compare both to other credible sources","Assume the longer source is correct","Pick the source that supports your opinion","Ignore both sources"],
-    answer:"Compare both to other credible sources",
-    hint:{why:"Agreement (or conflict) with other credible evidence is a key check.", keyPoints:["Corroboration","Multiple sources"] }
-  },
-  {
-    cs:"CS1",
-    prompt:"A website article about WWII includes no author name or credentials. Which credibility concern is MOST direct?",
-    choices:["Qualifications and reputation of the author","Sequence of events","Long-term causation","Correlation vs causation"],
-    answer:"Qualifications and reputation of the author",
-    hint:{why:"If you can’t identify the author and credentials, credibility is harder to verify.", keyPoints:["Author credentials","Reputation"] }
-  },
-  {
-    cs:"CS1",
-    prompt:"A source uses stereotypes to describe a group. Which credibility issue is this?",
-    choices:["Bias of the author","Agreement with other sources","Accuracy and consistency","Circumstances of publication"],
-    answer:"Bias of the author",
-    hint:{why:"Stereotypes are a strong sign of bias and can distort interpretation.", keyPoints:["Bias","Stereotypes"] }
-  },
-  {
-    cs:"CS1",
-    prompt:"A politician’s speech argues a policy was “universally supported,” but later claims it was “controversial.” What credibility check is best?",
-    choices:["Accuracy and consistency of arguments","Author’s handwriting","Length of the speech","Whether it is a primary source"],
-    answer:"Accuracy and consistency of arguments",
-    hint:{why:"Internal consistency matters—contradictions weaken credibility.", keyPoints:["Consistency","Contradictions"] }
-  },
-  {
-    cs:"CS1",
-    prompt:"A newspaper editorial from 1890 praises a company owned by the editor’s brother. Which credibility check applies MOST?",
-    choices:["Circumstances in which the author prepared the source","Agreement with other credible sources","Whether it is primary vs secondary","Correlation"],
-    answer:"Circumstances in which the author prepared the source",
-    hint:{why:"Conflicts of interest and context of creation affect credibility.", keyPoints:["Conflict of interest","Context"] }
-  },
-  {
-    cs:"CS1",
-    prompt:"Which statement BEST distinguishes a primary source from a secondary source?",
-    choices:["Primary is created at the time; secondary interprets later","Primary is always unbiased; secondary is always biased","Primary is always longer; secondary is shorter","Primary is online; secondary is in books"],
-    answer:"Primary is created at the time; secondary interprets later",
-    hint:{why:"Primary = direct evidence from the time; secondary = later analysis/interpretation.", keyPoints:["Primary vs secondary","Time of creation"] }
-  },
-  {
-    cs:"CS1",
-    prompt:"A textbook cites multiple historians and includes footnotes. Which credibility factor is MOST supported by this?",
-    choices:["Agreement with other credible sources","Stereotyping language","Author is an eyewitness","It must be primary evidence"],
-    answer:"Agreement with other credible sources",
-    hint:{why:"Citations and multiple references show corroboration and traceability.", keyPoints:["Citations","Corroboration"] }
-  },
-  {
-    cs:"CS1",
-    prompt:"A photo is used to prove a protest was violent, but the caption is missing. What is the BEST credibility step?",
-    choices:["Investigate the photo’s origin and context","Assume the photo proves violence","Reject all photos as evidence","Only trust modern sources"],
-    answer:"Investigate the photo’s origin and context",
-    hint:{why:"You need who/when/where/why and whether it was staged or cropped.", keyPoints:["Origin","Context","Purpose"] }
-  },
 
-  // ----- CS2: Thesis + evidence -----
-  {
-    cs:"CS2",
-    prompt:"Which thesis is strongest (arguable + specific)?",
-    choices:[
-      "Industrialization happened in America.",
-      "Industrialization changed everything.",
-      "Industrialization increased factory output but also intensified urban crowding and labor conflict.",
-      "History is important."
-    ],
-    answer:"Industrialization increased factory output but also intensified urban crowding and labor conflict.",
-    hint:{why:"A strong thesis is specific and makes a claim you can prove with evidence.", keyPoints:["Specific claim","Arguable","Evidence-ready"] }
-  },
-  {
-    cs:"CS2",
-    prompt:"A student says: “The New Deal ended the Great Depression.” What is the BEST historian move?",
-    choices:["Test the claim using evidence from multiple sources","Accept it because it’s common knowledge","Replace it with a list of events","Ignore counterevidence"],
-    answer:"Test the claim using evidence from multiple sources",
-    hint:{why:"Historians support/refute assertions using evidence and comparison.", keyPoints:["Support/refute","Multiple sources"] }
-  },
-  {
-    cs:"CS2",
-    prompt:"Which item is MOST clearly an example of evidence historians can use?",
-    choices:["An artifact from the period","A guess about what people felt","A modern meme","A rumor with no source"],
-    answer:"An artifact from the period",
-    hint:{why:"Artifacts are a recognized evidence type used to build explanations.", keyPoints:["Artifacts","Primary evidence"] }
-  },
-  {
-    cs:"CS2",
-    prompt:"A thesis claims: “Women’s roles expanded during WWII.” Which evidence BEST supports it?",
-    choices:["Employment records showing increased women workers","A modern opinion post","A random unsourced quote","A timeline with no documents"],
-    answer:"Employment records showing increased women workers",
-    hint:{why:"Records/data from the time directly support the claim.", keyPoints:["Direct evidence","Relevance"] }
-  },
-  {
-    cs:"CS2",
-    prompt:"Which action best shows a historian refining an explanation?",
-    choices:["Comparing conflicting eyewitness accounts and revising the claim","Keeping the same claim even if evidence disagrees","Using only one source to avoid confusion","Choosing evidence that matches feelings"],
-    answer:"Comparing conflicting eyewitness accounts and revising the claim",
-    hint:{why:"Historians revise interpretations when evidence requires it.", keyPoints:["Compare sources","Refine explanation"] }
-  },
-  {
-    cs:"CS2",
-    prompt:"A student writes a paragraph listing events but makes no claim. What is missing?",
-    choices:["A thesis that interprets significance","More adjectives","A longer timeline","A conclusion with feelings"],
-    answer:"A thesis that interprets significance",
-    hint:{why:"A thesis gives meaning and interpretation beyond a list.", keyPoints:["Interpretation","Significance"] }
-  },
-  {
-    cs:"CS2",
-    prompt:"Which is the BEST reason historians cite sources?",
-    choices:["So others can verify and trace evidence","To make writing look longer","To avoid thinking critically","To guarantee agreement"],
-    answer:"So others can verify and trace evidence",
-    hint:{why:"Citations let readers check evidence and strengthen credibility.", keyPoints:["Verification","Traceability"] }
-  },
-  {
-    cs:"CS2",
-    prompt:"A claim says: “The Great Migration changed northern culture.” Which evidence type BEST fits?",
-    choices:["Music/literature examples from the period","A single modern tweet","An unrelated map of Europe","A blank chart"],
-    answer:"Music/literature examples from the period",
-    hint:{why:"Cultural change is supported by period art, writing, music, and related records.", keyPoints:["Relevant evidence","Culture"] }
-  },
+/* =========================
+   CS1 — SOURCE CREDIBILITY
+   ========================= */
 
-  // ----- CS3: Cause/effect/sequence/correlation -----
-  {
-    cs:"CS3",
-    prompt:"Which best describes the difference between cause and effect?",
-    choices:["Cause leads to an outcome; effect is the outcome","Effect always happens first; cause happens later","Cause is opinion; effect is fact","They mean the same thing"],
-    answer:"Cause leads to an outcome; effect is the outcome",
-    hint:{why:"Cause = why it happened; effect = what resulted.", keyPoints:["Cause → effect","Outcome"] }
-  },
-  {
-    cs:"CS3",
-    prompt:"A timeline shows Event A happened before Event B. What can you conclude for sure?",
-    choices:["Sequence, not necessarily causation","B caused A","A and B are unrelated","Correlation proves cause"],
-    answer:"Sequence, not necessarily causation",
-    hint:{why:"Order matters, but you still need evidence to prove cause.", keyPoints:["Sequence","Causation requires evidence"] }
-  },
-  {
-    cs:"CS3",
-    prompt:"City population rises at the same time factory jobs increase. This is BEST described as:",
-    choices:["Correlation that may suggest a relationship","Proof that factories caused all city growth","Proof that cities caused factories","A random coincidence with no possible link"],
-    answer:"Correlation that may suggest a relationship",
-    hint:{why:"Correlation = move together; it can suggest but doesn’t prove cause.", keyPoints:["Correlation ≠ causation","Investigate evidence"] }
-  },
-  {
-    cs:"CS3",
-    prompt:"Which example shows multiple causation?",
-    choices:["The Great Depression resulted from several factors including credit use and speculation","A single storm caused a harvest to fail","A person moved for one reason only","One law caused every change"],
-    answer:"The Great Depression resulted from several factors including credit use and speculation",
-    hint:{why:"Multiple causation means more than one factor contributes to an event.", keyPoints:["Multiple factors","Complex causes"] }
-  },
-  {
-    cs:"CS3",
-    prompt:"Which is a long-term cause of a migration movement?",
-    choices:["Years of discriminatory laws and limited opportunities","A one-day snowstorm","A single newspaper headline","A short strike"],
-    answer:"Years of discriminatory laws and limited opportunities",
-    hint:{why:"Long-term causes build over time and set conditions.", keyPoints:["Long-term conditions","Structural factors"] }
-  },
-  {
-    cs:"CS3",
-    prompt:"Which is a short-term cause that could trigger migration?",
-    choices:["Immediate job openings in a new region","Centuries of cultural traditions","Long-standing climate patterns","A decades-long political ideology"],
-    answer:"Immediate job openings in a new region",
-    hint:{why:"Short-term causes are immediate triggers (like jobs, crises, events).", keyPoints:["Immediate trigger","Short-term factor"] }
-  },
-  {
-    cs:"CS3",
-    prompt:"A historian studies how one event led to another. This is MOST directly analysis of:",
-    choices:["Sequence and connection between events","Author reputation","Primary vs secondary","Bias only"],
-    answer:"Sequence and connection between events",
-    hint:{why:"Sequence asks how events connect across time.", keyPoints:["Sequence","Linkage"] }
-  },
-  {
-    cs:"CS3",
-    prompt:"Which statement best shows cause-and-effect reasoning?",
-    choices:[
-      "Because factories offered jobs, more people moved to cities, increasing crowding.",
-      "Cities are crowded and factories exist.",
-      "Factories are interesting.",
-      "Crowding happened at some point."
-    ],
-    answer:"Because factories offered jobs, more people moved to cities, increasing crowding.",
-    hint:{why:"It clearly states why (cause) and what happened (effect).", keyPoints:["Because…","Led to…"] }
-  },
-  {
-    cs:"CS3",
-    prompt:"Two events occur together: increased car ownership and new highways. A historian should FIRST:",
-    choices:["Check evidence to see whether one influenced the other","Assume highways caused cars","Assume cars caused highways","Ignore the connection"],
-    answer:"Check evidence to see whether one influenced the other",
-    hint:{why:"You test relationships with evidence, not assumption.", keyPoints:["Test with evidence","Avoid assumption"] }
-  },
-  {
-    cs:"CS3",
-    prompt:"Which scenario BEST reflects both long- and short-term causes?",
-    choices:[
-      "Long-term discrimination + short-term job demand both encourage a move",
-      "Only one law explains everything",
-      "Only the weather matters",
-      "Order doesn’t matter in history"
-    ],
-    answer:"Long-term discrimination + short-term job demand both encourage a move",
-    hint:{why:"Many events have conditions (long-term) and triggers (short-term).", keyPoints:["Long-term + short-term","Multiple causation"] }
-  },
-  {
-    cs:"CS3",
-    prompt:"A historian argues: “Event X caused Event Y,” but provides only that X happened before Y. What is missing?",
-    choices:["Evidence linking the events beyond sequence","A longer timeline","A secondary source only","A stereotype about people involved"],
-    answer:"Evidence linking the events beyond sequence",
-    hint:{why:"Sequence alone doesn’t prove causation.", keyPoints:["Need linkage evidence","Mechanism"] }
-  },
-  {
-    cs:"CS3",
-    prompt:"Which statement best distinguishes correlation from causation?",
-    choices:[
-      "Correlation is a relationship; causation is proof one event produced another.",
-      "Correlation means proven cause.",
-      "Causation means events happened together.",
-      "They are identical."
-    ],
-    answer:"Correlation is a relationship; causation is proof one event produced another.",
-    hint:{why:"Correlation suggests a connection; causation confirms cause with evidence.", keyPoints:["Suggest vs prove","Evidence required"] }
-  },
-  {
-    cs:"CS3",
-    prompt:"A historian compares causes across decades and identifies patterns. This is MOST closely analysis of:",
-    choices:["Long- and short-term causal relationships","Author handwriting","Primary vs secondary only","Opinion polling"],
-    answer:"Long- and short-term causal relationships",
-    hint:{why:"That’s exactly long/short-term causation analysis.", keyPoints:["Long-term","Short-term","Patterns"] }
-  }
+{
+  cs:"CS1",
+  prompt:"A historian finds a 1915 newspaper article praising a factory owner. The article was written by the owner's cousin. Which credibility check is MOST important?",
+  choices:[
+    "Circumstances in which the source was created",
+    "Sequence of events described",
+    "Whether the article is primary",
+    "Length of the article"
+  ],
+  answer:"Circumstances in which the source was created",
+  hint:{why:"Conflicts of interest affect reliability.", keyPoints:["Context","Conflict of interest"]}
+},
+
+{
+  cs:"CS1",
+  prompt:"Which of the following is NOT typically used to evaluate source credibility?",
+  choices:[
+    "Author’s qualifications",
+    "Agreement with other reliable sources",
+    "Use of stereotypes",
+    "Font size and formatting style"
+  ],
+  answer:"Font size and formatting style",
+  hint:{why:"Formatting does not determine reliability.", keyPoints:["Content > appearance"]}
+},
+
+{
+  cs:"CS1",
+  prompt:"A biased political cartoon is MOST useful for understanding:",
+  choices:[
+    "Public attitudes at the time",
+    "Exact statistical accuracy",
+    "Neutral reporting",
+    "Government spending totals"
+  ],
+  answer:"Public attitudes at the time",
+  hint:{why:"Biased sources still reveal perspective.", keyPoints:["Bias ≠ useless","Perspective evidence"]}
+},
+
+{
+  cs:"CS1",
+  prompt:"Two credible sources disagree. What is the historian’s BEST next step?",
+  choices:[
+    "Dismiss both sources",
+    "Compare them with additional independent evidence",
+    "Choose the more dramatic account",
+    "Accept the most recent one"
+  ],
+  answer:"Compare them with additional independent evidence",
+  hint:{why:"Corroboration strengthens interpretation.", keyPoints:["Multiple sources","Cross-check"]}
+},
+
+{
+  cs:"CS1",
+  prompt:"Which scenario MOST weakens a source’s reliability?",
+  choices:[
+    "It contradicts itself in two paragraphs",
+    "It includes citations",
+    "It was written during the event",
+    "It references primary accounts"
+  ],
+  answer:"It contradicts itself in two paragraphs",
+  hint:{why:"Internal inconsistency damages credibility.", keyPoints:["Consistency matters"]}
+},
+
+{
+  cs:"CS1",
+  prompt:"A website article about the Cold War lists no author and no sources. Which credibility factor is MOST concerning?",
+  choices:[
+    "Author qualifications",
+    "Correlation",
+    "Long-term causation",
+    "Historical sequence"
+  ],
+  answer:"Author qualifications",
+  hint:{why:"Unknown authorship weakens reliability.", keyPoints:["Credentials","Reputation"]}
+},
+
+{
+  cs:"CS1",
+  prompt:"A photograph shows a crowded street during a protest. What is the MOST important next step before using it as evidence?",
+  choices:[
+    "Investigate the photo’s origin and context",
+    "Assume it proves unrest",
+    "Ignore it because it is visual",
+    "Treat it as neutral"
+  ],
+  answer:"Investigate the photo’s origin and context",
+  hint:{why:"Context determines meaning.", keyPoints:["Origin","Purpose","Context"]}
+},
+
+{
+  cs:"CS1",
+  prompt:"Which BEST describes a secondary source?",
+  choices:[
+    "An interpretation written after the event",
+    "A diary written during the event",
+    "A government law",
+    "A photograph from the period"
+  ],
+  answer:"An interpretation written after the event",
+  hint:{why:"Secondary = later analysis.", keyPoints:["Primary vs secondary"]}
+},
+
+/* =========================
+   CS2 — THESIS & EVIDENCE
+   ========================= */
+
+{
+  cs:"CS2",
+  prompt:"Which statement is the strongest thesis?",
+  choices:[
+    "Urbanization happened in America.",
+    "Urbanization increased job opportunities but also created overcrowded living conditions.",
+    "Cities grew.",
+    "Factories were built."
+  ],
+  answer:"Urbanization increased job opportunities but also created overcrowded living conditions.",
+  hint:{why:"Specific, arguable, and evidence-ready.", keyPoints:["Interpretation","Specificity"]}
+},
+
+{
+  cs:"CS2",
+  prompt:"A student claims: “The New Deal solved all economic problems.” Which evidence would BEST refute this?",
+  choices:[
+    "Data showing continued unemployment in 1938",
+    "A speech praising FDR",
+    "A photo of a CCC camp",
+    "A textbook definition"
+  ],
+  answer:"Data showing continued unemployment in 1938",
+  hint:{why:"Strong refutation requires direct counter-evidence.", keyPoints:["Refute","Evidence-based"]}
+},
+
+{
+  cs:"CS2",
+  prompt:"Which action demonstrates refining a thesis?",
+  choices:[
+    "Revising it after comparing new evidence",
+    "Ignoring conflicting evidence",
+    "Using only one source",
+    "Choosing emotional language"
+  ],
+  answer:"Revising it after comparing new evidence",
+  hint:{why:"Historians adjust interpretation when evidence demands it.", keyPoints:["Revision","Comparison"]}
+},
+
+{
+  cs:"CS2",
+  prompt:"Which evidence would BEST support the claim that migration changed culture?",
+  choices:[
+    "Music and literature from the period",
+    "A blank map",
+    "A rumor",
+    "A weather report"
+  ],
+  answer:"Music and literature from the period",
+  hint:{why:"Cultural change appears in art and expression.", keyPoints:["Relevant evidence"]}
+},
+
+{
+  cs:"CS2",
+  prompt:"Which statement is NOT a characteristic of a strong thesis?",
+  choices:[
+    "It makes a clear claim",
+    "It interprets historical significance",
+    "It simply lists events",
+    "It can be supported with evidence"
+  ],
+  answer:"It simply lists events",
+  hint:{why:"A thesis must interpret, not list.", keyPoints:["Interpretation > list"]}
+},
+
+{
+  cs:"CS2",
+  prompt:"Why do historians cite sources?",
+  choices:[
+    "To allow others to verify their evidence",
+    "To make writing longer",
+    "To guarantee agreement",
+    "To avoid interpretation"
+  ],
+  answer:"To allow others to verify their evidence",
+  hint:{why:"Verification strengthens credibility.", keyPoints:["Traceability"]}
+},
+
+/* =========================
+   CS3 — CAUSE, EFFECT, CORRELATION
+   ========================= */
+
+{
+  cs:"CS3",
+  prompt:"Which scenario BEST represents multiple causation?",
+  choices:[
+    "Several economic and political factors contribute to a revolution",
+    "One law changes everything",
+    "One speech causes one protest",
+    "A snowstorm causes school closure"
+  ],
+  answer:"Several economic and political factors contribute to a revolution",
+  hint:{why:"Historical events rarely have one cause.", keyPoints:["Complexity"]}
+},
+
+{
+  cs:"CS3",
+  prompt:"Which is a long-term cause?",
+  choices:[
+    "Years of discriminatory policies",
+    "A one-day strike",
+    "A sudden storm",
+    "An isolated speech"
+  ],
+  answer:"Years of discriminatory policies",
+  hint:{why:"Long-term causes develop over time.", keyPoints:["Structural factors"]}
+},
+
+{
+  cs:"CS3",
+  prompt:"Which is a short-term cause?",
+  choices:[
+    "Immediate job opportunities",
+    "Generational poverty",
+    "Long-standing traditions",
+    "Decades of political tension"
+  ],
+  answer:"Immediate job opportunities",
+  hint:{why:"Short-term causes act as triggers.", keyPoints:["Trigger event"]}
+},
+
+{
+  cs:"CS3",
+  prompt:"Two events occur at the same time. What must a historian do before concluding one caused the other?",
+  choices:[
+    "Gather evidence linking the events",
+    "Assume causation",
+    "Ignore the pattern",
+    "Focus on formatting"
+  ],
+  answer:"Gather evidence linking the events",
+  hint:{why:"Correlation alone is not proof.", keyPoints:["Evidence needed"]}
+},
+
+{
+  cs:"CS3",
+  prompt:"Which statement BEST demonstrates cause-and-effect reasoning?",
+  choices:[
+    "Because factories offered jobs, more people moved to cities.",
+    "Factories existed.",
+    "Cities were crowded.",
+    "History happened."
+  ],
+  answer:"Because factories offered jobs, more people moved to cities.",
+  hint:{why:"It clearly links cause to effect.", keyPoints:["Because → effect"]}
+},
+
+{
+  cs:"CS3",
+  prompt:"An economic downturn leads to unemployment, which then leads to political unrest. This is an example of:",
+  choices:[
+    "A cause-and-effect chain",
+    "Correlation only",
+    "Bias analysis",
+    "Primary sourcing"
+  ],
+  answer:"A cause-and-effect chain",
+  hint:{why:"Effects can become new causes.", keyPoints:["Chain reaction"]}
+},
+
+{
+  cs:"CS3",
+  prompt:"Which BEST distinguishes correlation from causation?",
+  choices:[
+    "Correlation suggests a relationship; causation proves one event produced another.",
+    "They mean the same thing.",
+    "Correlation proves cause.",
+    "Causation means events happened together."
+  ],
+  answer:"Correlation suggests a relationship; causation proves one event produced another.",
+  hint:{why:"Proof requires evidence.", keyPoints:["Suggest vs prove"]}
+}
+
 ];
-
 /* =========
    ENGINE — FIRST-TRY ACCURACY (Block 7 / Block 12 style)
    ========= */
