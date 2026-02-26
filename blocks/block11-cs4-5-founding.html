@@ -157,35 +157,35 @@
 <script>
 /* =========
    QUESTIONS — Block 11 (CS 4–5)
-   CS4: Declaration of Independence
-   CS5: Northwest Ordinance
+   Updated to match test anchors:
+   ✅ Added explicit John Locke / natural rights item
    ========= */
 const QUESTIONS = [
-  // ===== CS4 — Declaration of Independence (13) =====
+  // ===== CS4 — Declaration of Independence (14) =====
   { cs:"CS4", prompt:"Which idea from the Declaration of Independence best supports the claim that government power comes from the people?",
     choices:["Consent of the governed","Mercantilism","Divine right of kings","Judicial review"],
     answer:"Consent of the governed",
-    hint:{ why:"The Declaration argues legitimate governments get power from the people’s permission.", keyPoints:["Consent","Legitimacy","Popular sovereignty"] }
+    hint:{ why:"Legitimate government gets its power from the people’s permission.", keyPoints:["Consent","Legitimacy","Popular sovereignty"] }
   },
   { cs:"CS4", prompt:"In the Declaration, what is the main purpose of government?",
     choices:["To secure people’s rights","To increase a king’s authority","To control all trade","To abolish elections"],
     answer:"To secure people’s rights",
-    hint:{ why:"The Declaration claims governments are instituted to protect (secure) rights.", keyPoints:["Rights protection","Social contract"] }
+    hint:{ why:"Governments are instituted to protect (secure) rights.", keyPoints:["Rights protection","Social contract"] }
   },
   { cs:"CS4", prompt:"Which set lists examples of “unalienable rights” emphasized in the Declaration?",
     choices:["Life, liberty, and the pursuit of happiness","Speech, press, and assembly","Trial by jury and habeas corpus","Tariffs, taxes, and trade"],
     answer:"Life, liberty, and the pursuit of happiness",
-    hint:{ why:"Those three are named directly as unalienable rights in the Declaration.", keyPoints:["Life","Liberty","Pursuit of happiness"] }
+    hint:{ why:"Those three are named directly in the Declaration.", keyPoints:["Life","Liberty","Pursuit of happiness"] }
   },
   { cs:"CS4", prompt:"According to the Declaration, when may people change or abolish a government?",
     choices:["When it becomes destructive of their rights","Whenever a new law is passed","Only after a war ends","Only if Parliament approves"],
     answer:"When it becomes destructive of their rights",
-    hint:{ why:"The Declaration says people may alter/abolish governments that threaten rights.", keyPoints:["Destructive of rights","Alter/abolish"] }
+    hint:{ why:"If government threatens rights, it can be altered or abolished.", keyPoints:["Destructive of rights","Alter/abolish"] }
   },
   { cs:"CS4", prompt:"A list of specific complaints against a ruler in the Declaration is best described as:",
     choices:["Grievances","Allotments","Embargoes","Vetoes"],
     answer:"Grievances",
-    hint:{ why:"Grievances are the detailed complaints used to justify independence.", keyPoints:["Complaints","Justification"] }
+    hint:{ why:"Grievances are detailed complaints used to justify independence.", keyPoints:["Complaints","Justification"] }
   },
   { cs:"CS4", prompt:"Which statement best matches the Declaration’s argument about equality?",
     choices:["People are created equal in rights, not necessarily in outcomes","Only landowners are equal under law","Equality depends on social class","Equality is granted by kings"],
@@ -200,32 +200,38 @@ const QUESTIONS = [
   { cs:"CS4", prompt:"If a government continues a “long train of abuses,” the Declaration suggests the people have a duty to:",
     choices:["Throw off that government and provide new guards for future security","Remain loyal to avoid conflict","Wait for foreign monarchs to intervene","End all trade with other nations"],
     answer:"Throw off that government and provide new guards for future security",
-    hint:{ why:"The Declaration frames resistance as justified when oppression becomes persistent.", keyPoints:["Long train of abuses","Justified resistance"] }
+    hint:{ why:"Persistent oppression justifies resistance and creating a new government.", keyPoints:["Long train of abuses","Justified resistance"] }
   },
   { cs:"CS4", prompt:"Which choice best describes the Declaration as a historical document?",
     choices:["A justification for independence using Enlightenment ideas about rights","A treaty ending the Civil War","A plan for industrial regulation","A law creating federal courts"],
     answer:"A justification for independence using Enlightenment ideas about rights",
-    hint:{ why:"It explains why independence is justified using natural rights and consent.", keyPoints:["Justification","Rights","Consent"] }
+    hint:{ why:"It defends independence using natural rights and consent.", keyPoints:["Justification","Rights","Consent"] }
   },
   { cs:"CS4", prompt:"A student claims: “The Declaration supports revolution for any small problem.” Which is the best correction?",
     choices:["It says people should be cautious and only act after repeated abuses threaten rights","It says people must revolt every election cycle","It says only the military can decide","It says rights can be suspended during peace"],
     answer:"It says people should be cautious and only act after repeated abuses threaten rights",
-    hint:{ why:"The Declaration warns people don’t change governments for light/transient causes.", keyPoints:["Caution","Repeated abuses"] }
+    hint:{ why:"The Declaration warns against changing governments for light or transient causes.", keyPoints:["Caution","Repeated abuses"] }
   },
   { cs:"CS4", prompt:"Which is the strongest example of the Declaration’s “consent of the governed” in action today?",
     choices:["Voting in elections to choose representatives","A king appointing lawmakers","A corporation setting laws","A judge writing new taxes"],
     answer:"Voting in elections to choose representatives",
-    hint:{ why:"Elections are a direct mechanism for giving or withholding consent in a republic.", keyPoints:["Elections","Representation","Consent"] }
+    hint:{ why:"Elections are a main mechanism for giving consent in a republic.", keyPoints:["Elections","Representation","Consent"] }
   },
   { cs:"CS4", prompt:"Which claim best represents the Declaration’s “social contract” idea?",
     choices:["People accept government authority in exchange for protection of rights","People surrender rights permanently to avoid conflict","Government controls speech to ensure order","Leaders rule because they are born to rule"],
     answer:"People accept government authority in exchange for protection of rights",
-    hint:{ why:"Social contract = authority is legitimate only if it protects rights.", keyPoints:["Contract","Rights protection"] }
+    hint:{ why:"Authority is legitimate only if government protects rights.", keyPoints:["Contract","Rights protection"] }
   },
   { cs:"CS4", prompt:"Which phrase best summarizes the Declaration’s core argument?",
     choices:["Natural rights + consent → legitimate government","Trade + tariffs → prosperity","Isolationism → peace","Assimilation → unity"],
     answer:"Natural rights + consent → legitimate government",
-    hint:{ why:"Those two ideas drive the Declaration’s logic about government legitimacy.", keyPoints:["Natural rights","Consent","Legitimacy"] }
+    hint:{ why:"Those ideas drive the logic of legitimate government.", keyPoints:["Natural rights","Consent","Legitimacy"] }
+  },
+  // ✅ New: explicit philosopher (Locke) like your test
+  { cs:"CS4", prompt:"Which Enlightenment thinker’s ideas most influenced the Declaration’s emphasis on natural rights?",
+    choices:["John Locke","Thomas Hobbes","Baron de Montesquieu","Voltaire"],
+    answer:"John Locke",
+    hint:{ why:"Locke argued people have natural rights and government must protect them.", keyPoints:["Natural rights","Government protects rights"] }
   },
 
   // ===== CS5 — Northwest Ordinance (12) =====
@@ -242,22 +248,22 @@ const QUESTIONS = [
   { cs:"CS5", prompt:"Which protection is most consistent with the Northwest Ordinance’s civil liberties tradition?",
     choices:["Religious freedom and legal protections for individuals","Only property owners have rights","Censorship of the press","Punishment without trial"],
     answer:"Religious freedom and legal protections for individuals",
-    hint:{ why:"The Ordinance includes rights protections (religion, legal safeguards).", keyPoints:["Religious liberty","Due process traditions"] }
+    hint:{ why:"The Ordinance includes rights protections including religious liberty and legal safeguards.", keyPoints:["Religious liberty","Rule of law"] }
   },
   { cs:"CS5", prompt:"How did the Northwest Ordinance address slavery in the Northwest Territory?",
     choices:["It prohibited slavery in the territory","It required slavery in every new state","It ignored slavery entirely","It legalized slavery only in cities"],
     answer:"It prohibited slavery in the territory",
-    hint:{ why:"A key feature was banning slavery north of the Ohio River (in that territory).", keyPoints:["Prohibited slavery","Northwest Territory"] }
+    hint:{ why:"It banned slavery in the Northwest Territory.", keyPoints:["Prohibited slavery","Northwest Territory"] }
   },
   { cs:"CS5", prompt:"Which describes the Northwest Ordinance’s approach to statehood?",
-    choices:["Territories could become states and join on equal footing after meeting population/government steps","Territories remained permanent colonies","Only the president could create states by decree","States could join only if they allowed slavery"],
-    answer:"Territories could become states and join on equal footing after meeting population/government steps",
-    hint:{ why:"It set stages to self-government and equal statehood.", keyPoints:["Stages","Self-government","Equal footing"] }
+    choices:["Territories could become states and join on equal footing after meeting steps","Territories remained permanent colonies","Only the president could create states by decree","States could join only if they allowed slavery"],
+    answer:"Territories could become states and join on equal footing after meeting steps",
+    hint:{ why:"It set stages toward self-government and equal statehood.", keyPoints:["Stages","Self-government","Equal footing"] }
   },
   { cs:"CS5", prompt:"A historian argues the Northwest Ordinance shaped later U.S. documents. Which evidence best supports this?",
     choices:["It included rights protections and education that echo later constitutional ideas","It created the Interstate Highway System","It legalized segregation nationwide","It ended political parties"],
     answer:"It included rights protections and education that echo later constitutional ideas",
-    hint:{ why:"Its rights + education principles connect to later American civic foundations.", keyPoints:["Rights language","Education","Foundational influence"] }
+    hint:{ why:"Rights + education principles connect to later civic foundations.", keyPoints:["Rights language","Education","Foundational influence"] }
   },
   { cs:"CS5", prompt:"Which scenario best shows the Northwest Ordinance’s emphasis on rule of law?",
     choices:["Territory leaders must follow written rules for governance and rights protections","A governor can punish opponents without legal limits","Courts are optional and rarely used","Votes are canceled during peace"],
@@ -267,7 +273,7 @@ const QUESTIONS = [
   { cs:"CS5", prompt:"Which idea connects CS4 and CS5 most directly?",
     choices:["Natural rights and the people’s role in creating legitimate government","The need for monarchy to stabilize society","The belief that rights are earned by wealth","The idea that education should be avoided"],
     answer:"Natural rights and the people’s role in creating legitimate government",
-    hint:{ why:"Both documents emphasize rights and the people’s role in shaping government foundations.", keyPoints:["Natural rights","People’s role","Legitimacy"] }
+    hint:{ why:"Both emphasize rights and the people’s role in shaping government foundations.", keyPoints:["Natural rights","People’s role","Legitimacy"] }
   },
   { cs:"CS5", prompt:"If a territory followed the Northwest Ordinance, what political outcome was most likely?",
     choices:["Representative self-government develops before statehood","A king is crowned as territorial ruler","The territory becomes a foreign colony","Elections are permanently banned"],
@@ -277,7 +283,7 @@ const QUESTIONS = [
   { cs:"CS5", prompt:"Which statement best reflects why “setting up educational institutions” is important in CS5?",
     choices:["Education supports informed citizenship and stable self-government","Education replaces elections","Education eliminates the need for laws","Education is mainly for military training"],
     answer:"Education supports informed citizenship and stable self-government",
-    hint:{ why:"It ties education to effective governance and civic responsibility.", keyPoints:["Informed citizens","Self-government"] }
+    hint:{ why:"Education supports effective self-government.", keyPoints:["Informed citizens","Self-government"] }
   },
   { cs:"CS5", prompt:"Which is the best example of the Northwest Ordinance’s long-term impact?",
     choices:["It created a model used as the U.S. expanded westward","It ended all conflicts with American Indians","It caused the Great Depression","It created NATO"],
@@ -287,12 +293,12 @@ const QUESTIONS = [
   { cs:"CS5", prompt:"A student says: “The Northwest Ordinance is only about land.” Which is the best correction?",
     choices:["It also establishes rights protections, education, and a framework for government and statehood","It is mainly about factory rules","It only describes trade tariffs","It bans public participation"],
     answer:"It also establishes rights protections, education, and a framework for government and statehood",
-    hint:{ why:"It’s governance + rights + education + statehood rules, not just land.", keyPoints:["Rights","Education","Government framework"] }
+    hint:{ why:"It’s governance + rights + education + statehood rules.", keyPoints:["Rights","Education","Government framework"] }
   }
 ];
 
 /* =========
-   ENGINE — FIRST-TRY ACCURACY STANDARD (Block 7 style)
+   ENGINE — FIRST-TRY ACCURACY STANDARD
    ========= */
 const $ = (s)=>document.querySelector(s);
 const screens = { start: $("#screenStart"), game: $("#screenGame"), done: $("#screenDone") };
@@ -309,7 +315,7 @@ let state = {
   idx:0,
   questionsCompleted:0,
   correctFirst:0,
-  misses:0,                 // counts ONCE per question
+  misses:0,
   missedThisQuestion:false,
   qOrder:[]
 };
@@ -332,9 +338,7 @@ function calcAccuracy(){
   if(state.questionsCompleted <= 0) return 100;
   return Math.round((state.correctFirst / state.questionsCompleted) * 100);
 }
-function updateAccuracy(){
-  meta.acc.textContent = `${calcAccuracy()}%`;
-}
+function updateAccuracy(){ meta.acc.textContent = `${calcAccuracy()}%`; }
 
 function shuffledChoices(q){
   const arr = [...q.choices];
@@ -414,10 +418,7 @@ function submit(choice){
     qUI.feedback.style.color = "var(--good)";
     flashButtons(choice, true);
 
-    setTimeout(()=>{
-      state.idx++;
-      renderQuestion();
-    }, 320);
+    setTimeout(()=>{ state.idx++; renderQuestion(); }, 320);
     return;
   }
 
@@ -433,12 +434,9 @@ function submit(choice){
 
   qUI.hintBox.style.display = "block";
   qUI.hintText.textContent = q.hint?.why || "Think back to the document’s key ideas.";
-  qUI.hintSmall.textContent = q.hint?.keyPoints?.length
-    ? ("Key points: " + q.hint.keyPoints.join(" • "))
-    : "";
+  qUI.hintSmall.textContent = q.hint?.keyPoints?.length ? ("Key points: " + q.hint.keyPoints.join(" • ")) : "";
 
-  // ✅ reshuffle choices after a miss (and after any wrong click)
-  drawChoices(q);
+  drawChoices(q); // reshuffle after a miss
 }
 
 function finish(){
@@ -502,9 +500,7 @@ function startTimer(){
     meta.time.textContent = fmtTime(s);
   }, 250);
 }
-function stopTimer(){
-  if(state.timerId){ clearInterval(state.timerId); state.timerId=null; }
-}
+function stopTimer(){ if(state.timerId){ clearInterval(state.timerId); state.timerId=null; } }
 
 function resetAll(){
   stopTimer();
