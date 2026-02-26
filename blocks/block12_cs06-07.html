@@ -171,9 +171,27 @@
 <script>
 /* =========
    QUESTIONS — Block 12 (CS 6–7)
+   Updated to match test anchors:
+   ✅ Article I = representative government
+   ✅ Supremacy Clause
+   ✅ Article IV / Full Faith and Credit
+   ✅ Montesquieu / separation of powers
+   ✅ Explicit checks & balances naming
    ========= */
 const QUESTIONS = [
-  // -------- CS6 (14) --------
+  // -------- CS6 (16) --------
+  {
+    cs:"CS6",
+    prompt:"How does Article I of the U.S. Constitution reflect the framers’ commitment to representative government?",
+    choices:[
+      "It establishes a legislature whose members are elected to represent the people",
+      "It creates a monarchy to lead the nation",
+      "It requires all laws to be written by judges",
+      "It removes elections to ensure stability"
+    ],
+    answer:"It establishes a legislature whose members are elected to represent the people",
+    hint:{why:"Article I creates Congress and links it to elections/representation.", keyPoints:["Article I","Congress","Representation"]}
+  },
   {
     cs:"CS6",
     prompt:"Which feature best shows the Constitution strengthened the national government compared with a looser system?",
@@ -184,21 +202,47 @@ const QUESTIONS = [
       "It ended all state governments"
     ],
     answer:"It created three separate branches to carry out national responsibilities",
-    hint:{why:"CS6 emphasizes a stronger structure, including three branches.", keyPoints:["3 branches","Stronger national structure"]}
+    hint:{why:"A defined national structure (3 branches) strengthened national governance.", keyPoints:["3 branches","Stronger structure"]}
   },
   {
     cs:"CS6",
     prompt:"Which principle best describes how power is shared between the national government and the states?",
     choices:["Federalism","Judicial precedent","Mercantilism","Nativism"],
     answer:"Federalism",
-    hint:{why:"Federalism delineates the distribution of powers between levels of government.", keyPoints:["National vs state powers","Shared authority"]}
+    hint:{why:"Federalism divides powers between levels of government.", keyPoints:["National vs state powers","Shared authority"]}
   },
   {
     cs:"CS6",
-    prompt:"A student claims the Constitution is “flexible.” Which feature best supports that claim?",
-    choices:["The ability to amend the Constitution","The absence of any written rules","Lifetime elections for Congress","Only one branch of government"],
-    answer:"The ability to amend the Constitution",
-    hint:{why:"CS6 specifically includes the ability to amend the Constitution.", keyPoints:["Amendments","Adapt over time"]}
+    prompt:"Which two features were designed to prevent the concentration of power in one person? (Select two.)",
+    choices:["Separation of powers","Checks and balances","Executive privilege","Unitary government"],
+    answer:"Separation of powers",
+    hint:{why:"On tests, this is typically separation of powers + checks and balances working together.", keyPoints:["Separation of powers","Checks and balances"]}
+  },
+  {
+    cs:"CS6",
+    prompt:"Which principle ensures that no single branch of government becomes too powerful?",
+    choices:["Checks and balances","Judicial review","Popular sovereignty","Isolationism"],
+    answer:"Checks and balances",
+    hint:{why:"Each branch can limit (check) the others.", keyPoints:["Limits on branches","Prevent tyranny"]}
+  },
+  {
+    cs:"CS6",
+    prompt:"Which Enlightenment thinker’s ideas most influenced the Constitution’s separation of powers?",
+    choices:["Baron de Montesquieu","John Locke","Thomas Hobbes","Voltaire"],
+    answer:"Baron de Montesquieu",
+    hint:{why:"Montesquieu argued for separating power to prevent tyranny.", keyPoints:["Montesquieu","Separation of powers"]}
+  },
+  {
+    cs:"CS6",
+    prompt:"Which statement best explains what the Supremacy Clause does?",
+    choices:[
+      "It establishes that federal law is the supreme law of the land",
+      "It allows states to ignore federal laws",
+      "It gives states power over treaties",
+      "It makes local ordinances override the Constitution"
+    ],
+    answer:"It establishes that federal law is the supreme law of the land",
+    hint:{why:"Supremacy = federal Constitution/laws/treaties outrank state law.", keyPoints:["Supremacy Clause","Federal law highest"]}
   },
   {
     cs:"CS6",
@@ -210,31 +254,14 @@ const QUESTIONS = [
       "It requires citizens to serve in office"
     ],
     answer:"It ensures people have a role in electing representatives",
-    hint:{why:"CS6 says people have a role in electing government representatives.", keyPoints:["Elections","Representation"]}
+    hint:{why:"Representation and elections connect people to government.", keyPoints:["Elections","Representation"]}
   },
   {
     cs:"CS6",
-    prompt:"Which idea is most aligned with “consent of the people”?",
-    choices:[
-      "Government authority comes from the governed",
-      "Government authority comes from inherited status",
-      "Government authority comes from foreign approval",
-      "Government authority comes from military leadership"
-    ],
-    answer:"Government authority comes from the governed",
-    hint:{why:"Consent of the people = legitimacy from the governed.", keyPoints:["Popular sovereignty","Legitimacy"]}
-  },
-  {
-    cs:"CS6",
-    prompt:"Which pair is the best example of Congress being able to address national issues under the Constitution?",
-    choices:[
-      "Levy taxes and raise armies",
-      "Approve royal titles and control churches",
-      "End elections and censor the press",
-      "Ban state governments"
-    ],
-    answer:"Levy taxes and raise armies",
-    hint:{why:"CS6 lists powers like taxes and raising armies as ways to address issues facing the nation.", keyPoints:["Taxes","Armies","National needs"]}
+    prompt:"A student claims the Constitution is “flexible.” Which feature best supports that claim?",
+    choices:["The ability to amend the Constitution","The absence of any written rules","Lifetime elections for Congress","Only one branch of government"],
+    answer:"The ability to amend the Constitution",
+    hint:{why:"Amendments allow change over time.", keyPoints:["Amendments","Adapt"]}
   },
   {
     cs:"CS6",
@@ -246,43 +273,26 @@ const QUESTIONS = [
       "Replacing courts with military tribunals"
     ],
     answer:"Setting boundaries so government power does not become unlimited",
-    hint:{why:"CS6 emphasizes limited government to protect liberties.", keyPoints:["Limited government","Protect liberties"]}
+    hint:{why:"Limited government protects liberties by restricting power.", keyPoints:["Limited government","Rights protection"]}
   },
   {
     cs:"CS6",
-    prompt:"In a federal system, which action best shows the national government using constitutional power to address a nationwide issue?",
-    choices:[
-      "Passing national legislation that applies across states",
-      "A city council setting its own trash schedule",
-      "A state choosing a school mascot",
-      "A county running local elections only"
-    ],
-    answer:"Passing national legislation that applies across states",
-    hint:{why:"CS6 includes the ability to pass legislation at the national level to address issues.", keyPoints:["National legislation","Nationwide problems"]}
+    prompt:"Which clause in Article IV helps states work together by recognizing public acts and legal decisions across state lines?",
+    choices:["Full Faith and Credit Clause","Necessary and Proper Clause","Commerce Clause","Establishment Clause"],
+    answer:"Full Faith and Credit Clause",
+    hint:{why:"It supports national unity by requiring recognition of other states’ acts/records.", keyPoints:["Article IV","Full Faith and Credit"]}
   },
   {
     cs:"CS6",
-    prompt:"Which statement best explains why having three branches helps protect rights?",
+    prompt:"Cause → Effect: If the national government can levy taxes under the Constitution, the most likely effect is that it can:",
     choices:[
-      "Dividing power makes it harder for one group to dominate",
-      "It guarantees every law will be popular",
-      "It removes conflict by eliminating debate",
-      "It ensures states cannot govern themselves"
+      "Fund national programs and responsibilities",
+      "Eliminate all state governments",
+      "End the court system",
+      "Ban elections in the states"
     ],
-    answer:"Dividing power makes it harder for one group to dominate",
-    hint:{why:"Three branches distribute power to prevent abuse.", keyPoints:["Power divided","Prevents domination"]}
-  },
-  {
-    cs:"CS6",
-    prompt:"Cause → Effect: If the Constitution expands Congress’s ability to regulate commerce, the most likely effect is that:",
-    choices:[
-      "National trade rules can address disputes among states",
-      "States lose the ability to run elections",
-      "The Constitution can no longer be amended",
-      "Courts stop interpreting laws"
-    ],
-    answer:"National trade rules can address disputes among states",
-    hint:{why:"CS6 notes Congress can address issues via powers like regulating commerce.", keyPoints:["Commerce power","National solutions"]}
+    answer:"Fund national programs and responsibilities",
+    hint:{why:"Taxation provides revenue for national responsibilities.", keyPoints:["National taxation","Funding government"]}
   },
   {
     cs:"CS6",
@@ -294,7 +304,7 @@ const QUESTIONS = [
       "A president can rewrite elections unilaterally"
     ],
     answer:"A government must follow the Constitution and laws",
-    hint:{why:"Limited government means government power is restricted by law.", keyPoints:["Rule of law","Limits on power"]}
+    hint:{why:"Limited government = rule of law + restricted powers.", keyPoints:["Rule of law","Limits"]}
   },
   {
     cs:"CS6",
@@ -306,19 +316,7 @@ const QUESTIONS = [
       "Federalism means only the national government exists"
     ],
     answer:"Power divided between national and state governments can limit overreach",
-    hint:{why:"Federalism delineates powers; dividing power helps prevent concentration.", keyPoints:["Divide authority","Prevent overreach"]}
-  },
-  {
-    cs:"CS6",
-    prompt:"A historian argues the Constitution helped “define the relationship” between people and government. Which detail best supports this?",
-    choices:[
-      "It guarantees power comes from the consent of the people",
-      "It abolished representation in government",
-      "It required citizens to leave politics to elites",
-      "It banned civil liberties to maintain order"
-    ],
-    answer:"It guarantees power comes from the consent of the people",
-    hint:{why:"CS6 explicitly includes consent and the people’s role.", keyPoints:["Consent","People-government relationship"]}
+    hint:{why:"Dividing power can prevent one level from becoming too dominant.", keyPoints:["Division of power","Prevent overreach"]}
   },
   {
     cs:"CS6",
@@ -330,7 +328,14 @@ const QUESTIONS = [
       "The Constitution made rights optional"
     ],
     answer:"The Constitution created a stronger structure and limited government to protect liberties",
-    hint:{why:"This matches CS6: structure + limited government + rights protection.", keyPoints:["3 branches","Federalism","Limited government","Rights"]}
+    hint:{why:"CS6 emphasizes structure + limited government + liberties.", keyPoints:["Structure","Limited government","Liberties"]}
+  },
+  {
+    cs:"CS6",
+    prompt:"Which principle divides power among legislative, executive, and judicial branches to reduce the chance of tyranny?",
+    choices:["Separation of powers","Popular sovereignty","Judicial review","Unicameralism"],
+    answer:"Separation of powers",
+    hint:{why:"Separating powers reduces concentration of authority.", keyPoints:["3 branches","Prevent tyranny"]}
   },
 
   // -------- CS7 (14) --------
@@ -344,43 +349,55 @@ const QUESTIONS = [
       "Create the first political party platform"
     ],
     answer:"Convince people to support ratification of the U.S. Constitution",
-    hint:{why:"CS7: Federalists published essays to persuade support for ratification.", keyPoints:["Federalist Papers","Ratification support"]}
+    hint:{why:"They were persuasive essays supporting ratification.", keyPoints:["Federalist Papers","Ratification"]}
   },
   {
     cs:"CS7",
-    prompt:"Which argument is most associated with the Federalists?",
+    prompt:"Which statement reflects a key argument made by Federalists during ratification debates?",
     choices:[
-      "National taxation is needed to fund a central government",
-      "A standing army is always tyranny and must be banned",
-      "States should be the only level of government",
-      "A bill of rights is unnecessary because rights don’t exist"
+      "A stronger national government is needed for stability and effective governance",
+      "States should be independent countries",
+      "The president should be a king",
+      "Congress should have no power to tax"
     ],
-    answer:"National taxation is needed to fund a central government",
-    hint:{why:"Federalists advocated national taxation to fund the central government.", keyPoints:["National taxation","Fund central government"]}
+    answer:"A stronger national government is needed for stability and effective governance",
+    hint:{why:"Federalists argued the nation needed a stronger central authority.", keyPoints:["Strong national government","Stability"]}
   },
   {
     cs:"CS7",
-    prompt:"Which position best matches a Federalist view of national defense?",
+    prompt:"Which position did Anti-Federalists take during ratification debates over the Constitution?",
     choices:[
-      "A standing army supports a strong national defense",
-      "No national defense is needed in any circumstance",
-      "Only state militias can exist, never a national force",
-      "The president should command private armies"
+      "A written bill of rights is necessary to protect individual liberty",
+      "The Constitution should remove all state governments",
+      "The Constitution should increase the power of the king",
+      "The Bill of Rights is unnecessary because government will always be fair"
     ],
-    answer:"A standing army supports a strong national defense",
-    hint:{why:"CS7: Federalists advocated a standing army.", keyPoints:["Standing army","National defense"]}
+    answer:"A written bill of rights is necessary to protect individual liberty",
+    hint:{why:"Anti-Federalists demanded written protections for individual rights.", keyPoints:["Bill of Rights","Liberty"]}
   },
   {
     cs:"CS7",
-    prompt:"Which concern best matches the Anti-Federalists?",
+    prompt:"Which criticism did Anti-Federalists express about the Constitution during the ratification debates?",
     choices:[
-      "National taxation could become oppressive",
-      "Congress should be able to tax without limits",
-      "A strong central government is always safe",
-      "A bill of rights is dangerous because it expands rights"
+      "It lacked explicit protections for individual rights",
+      "It created too weak a national government",
+      "It abolished Congress",
+      "It required states to print their own money"
     ],
-    answer:"National taxation could become oppressive",
-    hint:{why:"CS7 lists Anti-Federalist concerns about repressive taxation.", keyPoints:["Taxation could be repressive","Power shift concern"]}
+    answer:"It lacked explicit protections for individual rights",
+    hint:{why:"This is the central Anti-Federalist critique tied to the Bill of Rights.", keyPoints:["No bill of rights","Rights protections"]}
+  },
+  {
+    cs:"CS7",
+    prompt:"Which concern best matches the Anti-Federalists about national taxation?",
+    choices:[
+      "Taxes could become oppressive and threaten liberty",
+      "Taxes should never be collected by any government",
+      "Only kings should set taxes",
+      "Taxes should replace elections"
+    ],
+    answer:"Taxes could become oppressive and threaten liberty",
+    hint:{why:"They feared national taxation could become repressive.", keyPoints:["Repressive taxation","Liberty"]}
   },
   {
     cs:"CS7",
@@ -392,55 +409,43 @@ const QUESTIONS = [
       "Replace state governments with courts"
     ],
     answer:"Be used against citizens",
-    hint:{why:"CS7: Anti-Federalists worried a standing army could be used against citizens.", keyPoints:["Standing army concern","Liberty risk"]}
+    hint:{why:"A standing army was viewed as a tool of tyranny.", keyPoints:["Standing army","Tyranny risk"]}
   },
   {
     cs:"CS7",
-    prompt:"Which statement best explains the key disagreement that led to the Bill of Rights being added?",
+    prompt:"Which statement best explains the compromise that helped secure ratification?",
     choices:[
-      "Anti-Federalists argued the Constitution lacked protections for individual liberties",
-      "Federalists demanded states be removed from the union",
-      "Anti-Federalists wanted a king instead of a president",
-      "Federalists wanted to abolish courts"
+      "Promise to add amendments protecting individual liberties (Bill of Rights)",
+      "Promise to end Congress and create one leader",
+      "Promise to eliminate courts",
+      "Promise to ban all state governments"
     ],
-    answer:"Anti-Federalists argued the Constitution lacked protections for individual liberties",
-    hint:{why:"CS7: lack of rights protections drove the push for the Bill of Rights.", keyPoints:["Individual liberties","Bill of Rights demand"]}
+    answer:"Promise to add amendments protecting individual liberties (Bill of Rights)",
+    hint:{why:"Federalists promised to support a Bill of Rights after ratification.", keyPoints:["Compromise","Bill of Rights"]}
   },
   {
     cs:"CS7",
-    prompt:"Which set contains only rights specifically mentioned in the debate’s outcome (Bill of Rights examples in the standards)?",
+    prompt:"Which right is an example of civil liberties added through the Bill of Rights (as highlighted in the standards examples)?",
+    choices:[
+      "Protection against unreasonable search and seizure",
+      "Right to receive government employment",
+      "Right to free housing",
+      "Right to unlimited executive power"
+    ],
+    answer:"Protection against unreasonable search and seizure",
+    hint:{why:"Fourth Amendment protections are classic civil liberties limiting government power.", keyPoints:["4th Amendment","Limits on power"]}
+  },
+  {
+    cs:"CS7",
+    prompt:"Which set contains only First Amendment freedoms commonly emphasized in the Bill of Rights examples?",
     choices:[
       "Speech, press, assembly, petition, religion",
-      "Right to vote at age 18, direct election of senators",
-      "Social Security benefits, minimum wage",
-      "Annexation, neutrality, isolationism"
+      "Voting at 18, direct election of senators, income tax",
+      "Social Security, minimum wage, Medicare",
+      "Annexation, neutrality, containment"
     ],
     answer:"Speech, press, assembly, petition, religion",
-    hint:{why:"CS7 lists these First Amendment freedoms as examples of rights included.", keyPoints:["1st Amendment freedoms","Civil liberties"]}
-  },
-  {
-    cs:"CS7",
-    prompt:"Which protection is most directly tied to limiting government power in criminal investigations (as listed in the standards examples)?",
-    choices:[
-      "Protection against illegal search and seizure",
-      "Right to an education",
-      "Right to a job",
-      "Right to a national bank"
-    ],
-    answer:"Protection against illegal search and seizure",
-    hint:{why:"CS7 includes protections against illegal search and seizure.", keyPoints:["Search & seizure","Limits on power"]}
-  },
-  {
-    cs:"CS7",
-    prompt:"Which choice best matches the Anti-Federalist goal of maintaining balance between national and state power?",
-    choices:[
-      "Preventing the national government from overwhelming state governments",
-      "Eliminating state governments entirely",
-      "Allowing only local governments to exist",
-      "Banning elections for national officials"
-    ],
-    answer:"Preventing the national government from overwhelming state governments",
-    hint:{why:"CS7: Anti-Federalists were concerned about the shift of power away from states.", keyPoints:["State vs national balance","Power shift"]}
+    hint:{why:"Those five freedoms are core 1st Amendment liberties.", keyPoints:["1st Amendment","Civil liberties"]}
   },
   {
     cs:"CS7",
@@ -452,31 +457,31 @@ const QUESTIONS = [
       "The repeal of the Constitution"
     ],
     answer:"The introduction and ratification of the Bill of Rights",
-    hint:{why:"CS7: Anti-Federalist arguments led to the Bill of Rights.", keyPoints:["Anti-Federalist pressure","Bill of Rights added"]}
+    hint:{why:"Anti-Federalist pressure pushed for a Bill of Rights.", keyPoints:["Debate outcome","Bill of Rights"]}
   },
   {
     cs:"CS7",
-    prompt:"A student says, “The Constitution already had checks and balances, so rights didn’t matter.” Which response best aligns with CS7?",
+    prompt:"A student says, “Checks and balances were enough, so rights didn’t matter.” Which response best aligns with CS7?",
     choices:[
-      "Anti-Federalists argued checks and balances were not enough without written rights protections",
-      "Federalists and Anti-Federalists agreed rights were irrelevant",
+      "Anti-Federalists argued structure was not enough without written protections for individual liberties",
+      "Both sides agreed rights were irrelevant",
       "The debate was mainly about industrialization",
       "The debate was mainly about World War I"
     ],
-    answer:"Anti-Federalists argued checks and balances were not enough without written rights protections",
-    hint:{why:"CS7 focuses on rights protections as a key issue in ratification debates.", keyPoints:["Checks & balances ≠ full rights protections","Written liberties"]}
+    answer:"Anti-Federalists argued structure was not enough without written protections for individual liberties",
+    hint:{why:"CS7 highlights the demand for explicit rights protections.", keyPoints:["Written rights","Limits on power"]}
   },
   {
     cs:"CS7",
     prompt:"Which statement best explains why the Bill of Rights also connects to “limits on government power”?",
     choices:[
-      "It restricts what government can do to individuals (civil liberties)",
+      "It restricts what government can do to individuals",
       "It guarantees government can act without limits",
       "It removes courts from reviewing government actions",
       "It ends all debate about rights"
     ],
-    answer:"It restricts what government can do to individuals (civil liberties)",
-    hint:{why:"CS7: Bill of Rights = protections for liberties + limits on power.", keyPoints:["Limits on government","Civil liberties"]}
+    answer:"It restricts what government can do to individuals",
+    hint:{why:"Civil liberties are limits on government actions.", keyPoints:["Limits on government","Civil liberties"]}
   },
   {
     cs:"CS7",
@@ -488,24 +493,24 @@ const QUESTIONS = [
       "The debate was only about foreign policy"
     ],
     answer:"Debates over protections and limits produced the Bill of Rights",
-    hint:{why:"This is the direct CS7 result: Bill of Rights.", keyPoints:["Federalist vs Anti-Federalist","Bill of Rights result"]}
+    hint:{why:"The key outcome is the Bill of Rights.", keyPoints:["Debates","Bill of Rights"]}
   },
   {
     cs:"CS7",
-    prompt:"A historian uses CS7 to evaluate a claim: “Ratification debates were only about economics.” Which evidence best refutes that claim?",
+    prompt:"A historian argues: “Ratification debates were only about economics.” Which evidence best refutes that claim?",
     choices:[
-      "A major debate focused on individual rights protections and limiting government power",
+      "A major debate focused on protecting individual liberties and limiting government power",
       "The debates only discussed assembly lines",
       "The debates only discussed immigration quotas",
       "The debates only discussed the Great Depression"
     ],
-    answer:"A major debate focused on individual rights protections and limiting government power",
-    hint:{why:"CS7 identifies individual rights as a key issue in the debate.", keyPoints:["Rights protections central","Limits on power"]}
+    answer:"A major debate focused on protecting individual liberties and limiting government power",
+    hint:{why:"Rights protections were central, not just economics.", keyPoints:["Rights protections","Limits on power"]}
   }
 ];
 
 /* =========
-   ENGINE — FIRST-TRY ACCURACY STANDARD (Block 7 style)
+   ENGINE — FIRST-TRY ACCURACY STANDARD
    ========= */
 const $ = (s)=>document.querySelector(s);
 const screens = { start: $("#screenStart"), game: $("#screenGame"), done: $("#screenDone") };
@@ -522,7 +527,7 @@ let state = {
   idx:0,
   questionsCompleted:0,
   correctFirst:0,
-  misses:0,                 // counts ONCE per question
+  misses:0,
   missedThisQuestion:false,
   qOrder:[]
 };
@@ -545,9 +550,7 @@ function calcAccuracy(){
   if(state.questionsCompleted <= 0) return 100;
   return Math.round((state.correctFirst / state.questionsCompleted) * 100);
 }
-function updateAccuracy(){
-  meta.acc.textContent = `${calcAccuracy()}%`;
-}
+function updateAccuracy(){ meta.acc.textContent = `${calcAccuracy()}%`; }
 
 function shuffledChoices(q){
   const arr = [...q.choices];
@@ -627,10 +630,7 @@ function submit(choice){
     qUI.feedback.style.color = "var(--good)";
     flashButtons(choice, true);
 
-    setTimeout(()=>{
-      state.idx++;
-      renderQuestion();
-    }, 320);
+    setTimeout(()=>{ state.idx++; renderQuestion(); }, 320);
     return;
   }
 
@@ -646,12 +646,9 @@ function submit(choice){
 
   qUI.hintBox.style.display = "block";
   qUI.hintText.textContent = q.hint?.why || "Think back to the standard’s wording and examples.";
-  qUI.hintSmall.textContent = q.hint?.keyPoints?.length
-    ? ("Key points: " + q.hint.keyPoints.join(" • "))
-    : "";
+  qUI.hintSmall.textContent = q.hint?.keyPoints?.length ? ("Key points: " + q.hint.keyPoints.join(" • ")) : "";
 
-  // ✅ reshuffle choices after a miss (and after any wrong click)
-  drawChoices(q);
+  drawChoices(q); // reshuffle after a miss
 }
 
 function finish(){
@@ -715,9 +712,7 @@ function startTimer(){
     meta.time.textContent = fmtTime(s);
   }, 250);
 }
-function stopTimer(){
-  if(state.timerId){ clearInterval(state.timerId); state.timerId=null; }
-}
+function stopTimer(){ if(state.timerId){ clearInterval(state.timerId); state.timerId=null; } }
 
 function resetAll(){
   stopTimer();
